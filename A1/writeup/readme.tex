@@ -1,12 +1,27 @@
 \documentclass[11pt]{article}
-\usepackage{array,url,kantlipsum}
+\usepackage{array, url, kantlipsum, listings, xcolor}
 \usepackage[margin=1in]{geometry}
+
+\lstdefinestyle{terminal}
+{
+    backgroundcolor=\color{white},
+    basicstyle=\footnotesize\color{black}\ttfamily,
+    frame=tb,
+    numbers=left
+}
+\makeatletter
+\long\def\@makecaption#1#2{%
+	\vskip\abovecaptionskip
+		\bfseries #1: #2\par
+	\vskip\belowcaptionskip}%
+\makeatother
 
 \title{Assignment 1 \\CPSC 526 Fall 2017 \\ October 1, 2017}
 \author{
 \begin{tabular}{c c}
 Mason Lieu & Shane Sims\tabularnewline
 ID: 10110089 & ID: 00300601\tabularnewline
+Tutorial 03 & Tutorial 04 \tabularnewline
 \url{mlieu@ucalgary.ca} & \url{shane.sims@ucalgary.ca}
 \end{tabular}}
 \date{}
@@ -19,5 +34,40 @@ The vulnerability can be found in the readLineFromFd function where it reads fro
 
 \section*{Task 2 - Fix the vulnerability}
 The vulnerability can be removed from the readLineFromFd function by reading from the socket an amount equal to the size of the buffer. This ensures that a buffer overflow does not take place and the server's data is protected from this exploit.
+
+\section*{How to compile and run our patch}
+Our patched server is compiled and run the same as the original server.
+
+\section*{Sample exploit of the original server}
+\begin{lstlisting}[style=terminal, title={Server side}]
+Masons-MacBook-Pro:a1 MasonL$ ./secretServer 1234 pass 'My favourite number is 42.'
+Waiting for a new connection...
+Talking to someone.
+Someone used an incorrect password.
+Waiting for a new connection...
+Talking to someone.
+Someone used an incorrect password.
+Waiting for a new connection...
+Talking to someone.
+Someone used the correct password.
+Waiting for a new connection...
+\end{lstlisting}
+\begin{lstlisting}[style=terminal, title={Client side}]
+Masons-MacBook-Pro:a1 MasonL$ nc localhost 1234
+Secret Server 1.0
+NEWPASS
+I am not talking to you, bye!
+Masons-MacBook-Pro:a1 MasonL$ nc localhost 1234
+Secret Server 1.0
+11111111112222222222333333333344NEWPASS
+I am not talking to you, bye!
+Masons-MacBook-Pro:a1 MasonL$ nc localhost 1234
+Secret Server 1.0
+NEWPASS
+The secret is: My favourite number is 42.
+\end{lstlisting}
+
+Line 1 of the server side shows the initialization of the server with the password = 'pass' and the secret.
+
 
 \end{document}
