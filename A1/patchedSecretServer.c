@@ -31,9 +31,13 @@ void die( const char * errorMessage, ...) {
 // read a line of text from file descriptor into provided buffer
 void readLineFromFd( int fd, char * buff) {
     char * ptr = buff;
+    // i will track the number of elements inserted into the buffer
     int i = 0;
-    int sizeOfBuffer = (sizeof(globals.buffer)/sizeof(globals.buffer[0]));
-    //printf("The buffer size is %d.\n", sizeOfBuffer);
+    // Determine the size of the buffer - not hardcoded to 32 so that if size
+    // of buffer is changed, this line will not have to be changed along with it.
+    // sizeof, when passed an array, will return the number of bytes to store
+    // the array. Since 1 byte = 1 char we know the length of the array
+    int sizeOfBuffer = sizeof(globals.buffer);
     while(i < sizeOfBuffer) {
         i++;
         if(i >= sizeOfBuffer) break;
