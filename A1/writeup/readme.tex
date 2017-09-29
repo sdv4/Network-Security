@@ -30,10 +30,10 @@ Tutorial 04 & Tutorial 04 \tabularnewline
 \maketitle
 
 \section*{Task 1 - Exploit the vulnerability}
-The vulnerability can be found in the readLineFromFd function where it reads from the socket into the provided buffer. Since this function does not check the size of the input, the vulnerability can be exploited by a client by providing an input greater than 32 bytes to overflow the buffer into the memory space of the password. This effectively overwrites the server's password with the overflowed bytes. The next time the client connects to the server, the client can input the overflowed bytes for the password to force the server to reveal its secret.
+The vulnerability can be found in the readLineFromFd function where this function reads from the socket into the provided buffer. Since this function does not check the size of the input, the vulnerability can be exploited by a client by providing an input greater than the instantiated buffer size to overflow the buffer contents into the memory space of the password. This overwrites the server's password with the overflowed bytes, effectively changing the password. The next time the client connects to the server, the client can input the overflowed bytes (i.e. the new password), forcing the server to reveal its secret.
 
 \section*{Task 2 - Fix the vulnerability}
-The vulnerability can be removed from the readLineFromFd function by reading from the socket an amount equal to the size of the buffer. This ensures that a buffer overflow does not take place and the server's data is protected from this exploit.
+The vulnerability can be removed from the readLineFromFd function by reading from the socket a number of bytes equal to the size of the buffer. This ensures that a buffer overflow does not take place and the server's data is protected from this exploit.
 
 \section*{How to compile and run our patch}
 Our patched server is compiled and run the same as the original server.
