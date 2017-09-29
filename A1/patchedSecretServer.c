@@ -1,3 +1,7 @@
+// Modified code authored by:
+// Shane Sims and Mason Lieu
+// CPSC 526 T4
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
