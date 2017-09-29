@@ -21,7 +21,7 @@
 \begin{tabular}{c c}
 Mason Lieu & Shane Sims\tabularnewline
 ID: 10110089 & ID: 00300601\tabularnewline
-Tutorial 03 & Tutorial 04 \tabularnewline
+Tutorial 04 & Tutorial 04 \tabularnewline
 \url{mlieu@ucalgary.ca} & \url{shane.sims@ucalgary.ca}
 \end{tabular}}
 \date{}
@@ -67,7 +67,17 @@ NEWPASS
 The secret is: My favourite number is 42.
 \end{lstlisting}
 
-Line 1 of the server side shows the initialization of the server with the password = 'pass' and the secret.
+\subsection*{Server side explanation}
+\begin{itemize}
+\item Line 1 shows the initialization of the server with the password = 'pass' and the secret. The rest of the lines are the server's response to the client.
+\end{itemize}
+
+\subsection*{Client side explanation}
+\begin{itemize}
+\item Lines 1-4 is a test with the password = 'NEWPASS' chosen by the attacker; since the attacker does not know the real password this does not reveal the secret. 
+\item Lines 5-8 show the attacker using a 39 character string to overflow the buffer using the string '11111111112222222222333333333344NEWPASS'. The substring 'NEWPASS' are bytes 32-38 and these bytes are overwritten into the memory space of the server's password.
+\item Lines 9-12 show the attacker using the same password = 'NEWPASS', however since the buffer overflow caused the server's password to be overwritten with bytes of the attacker's choosing, this forces the server to reveal the password to the attacker.
+\end{itemize}
 
 
 \end{document}
