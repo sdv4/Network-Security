@@ -55,6 +55,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                if len(data) == 0:
                    break
                data = (data.decode( "utf-8")).strip()                                     # Decode received byte array to interpret command
+               wordsInCommand = data.split()
                # Process client command
                if (data.lower() == "help"): #TODO add two more commands of our choosing to this list and implement
                    self.request.sendall( bytearray( "Supported commands:\n pwd, cd, cp, ls, mv, rm, cat, snap, diff, help, logout, off \n", "utf-8"))
@@ -71,6 +72,24 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                    result = listContents()
                    self.request.sendall(bytearray(result, "utf-8"))
                elif data.lower() == "mv" :
+                   result = listContents()
+                   self.request.sendall(bytearray(result, "utf-8"))
+               elif data.lower() == "rm" :
+                   result = listContents()
+                   self.request.sendall(bytearray(result, "utf-8"))
+               elif data.lower() == "cat" :
+                   result = listContents()
+                   self.request.sendall(bytearray(result, "utf-8"))
+               elif data.lower() == "snap" :
+                   result = listContents()
+                   self.request.sendall(bytearray(result, "utf-8"))
+               elif data.lower() == "diff" :
+                   result = listContents()
+                   self.request.sendall(bytearray(result, "utf-8"))
+               elif data.lower() == "logout" :
+                   result = listContents()
+                   self.request.sendall(bytearray(result, "utf-8"))
+               elif data.lower() == "off" :
                    result = listContents()
                    self.request.sendall(bytearray(result, "utf-8"))
 
