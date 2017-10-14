@@ -52,6 +52,36 @@ def snap():
 def turnServerOff():
     sys.exit()
 
+def copyFile(file1, file2):
+    procc = subprocess.Popen('cp -r ' + file1 + " " + file2, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    result, err = procc.communicate()
+    if err is not None:
+        result = err
+    return result.decode("utf-8")
+
+def moveFile(file1, file2):
+    procc = subprocess.Popen('mv ' + file1 + " " + file2, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    result, err = procc.communicate()
+    if err is not None:
+        result = err
+    return result.decode("utf-8")
+
+def removeFile(file1):
+    procc = subprocess.Popen('rm -f ' + file1, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    result, err = procc.communicate()
+    if err is not None:
+        result = err
+    return result.decode("utf-8")
+
+
+def cat(file1):
+    procc = subprocess.Popen('cat ' + file1, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    result, err = procc.communicate()
+    if len(result) < 1:
+        result = err
+    else:
+        result = result + bytes("\n", "utf-8")
+    return result.decode("utf-8")
 
 # Override of handle method to handle functionality of the server
 class MyTCPHandler(socketserver.BaseRequestHandler):                            # Create a request handler as subclass of BaseRequestHandler
@@ -116,10 +146,25 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                 elif data.lower() == "ls" :
                     result = listContents()
                     self.request.sendall(bytearray(result, "utf-8"))
-                elif data.lower() == "mv" :
-                    result = listContents()
-                    self.request.sendall(bytearray(result, "utf-8"))
-                elif data.lower() == "rm" :
+                elif wordsInCommand[0] == "mv" :
+                    if len(wordsInCommand) == 3:
+                        result = moveFile(wordsInCommand[1], wordsInCommand[2])
+                        self.request.sendall(bytearray(result, "utf-8"))
+                    else:
+                        self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[0].lower()] + "\n", "utf-8"))
+                elif wordsInCommand[0] == "rm" :
+                    if len(wordsInCommand) == 2:
+                        result = removeFile(wordsInCommand[1])
+                        self.request.sendall(bytearray(result, "utf-8"))
+                    else:
+                        self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[0].lower()] + "\n", "utf-8"))
+                elif wordsInCommand[0] == "cat" :
+                    if len(wordsInCommand) == 2:
+                        result = cat(wordsInCommand[1])
+                        self.request.sendall(bytearray(result, "utf-8"))
+                    else:
+                        self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[0].lower()] + "\n", "utf-8"))
+                elif data.lower() == "snap" :
                     result = listContents()
                     self.request.sendall(bytearray(result, "utf-8"))
                 elif data.lower() == "cat" :
