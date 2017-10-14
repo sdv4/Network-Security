@@ -34,8 +34,6 @@ COMMAND_LIST = {                                                                
 'help': 'help - list command options\nhelp <cmd> - show detailed help for given cmd',
 'logout': 'logout - disconnect client',
 'off': 'off - terminate the backdoor program',
-'opt1': 'PLACEHOLDER',
-'opt2': 'PLACEHOLDER',
 }
 
 def printWorkingDir():
@@ -205,19 +203,19 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                 data = (data.decode( "utf-8")).strip()                          # Decode received byte array to interpret command
                 wordsInCommand = data.split()
                 # Process client command
-                if (wordsInCommand[0].lower() == "help"):
+                if wordsInCommand[0].lower() == "help":
                     result = helpCommand(wordsInCommand)
                     self.request.sendall( bytearray(result, "utf-8"))
-                elif data.lower() == "pwd" :
+                elif wordsInCommand[0].lower() == "pwd" :
                     result = printWorkingDir()
                     self.request.sendall(bytearray(result, "utf-8"))
                 elif wordsInCommand[0].lower() == "cd" :
                     result = changeDirectory(wordsInCommand)
                     self.request.sendall( bytearray(result, "utf-8"))
-                elif data.lower() == "cp" :
+                elif wordsInCommand[0].lower() == "cp" :
                     result = copyFile(wordsInCommand)
                     self.request.sendall(bytearray(result, "utf-8"))
-                elif data.lower() == "ls" :
+                elif wordsInCommand[0].lower() == "ls" :
                     result = listContents()
                     self.request.sendall(bytearray(result, "utf-8"))
                 elif wordsInCommand[0] == "mv" :
@@ -229,21 +227,23 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                 elif wordsInCommand[0] == "cat" :
                     result = cat(wordsInCommand)
                     self.request.sendall(bytearray(result, "utf-8"))
-                elif data.lower() == "snap" :
+                elif wordsInCommand[0].lower() == "snap" :
                     snap(1)
                     self.request.sendall(bytearray("OK\n", "utf-8"))
-                elif data.lower() == "diff" :
+                elif wordsInCommand[0].lower() == "diff" :
                     result = checkDifference()
                     self.request.sendall(bytearray(result, "utf-8"))
-                elif data.lower() == "logout" :
+                elif wordsInCommand[0].lower() == "logout" :
+                    self.request.sendall(bytearray("Goodbye.\n", "utf-8"))
                     break
-                elif data.lower() == "off" :
+                elif wordsInCommand[0].lower() == "off" :
+                    self.request.sendall(bytearray("Goodbye.\n", "utf-8"))
                     turnServerOff()
-                elif data.lower() == "test" :#TODO: delete
+                elif wordsInCommand[0].lower() == "test" :#TODO: delete
                     self.request.sendall(bytearray(snapOutput, "utf-8"))
-                elif data.lower() == "who" :
+                elif wordsInCommand[0].lower() == "who" :
                     self.request.sendall(bytearray("Current User:\n" + self.client_address[0] + "\n", "utf-8"))
-                elif data.lower() == "ps" :
+                elif wordsInCommand[0].lower() == "ps" :
                     result = runningProcesses()
                     self.request.sendall(bytearray("Current running processes: \n" + result, "utf-8"))
                 else:
