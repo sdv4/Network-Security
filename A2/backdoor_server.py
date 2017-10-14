@@ -59,10 +59,10 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
     def handle(self):                                                            # Override parent class handle method to handle incoming requests
         # Authenticate user via hardcoded password
         self.request.sendall( bytearray( "Enter Password: ", "utf-8"))
-        client_password = self.request.recv(self.PASSWORD_SIZE)
-        client_password = client_password.decode("utf-8")
-        client_password = client_password.strip()
-        if client_password == server_password:
+        clientPassword = self.request.recv(self.PASSWORD_SIZE)
+        clientPassword = clientPassword.decode("utf-8")
+        clientPassword = clientPassword.strip()
+        if clientPassword == serverPassword:
             self.request.sendall(bytearray( "Password correct. Welcome.\n", "utf-8"))
             # Accept commands from authenticated user
             while 1:
@@ -123,17 +123,10 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
 
 
                 else:
-<<<<<<< HEAD
-                    self.request.sendall( bytearray( "You said: " + data + "\n I do not understand that command.\n", "utf-8"))
-                # Print any command given by user to server terminal
-                print("%s (%s) wrote: %s" % (self.client_address[0],
-                    threading.currentThread().getName(), data.strip()))
-=======
                     # TODO: deleted this echo of the command when other functionality is implemented
                     self.request.sendall( bytearray( "You said: " + data + "\n I do not understand that command.\n", "utf-8"))
                     print("%s (%s) wrote: %s" % (self.client_address[0],
                         threading.currentThread().getName(), data.strip()))
->>>>>>> 07151b3b85254863b0c984a1fded4b3e487ea125
         else:
             self.request.sendall( bytearray( "Incorrect Password. Goodbye.\n", "utf-8"))
 
