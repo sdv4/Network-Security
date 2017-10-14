@@ -54,6 +54,13 @@ def removeFile(file1):
         result = err
     return result.decode("utf-8")
 
+def cat(file1):
+    procc = subprocess.Popen('cat ' + file1, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    result, err = procc.communicate()
+    if err is not None:
+        result = err
+    return result.decode("utf-8")
+
 # Override of handle method to handle functionality of the server
 class MyTCPHandler(socketserver.BaseRequestHandler):                            # Create a request handler as subclass of BaseRequestHandler
     BUFFER_SIZE = 4096                                                           # Input buffer for client requests will be 4096 bytes
@@ -132,9 +139,12 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                         self.request.sendall(bytearray(result, "utf-8"))
                     else:
                         self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[0].lower()] + "\n", "utf-8"))
-                elif data.lower() == "cat" :
-                    result = listContents()
-                    self.request.sendall(bytearray(result, "utf-8"))
+                elif wordsInCommand[0] == "cat" :
+                    if len(wordsInCommand) == 2:
+                        result = cat(wordsInCommand[1])
+                        self.request.sendall(bytearray(result, "utf-8"))
+                    else:
+                        self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[0].lower()] + "\n", "utf-8"))
                 elif data.lower() == "snap" :
                     result = listContents()
                     self.request.sendall(bytearray(result, "utf-8"))
