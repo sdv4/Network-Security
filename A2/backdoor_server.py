@@ -16,7 +16,7 @@ import sys
 import subprocess                                                               # subprocess module will allow us to spawn new processes and connect to their
                                                                                 # pipes to collect their return results
 
-server_password = "pass"                                           # Hard coded server password
+server_password = "thepasswordfornow"                                           # Hard coded server password
 
 def printWorkingDir():
     procc = subprocess.Popen(["pwd"], stdout=subprocess.PIPE)
