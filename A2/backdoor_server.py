@@ -48,8 +48,11 @@ def listContents():
 
 def changeDirectory(listOfWords):
     if len(listOfWords) == 2:
-        os.chdir(listOfWords[1])
-        result = ""
+        try:
+            os.chdir(listOfWords[1])
+            result = ""
+        except:
+            result = "The directory \'" + listOfWords[1] + "\' does not exist.\n"
     else:
         result = COMMAND_LIST[listOfWords[0].lower()] + "\n"
     return result
