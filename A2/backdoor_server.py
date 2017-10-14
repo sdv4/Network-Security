@@ -34,11 +34,8 @@ COMMAND_LIST = {                                                                
 'help': 'help - list command options\nhelp <cmd> - show detailed help for given cmd',
 'logout': 'logout - disconnect client',
 'off': 'off - terminate the backdoor program',
-<<<<<<< HEAD
-=======
 'who': 'who - list currently logged in user',
 'ps': 'ps - show currently running processes',
->>>>>>> mason-cleaningup
 }
 
 def printWorkingDir():
