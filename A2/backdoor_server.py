@@ -66,8 +66,29 @@ def checkDifference():
         return "No change\n"
     else:
         stringOfDifferences = ""
-        listOfCurrentView = currentView.split()
-        listOfLastSnap = snapOutput.split()
+        listOfDiff = currentView.split("\n")
+        listOfSnap = snapOutput.split("\n")
+        lenListOfSnap = len(listOfSnap)
+        for i in range(int(lenListOfSnap/2)) :
+            for j in range(int(len(listOfDiff)/2)) :
+                if listOfSnap[i] == listOfDiff[j] :
+                    if listOfSnap[i+(int(lenListOfSnap/2))].find(listOfSnap[i]) == -1:
+                        neverPrinted = "never printed"
+                    elif listOfSnap[i+(int(lenListOfSnap/2))] != listOfDiff[j+(int(len(listOfDiff)/2))] :
+                        stringOfDifferences = stringOfDifferences + listOfSnap[i] + " - was changed\n"
+                    listOfDiff.pop(j)
+                    listOfDiff.pop(j+(int(len(listOfDiff)/2)))
+                    break
+            stringOfDifferences = stringOfDifferences + listOfSnap[i] + " - was deleted\n"
+        for k in range(int(len(listOfDiff)/2)) :
+            stringOfDifferences = stringOfDifferences + listOfDiff[k] + " - was added\n"
+        return stringOfDifferences
+
+
+
+
+
+
 
 # Function to terminate the server script
 def turnServerOff():
