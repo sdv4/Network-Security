@@ -20,6 +20,7 @@ import subprocess                                                               
 
 serverPassword = "thepass"                                           # Hard coded server password
 snapOutput = ""
+currentView = ""                                                                # will hold a new snap without erasing last client initiated snap
 
 def printWorkingDir():
     procc = subprocess.Popen(["pwd"], stdout=subprocess.PIPE)
@@ -38,20 +39,44 @@ def changeDirectory(dirName):
 # results to memory. A snapshot will include file names and a hash of each file,
 # which will be saved in a hidden text file in the working directory.
 #TODO: remember to change md5 to md5sum before running on linux machine
-def snap():
+def snap(locationToSaveSnap):
+    global currentView
     global snapOutput
-    #subprocess.run("> snapshot.txt", shell=True, stdout=subprocess.PIPE)
     procc = subprocess.Popen(["ls"], stdout=subprocess.PIPE)
     result = procc.communicate()[0]
-    snapOutput = result.decode("utf-8")
+    tempString = result.decode("utf-8")
     procc = subprocess.Popen("md5 *", stdout=subprocess.PIPE, shell=True)
     result = procc.communicate()[0]
-    snapOutput = snapOutput + result.decode("utf-8")
-    
+    tempString = tempString + result.decode("utf-8")
+    if locationToSaveSnap == 1:
+        snapOutput = tempString
+    else :
+        currentView = tempString
+
+# Function to compare the contents of the current directory with the most recent
+# snapshot. If no snapshot has been taken, an error message is returned.
+def checkDifference():
+    global snapOutput
+    global currentView
+    snap(2)                                                                     # Save current view of directory to currentView
+    result = ""
+    if snapOutput == "" :
+        return "ERROR: no snapshot\n"
+    elif currentView == snapOutput :
+        return "No change\n"
+    else:
+        stringOfDifferences = ""
+        listOfCurrentView = currentView.split()
+        listOfLastSnap = snapOutput.split()
+
 # Function to terminate the server script
 def turnServerOff():
     sys.exit()
 
+def runningProcesses():
+    procc = subprocess.Popen("ps", stdout=subprocess.PIPE, shell=True)
+    result = procc.communicate()[0]
+    return result.decode("utf-8")
 
 # Override of handle method to handle functionality of the server
 class MyTCPHandler(socketserver.BaseRequestHandler):                            # Create a request handler as subclass of BaseRequestHandler
@@ -126,10 +151,10 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                     result = listContents()
                     self.request.sendall(bytearray(result, "utf-8"))
                 elif data.lower() == "snap" :
-                    snap()
+                    snap(1)
                     self.request.sendall(bytearray("OK\n", "utf-8"))
                 elif data.lower() == "diff" :
-                    result = listContents()
+                    result = checkDifference()
                     self.request.sendall(bytearray(result, "utf-8"))
                 elif data.lower() == "logout" :
                     break
@@ -138,7 +163,10 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                 elif data.lower() == "test" :
                     self.request.sendall(bytearray(snapOutput, "utf-8"))
                 elif data.lower() == "who" :
-                    self.request.sendall(bytearray(self.client_address[0] + "\n", "utf-8"))
+                    self.request.sendall(bytearray("Current User:\n" + self.client_address[0] + "\n", "utf-8"))
+                elif data.lower() == "ps" :
+                    result = runningProcesses()
+                    self.request.sendall(bytearray("Current running processes: \n" + result, "utf-8"))
                 else:
                     # TODO: deleted this echo of the command when other functionality is implemented
                     self.request.sendall( bytearray( "You said: " + data + "\n I do not understand that command.\n", "utf-8"))
