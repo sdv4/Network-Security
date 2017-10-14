@@ -19,6 +19,7 @@ import subprocess                                                               
                                                                                 # pipes to collect their return results
 
 serverPassword = "thepass"                                           # Hard coded server password
+snapOutput = ""
 
 def printWorkingDir():
     procc = subprocess.Popen(["pwd"], stdout=subprocess.PIPE)
@@ -33,8 +34,19 @@ def listContents():
 def changeDirectory(dirName):
     os.chdir(dirName)
 
-#def logOut():
-
+# Function to take a snapshot of all files in the current directory and saved
+# results to memory. A snapshot will include file names and a hash of each file,
+# which will be saved in a hidden text file in the working directory.
+#TODO: remember to change md5 to md5sum before running on linux machine
+def snap():
+    global snapOutput
+    #subprocess.run("> snapshot.txt", shell=True, stdout=subprocess.PIPE)
+    procc = subprocess.Popen(["ls"], stdout=subprocess.PIPE)
+    result = procc.communicate()[0]
+    snapOutput = result.decode("utf-8")
+    procc = subprocess.Popen("md5 *", stdout=subprocess.PIPE, shell=True)
+    result = procc.communicate()[0]
+    snapOutput = snapOutput + result.decode("utf-8")
 # Function to terminate the server script
 def turnServerOff():
     sys.exit()
@@ -113,8 +125,8 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                     result = listContents()
                     self.request.sendall(bytearray(result, "utf-8"))
                 elif data.lower() == "snap" :
-                    result = listContents()
-                    self.request.sendall(bytearray(result, "utf-8"))
+                    snap()
+                    self.request.sendall(bytearray("OK\n", "utf-8"))
                 elif data.lower() == "diff" :
                     result = listContents()
                     self.request.sendall(bytearray(result, "utf-8"))
@@ -122,6 +134,10 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                     break
                 elif data.lower() == "off" :
                     turnServerOff()
+                elif data.lower() == "test" :
+                    self.request.sendall(bytearray(snapOutput, "utf-8"))
+                elif data.lower() == "who" :
+                    self.request.sendall(bytearray(self.client_address[0] + "\n", "utf-8"))
                 else:
                     # TODO: deleted this echo of the command when other functionality is implemented
                     self.request.sendall( bytearray( "You said: " + data + "\n I do not understand that command.\n", "utf-8"))
