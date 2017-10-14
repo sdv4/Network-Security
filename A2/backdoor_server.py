@@ -57,8 +57,10 @@ def removeFile(file1):
 def cat(file1):
     procc = subprocess.Popen('cat ' + file1, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     result, err = procc.communicate()
-    if err is not None:
+    if len(result) < 1:
         result = err
+    else:
+        result = result + bytes("\n", "utf-8")
     return result.decode("utf-8")
 
 # Override of handle method to handle functionality of the server
