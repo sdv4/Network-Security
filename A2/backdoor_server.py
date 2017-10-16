@@ -16,7 +16,6 @@ import socket, threading
 import sys
 import subprocess
 
-
 serverPassword = "thepass"                                                      # Hard coded server password
 snapOutput = ""
 currentView = ""                                                                # Will hold a new snap without erasing last client initiated snap
@@ -61,15 +60,17 @@ def changeDirectory(listOfWords):
 
 # Function to take a snapshot of all files in the current directory and saved
 # results to memory. A snapshot will include file names and a hash of each file,
-# which will be saved in a hidden text file in the working directory.
-#TODO: remember to change md5 to md5sum before running on linux machine
+# which will be saved to memory in the form of a global variable, snapOutput,
+# when locationToSaveSnap = 1. When locationToSaveSnap equals anything else,
+# snap is being used to take a picture of the current view of the directory for
+# comparison with the last snapshot taken.
 def snap(locationToSaveSnap):
     global currentView
     global snapOutput
     procc = subprocess.Popen(["ls"], stdout=subprocess.PIPE)
     result = procc.communicate()[0]
     tempString = result.decode("utf-8")
-    procc = subprocess.Popen("md5 *", stdout=subprocess.PIPE, shell=True)
+    procc = subprocess.Popen("md5sum *", stdout=subprocess.PIPE, shell=True)
     result = procc.communicate()[0]
     tempString = tempString + result.decode("utf-8")
     if locationToSaveSnap == 1:
@@ -114,7 +115,8 @@ def turnServerOff():
 
 def copyFile(listOfWords):
     if len(listOfWords) == 3:
-        procc = subprocess.Popen('cp -r ' + listOfWords[1] + " " + listOfWords[2], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        procc = subprocess.Popen('cp -r ' + listOfWords[1] + " " + listOfWords[2],
+         stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         result, err = procc.communicate()
         if err:
             result = err
@@ -161,6 +163,7 @@ def cat(listOfWords):
 def runningProcesses():
     procc = subprocess.Popen("ps", stdout=subprocess.PIPE, shell=True)
     result = procc.communicate()[0]
+    return result.decode("utf-8")
 
 def helpCommand(listOfWords):
     if (len(listOfWords) == 1) or not(listOfWords[1].lower() in COMMAND_LIST):
@@ -199,8 +202,10 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                     break
                 data = (data.decode( "utf-8")).strip()                          # Decode received byte array to interpret command
                 wordsInCommand = data.split()
+                if len(wordsInCommand) == 0:
+                    self.request.sendall( bytearray("", "utf-8"))
                 # Process client command
-                if wordsInCommand[0].lower() == "help":
+                elif wordsInCommand[0].lower() == "help":
                     result = helpCommand(wordsInCommand)
                     self.request.sendall( bytearray(result, "utf-8"))
                 elif wordsInCommand[0].lower() == "pwd" :
@@ -235,6 +240,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
                     break
                 elif wordsInCommand[0].lower() == "off" :
                     self.request.sendall(bytearray("Goodbye.\n", "utf-8"))
+                    #self.server.shutdown()                                     #this command is preventing the server from closing
                     turnServerOff()
                 elif wordsInCommand[0].lower() == "test" :#TODO: delete
                     self.request.sendall(bytearray(snapOutput, "utf-8"))
@@ -253,4 +259,4 @@ class MyTCPHandler(socketserver.BaseRequestHandler):                            
 if __name__ == "__main__":
     HOST, PORT = "localhost", int(sys.argv[1])                                   # Get port number from command line
     server = socketserver.TCPServer((HOST, PORT), MyTCPHandler)                  # Instantiate the threaded TCP server class and give it our handler
-    server.serve_forever()                                                       # Instruct server to handle many requests
+    server.serve_forever(.5)                                                     # serve forever until shutdown request issued; check every .5 seconds
