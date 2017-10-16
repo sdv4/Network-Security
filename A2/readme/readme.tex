@@ -1,0 +1,65 @@
+\documentclass[11pt]{article}
+\usepackage{array, url, kantlipsum, listings, xcolor}
+\usepackage[margin=1in]{geometry}
+
+\lstdefinestyle{terminal}
+{
+    backgroundcolor=\color{white},
+    basicstyle=\footnotesize\color{black}\ttfamily,
+    frame=tb,
+    numbers=left
+}
+\makeatletter
+\long\def\@makecaption#1#2{%
+	\vskip\abovecaptionskip
+		\bfseries #1: #2\par
+	\vskip\belowcaptionskip}%
+\makeatother
+
+\title{Assignment 2 \\CPSC 526 Fall 2017 \\ October 15, 2017}
+\author{
+\begin{tabular}{c c}
+Mason Lieu & Shane Sims\tabularnewline
+ID: 10110089 & ID: 00300601\tabularnewline
+Tutorial 04 & Tutorial 04 \tabularnewline
+\url{mlieu@ucalgary.ca} & \url{shane.sims@ucalgary.ca}
+\end{tabular}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{How to run and connect to the backdoor}
+\begin{lstlisting}[style=terminal, title={Running the backdoor}]
+python3 backdoor_server.py <port number >
+\end{lstlisting}
+\begin{lstlisting}[style=terminal, title={Connecting to the backdoor}]
+nc localhost <port number of the backdoor>
+Enter Password: thepass
+\end{lstlisting}
+
+\section*{Handshake details}
+The backdoor uses the TCP Internet protocol and this is implemented using the localhost address and a port provided by the user. A client can connect to the backdoor using a networking utility such as Netcat and providing the correct password. The backdoor will listen on the port for a client to connect to it.
+
+\section*{Supported commands}
+The supported commands are as follows
+\begin{enumerate}
+\item pwd
+\item cd
+\item ls
+\item cp
+\item mv
+\item rm
+\item cat
+\item snap
+\item diff
+\item help
+\item logout
+\item off
+\item who
+\item ps
+\end{enumerate}
+
+
+\end{document}
+

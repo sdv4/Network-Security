@@ -156,7 +156,11 @@ def cat(listOfWords):
         result, err = procc.communicate()
         if err:
             result = err
-        return result.decode("utf-8")
+        try:
+            result = result.decode("utf-8")
+            return result
+        except:
+            return listOfWords[1] + " cannot be displayed using cat.\n"
     else:
         return COMMAND_LIST[listOfWords[0].lower()] + "\n"
 
