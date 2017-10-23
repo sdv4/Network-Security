@@ -32,24 +32,29 @@ class proxyServerHandler(socketserver.BaseRequestHandler):
                             break
                 if len(data) == 0:
                     break
-                #TODO: change from decoding to custom formatting so that we can have ---> prepended to each input line and <--- to output lines
-                print(data.decode("utf-8"))
+
+                # Print data recieved from proxy client to standard ourput before sending to remote server
+                data_lines = data.split(b'\n')                                  # Split raw data into lines
+                for line in data_lines:
+                    print("---> " + line.decode("utf-8"))                       # Print each line with arrow
                 print("\n\n")
+
                 # Send proxy client data to remote server
                 remote_client_socket.sendall(data)
 
-                # Receive remote server response
+                # Receive remote server response and print each line formatted to std output
+                # then send remote server response data to proxy client
 
-                #received_from_remote  = remote_client_socket.recv(1024)
                 while 1:
                     remote_data = remote_client_socket.recv(1024)
                     if not remote_data:
                         break
                     self.request.sendall(remote_data)
-                    print(remote_data.decode("utf-8"))
+                    data_lines = remote_data.split(b'\n')                       # Split raw data into lines
+                    for line in data_lines:
+                        print("<--- " + line.decode("utf-8"))                   # Print each line with arrow
 
 
-                #Send remote server response data to proxy client
         finally:
             remote_client_socket.close()
 
