@@ -1,0 +1,6 @@
+# Replaces all instances of 't' with '.'
+byte = b'This is a test'
+charss = list(byte) # Creates a list of integer values from a byte string
+charss = [46 if n == 116 else n for n in charss]
+byteLine = bytes(charss) # Creates a byte string from a list of integer values
+print("The new string is: " + str(byteLine))
