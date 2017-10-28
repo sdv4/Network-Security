@@ -19,6 +19,15 @@ errorString = ("Usage: python3 proxyServer.py [logOptions] [replaceOptions]" +
 def removeNonPrintable(lines):
     oldLines = lines
     newLines = []
+    for line in oldLines:
+        intList = list(line)
+        intList = [46 if num < 32 or num > 126 else num for num in intList]
+        byteLine = bytes(intList)
+        newLines.append(byteLine)
+    return newLines
+
+
+
     return lines #TODO this does nothing yet
 
              #Canonical hex+ASCII display.  Display the input offset in hexadecimal,
@@ -116,8 +125,8 @@ if __name__ == "__main__":
                         dataFromSock = sock.recv(1024)                                  # get data in 1024 byte chunks
                         if dataFromSock: #i.e. not empty
                             linesOfData = dataFromSock.split(b'\n')
-                            #if loggingOption == "-strip":
-                            #    linesOfData = removeNonPrintable(linesOfData)
+                            if loggingOption == "-strip":
+                                linesOfData = removeNonPrintable(linesOfData)
                             if sock in dictionaryOfWriters:
                                 if loggingOption == "-raw" or loggingOption == "-strip":
                                     for line in linesOfData:
