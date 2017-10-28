@@ -21,6 +21,37 @@ def removeNonPrintable(lines):
     newLines = []
     return lines #TODO this does nothing yet
 
+             #Canonical hex+ASCII display.  Display the input offset in hexadecimal,
+             #followed by sixteen space-separated, two column, hexadecimal bytes,
+             #followed by the same sixteen bytes in %_p format
+             #enclosed in ``|'' characters.
+# Function to prepare for display, the list of input strings, in Canonical
+# hex+ascii form, as per the Linux utility hexdump with argument -C
+# Input: A byte string
+# Output: a list of strings with 16 hex chars on each line, in format specified above
+def hexDump(byteData):
+    oldLines = byteData
+    newLines = []                                                               # each line holds 16 bytes of the original input string + offset and string
+    stringAsByteArray = bytearray(line)                                         # convert bytestring to list of each byte an an element
+    newln = ""
+    charsProcessed = 0
+    pString = ""
+    for c in stringAsByteArray:                                                 # for each character in the bytestring
+        newln = newln + hex(c)[2:4] + " "                                             # convert its ascii int value to hex: 0x?? and use [2:4] to take only the last two
+        pString = pString + chr(c)
+        charsProcessed += 1
+        if charsProcessed % 16 == 0 :
+            offset = str(charsProcessed-16).zfill(8)                                    # pad for up to 8 zeros
+            newln = offset + "    " + newln + "        " + "| " + pString + " |"
+            newLines.append(newln)
+            pString = ""
+            newln = ""
+    return newLines
+
+
+
+
+
 
 if __name__ == "__main__":
     global destServer
@@ -97,6 +128,9 @@ if __name__ == "__main__":
                                     for line in linesOfData:
                                         sys.stdout.buffer.write(b' ---> ' + line + b'\n')
                                 (dictionaryOfClientWriters[sock]).send(dataFromSock)              # send the data to socks pair in the dictionary
+                        else:                                                   # That is, data is empty
+                            sock.close()
+                            print("Conncetion closed.\n")
                     except Exception as e:
                         pass
     except KeyboardInturrupt:
