@@ -205,6 +205,7 @@ if __name__ == "__main__":
                     dictionaryOfClientWriters[localClientConn] = remoteServerConn         #now if localClientConn is ready_to_read, it will only do so from remoteServerConn
                     dictionaryOfWriters[remoteServerConn] = localClientConn         #and if remoteServerConn is ready_to_read, it will only do so from localClientConn
                 else:
+                    potential_writers.append(sock)
                     try:
                         dataFromSock = sock.recv(1024)                                  # get data in 1024 byte chunks
                         if len(dataFromSock) != 0: #i.e. not empty
@@ -222,17 +223,20 @@ if __name__ == "__main__":
                                 if loggingOn:
                                     for line in linesOfData:
                                         sys.stdout.buffer.write(b' <--- ' + line + b'\n\r')
+                                        sys.stdout.flush()
                                 (dictionaryOfWriters[sock]).send(dataFromSock)              # send the data to socks pair in the dictionary
-                                # potential_writers.remove(sock)
+                                potential_writers.remove(sock)
 
                             else:
                                 if loggingOn:
                                     for line in linesOfData:
                                         sys.stdout.buffer.write(b' ---> ' + line + b'\n\r')
+                                        sys.stdout.flush()
                                 (dictionaryOfClientWriters[sock]).send(dataFromSock)              # send the data to socks pair in the dictionary
-                                # potential_writers.remove(sock)
+                                potential_writers.remove(sock)
                         else:                                                   # That is, data is empty
                             potential_readers.remove(sock)
+                            print("Connection closed.")
                     except Exception as e:
                         print("======================Error2: " + str(e))
     except KeyboardInterrupt:
