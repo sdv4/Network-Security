@@ -124,27 +124,64 @@ if __name__ == "__main__":
     global destServer
     global destPort
     global HOST
-    global loggingOption
-    global replaceOptions
-    global replaceOpt1, replaceOpt2
+    global loggingOptions
+    # global loggingOption
+    # global replaceOptions
+    # global replaceOpt1, replaceOpt2
     global loggingOn
+    global raw
+    global strip
+    global hexOpt
+    global autoN
+    global autoNum
+    global replace
+    global replaceOpt1, replaceOpt2
 
     cmdLineArgs = len(sys.argv)
-    loggingOption  = ""
-    replaceOptions = ""
+    # loggingOption  = ""
+    # replaceOptions = ""
+    loggingOptions = []
+    raw = False
+    strip = False
+    hexOpt = False
+    autoN = False
+    replace = False
     loggingOn = True
+
     if cmdLineArgs == 4:
-        HOST, srcPort = "localhost", int(sys.argv[1])                           # Get port number to listen on as command line input
-        destServer, destPort = str(sys.argv[2]), int(sys.argv[3])               # Get destination server name or IP and port number to connect to
         loggingOn = False
-    elif cmdLineArgs == 5:
-        loggingOption = str(sys.argv[1])
-        HOST, srcPort = "localhost", int(sys.argv[2])                           # Get port number to listen on as command line input
-        destServer, destPort = str(sys.argv[3]), int(sys.argv[4])               # Get destination server name or IP and port number to connect to
-    elif cmdLineArgs == 8:
-        loggingOption, replaceOptions, replaceOpt1, replaceOpt2 = str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3]), str(sys.argv[4])
-        HOST, srcPort = "localhost", int(sys.argv[5])                           # Get port number to listen on as command line input
-        destServer, destPort = str(sys.argv[6]), int(sys.argv[7])               # Get destination server name or IP and port number to connect to
+    if cmdLineArgs >= 4:
+        HOST, destPort, destServer, srcPort = "localhost", int(sys.argv[cmdLineArgs-1]), str(sys.argv[cmdLineArgs-2]), int(sys.argv[cmdLineArgs-3])
+    if cmdLineArgs > 4:
+        for i in range(1, cmdLineArgs-3):                                         # Receive the remainder of the command line arguments in a list
+            loggingOptions.append(str(sys.argv[i]))
+        for option in loggingOptions:
+            if option == "-raw":
+                raw = True
+            elif option == "-strip":
+                strip = True
+            elif option == "-hex":
+                hexOpt = True
+            elif option == "-autoN":
+                autoN = True
+                autoNum = int(loggingOptions[loggingOptions.index(option)+1])     # The next item in the list loggingOptions is the paramater for -autoN
+            elif option == "-replace":
+                replace = True
+                replaceOpt1 = loggingOptions[loggingOptions.index(option)+1]      # The next two items in the list loggingOptions are parameters for -replace
+                replaceOpt2 = loggingOptions[loggingOptions.index(option)+2]
+
+    # if cmdLineArgs == 4:
+    #     HOST, srcPort = "localhost", int(sys.argv[1])                           # Get port number to listen on as command line input
+    #     destServer, destPort = str(sys.argv[2]), int(sys.argv[3])               # Get destination server name or IP and port number to connect to
+    #     loggingOn = False
+    # elif cmdLineArgs == 5:
+    #     loggingOption = str(sys.argv[1])
+    #     HOST, srcPort = "localhost", int(sys.argv[2])                           # Get port number to listen on as command line input
+    #     destServer, destPort = str(sys.argv[3]), int(sys.argv[4])               # Get destination server name or IP and port number to connect to
+    # elif cmdLineArgs == 8:
+    #     loggingOption, replaceOptions, replaceOpt1, replaceOpt2 = str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3]), str(sys.argv[4])
+    #     HOST, srcPort = "localhost", int(sys.argv[5])                           # Get port number to listen on as command line input
+    #     destServer, destPort = str(sys.argv[6]), int(sys.argv[7])               # Get destination server name or IP and port number to connect to
     else:                                                                       # args must be less than 4 or greater than 6
         print(errorString)
         sys.exit(0)
@@ -187,15 +224,19 @@ if __name__ == "__main__":
                     try:
                         dataFromSock = sock.recv(1024)                                  # get data in 1024 byte chunks
                         if len(dataFromSock) != 0: #i.e. not empty
-                            if loggingOption == "-hex":
+                            # if loggingOption == "-hex":
+                            if hexOpt:
                                 linesOfData = hexDump(dataFromSock)
-                            elif loggingOption == "-autoN":
-                                linesOfData = autoNOutput(dataFromSock, 30)     #TODO: be able to take additional argument for N
+                            # elif loggingOption == "-autoN":
+                            elif autoN:
+                                linesOfData = autoNOutput(dataFromSock, autoNum)     #TODO: be able to take additional argument for N
                             else:
                                 linesOfData = dataFromSock.split(b'\n')
-                            if loggingOption == "-strip":
+                            # if loggingOption == "-strip":
+                            if strip:
                                 linesOfData = removeNonPrintable(linesOfData)
-                            if replaceOptions == "-replace":
+                            # if replaceOptions == "-replace":
+                            if replace:
                                 linesOfData = replacePattern(linesOfData, replaceOpt1, replaceOpt2)
                             if sock in dictionaryOfWriters:
                                 if loggingOn:
