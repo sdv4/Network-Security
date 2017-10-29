@@ -1,8 +1,10 @@
 # Materials Referenced:
 # https://docs.python.org/3/howto/sockets.html
 # https://docs.python.org/2/tutorial/datastructures.html
-# Select example given in tutorial
+# https://medium.com/@gdieu/build-a-tcp-proxy-in-python-part-1-3-7552cd5afdfe
 # http://zguide.zeromq.org/py:interrupt
+# https://stackoverflow.com/questions/2269827/how-to-convert-an-int-to-a-hex-string
+# tutorial material: http://pages.cpsc.ucalgary.ca/~henrique.pereira/pdfs/cpsc526_fall17_tutorial11.pdf
 
 #TODO: figure out if when how to close the sockets and return the "Connection closed" message
 
@@ -27,10 +29,32 @@ def removeNonPrintable(lines):
         newLines.append(byteLine)
     return newLines
 
-             #Canonical hex+ASCII display.  Display the input offset in hexadecimal,
-             #followed by sixteen space-separated, two column, hexadecimal bytes,
-             #followed by the same sixteen bytes in %_p format
-             #enclosed in ``|'' characters.
+#Input: bytestring and integer
+#output: list of lines for output, each containing N bytes from input bytestring
+def autoNOutput(byteData, N):
+    newLines = []                                                               # each line holds 16 bytes of the original input string + offset and string
+    stringAsByteArray = bytearray(byteData)                                         # convert bytestring to list of each byte an an element
+    newln = ""
+    charsProcessed = 0
+    for c in stringAsByteArray:                                                 # for each character in the bytestring
+        if c == 10:
+            newln = newln + "\\n"
+        elif c == 13:
+            newln = newln + "\\r"
+        elif c == 9:
+            newln = newln + "\\t"
+        elif c == 92:
+            newln = newln + "\\"
+        elif c < 32 or c > 127:
+            newln = newln + "/" + hex(c)[2:4]                                       # convert its ascii int value to hex: 0x?? and use [2:4] to take only the last two
+        else:
+            newln = newln + chr(c)
+        charsProcessed += 1
+        if (charsProcessed % N) == 0 or charsProcessed == len(stringAsByteArray):
+            newLines.append(newln.encode())
+            newln = ""
+    return newLines
+
 # Function to prepare for display, the list of input strings, in Canonical
 # hex+ascii form, as per the Linux utility hexdump with argument -C
 # Input: A byte string
@@ -60,6 +84,8 @@ def hexDump(byteData):
             pString = pString + "\\r"
         elif c == 9:
             pString = pString + "\\t"
+        elif c == 10:
+            pString = pString + "\\n"
         else:
             pString = pString + chr(c)
         charsProcessed += 1
@@ -85,13 +111,16 @@ if __name__ == "__main__":
     global HOST
     global loggingOption
     global replaceOptions
+    global loggingOn
 
     cmdLineArgs = len(sys.argv)
     loggingOption  = ""
     replaceOptions = ""
+    loggingOn = True
     if cmdLineArgs == 4:
         HOST, srcPort = "localhost", int(sys.argv[1])                           # Get port number to listen on as command line input
         destServer, destPort = str(sys.argv[2]), int(sys.argv[3])               # Get destination server name or IP and port number to connect to
+        loggingOn = False
     elif cmdLineArgs == 5:
         loggingOption = str(sys.argv[1])
         HOST, srcPort = "localhost", int(sys.argv[2])                           # Get port number to listen on as command line input
@@ -102,7 +131,7 @@ if __name__ == "__main__":
         destServer, destPort = str(sys.argv[4]), int(sys.argv[5])               # Get destination server name or IP and port number to connect to
     else:                                                                       # args must be less than 4 or greater than 6
         print(errorString)
-        sys.exit()
+        sys.exit(0)
     try:
         try:
             proxyListeningSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -128,6 +157,7 @@ if __name__ == "__main__":
                         remoteServerConn.connect((destServer,destPort))
                         localClientConn, clientAddress = sock.accept()                  # accept incoming local client
                     except:
+
                         pass
 
                     localClientConn.setblocking(0)                                  # double check that connection in non binding so more clients can connect
@@ -140,20 +170,22 @@ if __name__ == "__main__":
                 else:
                     try:
                         dataFromSock = sock.recv(1024)                                  # get data in 1024 byte chunks
-                        if dataFromSock: #i.e. not empty
+                        if len(dataFromSock) != 0: #i.e. not empty
                             if loggingOption == "-hex":
                                 linesOfData = hexDump(dataFromSock)
+                            elif loggingOption == "-autoN":
+                                linesOfData = autoNOutput(dataFromSock, 30)     #TODO: be able to take additional argument for N
                             else:
                                 linesOfData = dataFromSock.split(b'\n')
                             if loggingOption == "-strip":
                                 linesOfData = removeNonPrintable(linesOfData)
                             if sock in dictionaryOfWriters:
-                                if loggingOption == "-raw" or loggingOption == "-strip" or loggingOption == "-hex":
+                                if loggingOn:
                                     for line in linesOfData:
                                         sys.stdout.buffer.write(b' <--- ' + line + b'\n\r')
                                 (dictionaryOfWriters[sock]).send(dataFromSock)              # send the data to socks pair in the dictionary
                             else:
-                                if loggingOption == "-raw" or loggingOption == "-strip" or loggingOption == "-hex":
+                                if loggingOn:
                                     for line in linesOfData:
                                         sys.stdout.buffer.write(b' ---> ' + line + b'\n\r')
                                 (dictionaryOfClientWriters[sock]).send(dataFromSock)              # send the data to socks pair in the dictionary
@@ -165,3 +197,5 @@ if __name__ == "__main__":
                         pass
     except KeyboardInterrupt:
         print("\nControl-C detected. Closing proxy server...")
+        proxyListeningSocket.close()
+        sys.exit(0)
