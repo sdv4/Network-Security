@@ -6,8 +6,6 @@
 # https://stackoverflow.com/questions/2269827/how-to-convert-an-int-to-a-hex-string
 # tutorial material: http://pages.cpsc.ucalgary.ca/~henrique.pereira/pdfs/cpsc526_fall17_tutorial11.pdf
 
-#TODO: figure out if when how to close the sockets and return the "Connection closed" message
-
 import string
 import socket
 import sys
@@ -33,15 +31,12 @@ def removeNonPrintable(lines):
 
 #Input: List of bytestrings, string and string
 #Output: List of bytestrings with all instances of the first string replaced with the second string
-def replacePattern(lines, opt1, opt2):
-    oldLines = lines
-    newLines = []
+def replacePattern(data, opt1, opt2):
+    byteData = data
     bOpt1 = str(opt1).encode()                                                      # Get the bytestring of each replace option
     bOpt2 = str(opt2).encode()
-    for line in oldLines:
-        line = line.replace(bOpt1, bOpt2)                                           # Replace all instances of the bytestring bOp1 with bOp2 in each bytestring line
-        newLines.append(line)
-    return newLines
+    byteData = byteData.replace(bOpt1, bOpt2)                                           # Replace all instances of the bytestring bOp1 with bOp2 in each bytestring line
+    return byteData
 
 
 #Input: bytestring and integer
@@ -145,7 +140,10 @@ if __name__ == "__main__":
 
     if cmdLineArgs == 4:
         loggingOn = False
-    if cmdLineArgs >= 4:
+    if cmdLineArgs < 4:                                                                       # args must be less than 4
+        print(errorString)
+        sys.exit(0)
+    else:
         HOST, destPort, destServer, srcPort = "localhost", int(sys.argv[cmdLineArgs-1]), str(sys.argv[cmdLineArgs-2]), int(sys.argv[cmdLineArgs-3])
     if cmdLineArgs > 4:
         for i in range(1, cmdLineArgs-3):                                         # Receive the remainder of the command line arguments in a list
@@ -169,9 +167,6 @@ if __name__ == "__main__":
                 replace = True
                 replaceOpt1 = loggingOptions[loggingOptions.index(option)+1]      # The next two items in the list loggingOptions are parameters for -replace
                 replaceOpt2 = loggingOptions[loggingOptions.index(option)+2]
-    else:                                                                       # args must be less than 4
-        print(errorString)
-        sys.exit(0)
     try:
         try:
             proxyListeningSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -211,6 +206,8 @@ if __name__ == "__main__":
                     try:
                         dataFromSock = sock.recv(1024)                                  # get data in 1024 byte chunks
                         if len(dataFromSock) != 0: #i.e. not empty
+                            if replace:
+                                dataFromSock = replacePattern(dataFromSock, replaceOpt1, replaceOpt2)
                             if hexOpt:
                                 linesOfData = hexDump(dataFromSock)
                             elif autoN:
@@ -219,8 +216,6 @@ if __name__ == "__main__":
                                 linesOfData = dataFromSock.split(b'\n')
                             if strip:
                                 linesOfData = removeNonPrintable(linesOfData)
-                            if replace:
-                                linesOfData = replacePattern(linesOfData, replaceOpt1, replaceOpt2)
                             if (sock in dictionaryOfWriters) and (sock in potential_writers):
                                 if loggingOn:
                                     for line in linesOfData:
