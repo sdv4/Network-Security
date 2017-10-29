@@ -19,23 +19,27 @@ global errorString
 errorString = ("Usage: python3 proxyServer.py [logOptions] [replaceOptions] " +
         "<source port> <server> <destination port>")
 
+#Input: List of bytestrings
+#Output: List of bytestrings with all non-printable ascii characters replaced with '.'
 def removeNonPrintable(lines):
     oldLines = lines
     newLines = []
     for line in oldLines:
-        intList = list(line)
-        intList = [46 if num < 32 or num > 126 else num for num in intList]
-        byteLine = bytes(intList)
+        intList = list(line)                                                        # Creates a list of each byte in a bytestring as an integer
+        intList = [46 if num < 32 or num > 126 else num for num in intList]         # Replaces all ascii values outside the printable range of 32-126 with 42 = '.'
+        byteLine = bytes(intList)                                                   # Creates a bytestring from a list of integers
         newLines.append(byteLine)
     return newLines
 
+#Input: List of bytestrings, string and string
+#Output: List of bytestrings with all instances of the first string replaced with the second string
 def replacePattern(lines, opt1, opt2):
     oldLines = lines
     newLines = []
-    bOpt1 = str(opt1).encode()
+    bOpt1 = str(opt1).encode()                                                      # Get the bytestring of each replace option
     bOpt2 = str(opt2).encode()
     for line in oldLines:
-        line = line.replace(bOpt1, bOpt2)
+        line = line.replace(bOpt1, bOpt2)                                           # Replace all instances of the bytestring bOp1 with bOp2 in each bytestring line
         newLines.append(line)
     return newLines
 
