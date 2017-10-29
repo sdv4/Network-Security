@@ -2,8 +2,8 @@
 # https://docs.python.org/3/howto/sockets.html
 # https://docs.python.org/2/tutorial/datastructures.html
 # Select example given in tutorial
+# http://zguide.zeromq.org/py:interrupt
 
-#TODO: add keyboard interupt
 #TODO: figure out if when how to close the sockets and return the "Connection closed" message
 
 import string
@@ -11,6 +11,7 @@ import socket
 import sys
 import datetime
 import select
+import signal
 
 global errorString
 errorString = ("Usage: python3 proxyServer.py [logOptions] [replaceOptions]" +
@@ -26,10 +27,6 @@ def removeNonPrintable(lines):
         newLines.append(byteLine)
     return newLines
 
-
-
-    return lines #TODO this does nothing yet
-
              #Canonical hex+ASCII display.  Display the input offset in hexadecimal,
              #followed by sixteen space-separated, two column, hexadecimal bytes,
              #followed by the same sixteen bytes in %_p format
@@ -37,22 +34,42 @@ def removeNonPrintable(lines):
 # Function to prepare for display, the list of input strings, in Canonical
 # hex+ascii form, as per the Linux utility hexdump with argument -C
 # Input: A byte string
-# Output: a list of strings with 16 hex chars on each line, in format specified above
+# Output: a list of bytestrings with 16 hex chars on each line, in format specified above
 def hexDump(byteData):
-    oldLines = byteData
     newLines = []                                                               # each line holds 16 bytes of the original input string + offset and string
-    stringAsByteArray = bytearray(line)                                         # convert bytestring to list of each byte an an element
+    stringAsByteArray = bytearray(byteData)                                         # convert bytestring to list of each byte an an element
     newln = ""
     charsProcessed = 0
     pString = ""
+    index = 0
+    for c in stringAsByteArray:                                                 # replace \t \r \n with \\t \\r \\n resp.
+        if c == 10:
+            stringAsByteArray.insert(index, 92)
+            stringAsByteArray[index+1] = 110
+        if c == 13:
+            stringAsByteArray.insert(index, 92)
+            stringAsByteArray[index+1] = 114
+        if c == 9:
+            stringAsByteArray.insert(index, 92)
+            stringAsByteArray[index+1] = 116
+        index +=1
+
     for c in stringAsByteArray:                                                 # for each character in the bytestring
-        newln = newln + hex(c)[2:4] + " "                                             # convert its ascii int value to hex: 0x?? and use [2:4] to take only the last two
-        pString = pString + chr(c)
+        newln = newln + hex(c)[2:4] + " "                                       # convert its ascii int value to hex: 0x?? and use [2:4] to take only the last two
+        if c == 13:
+            pString = pString + "\\r"
+        elif c == 9:
+            pString = pString + "\\t"
+        else:
+            pString = pString + chr(c)
         charsProcessed += 1
-        if charsProcessed % 16 == 0 :
-            offset = str(charsProcessed-16).zfill(8)                                    # pad for up to 8 zeros
-            newln = offset + "    " + newln + "        " + "| " + pString + " |"
-            newLines.append(newln)
+        if (charsProcessed % 16) == 0 or charsProcessed == len(stringAsByteArray):
+            offset = str(16*(len(newLines))).zfill(8)                           # pad for up to 8 zeros
+            numberOfCharsMissing = 16 - (charsProcessed % 16)                   # Number of spaces to add to right justify
+            newln = offset + "    " + newln
+            extraSpaces = 85 - len(newln)
+            newln = newln + " "*extraSpaces + "|" + pString + "|"
+            newLines.append(newln.encode())
             pString = ""
             newln = ""
     return newLines
@@ -124,27 +141,27 @@ if __name__ == "__main__":
                     try:
                         dataFromSock = sock.recv(1024)                                  # get data in 1024 byte chunks
                         if dataFromSock: #i.e. not empty
-                            linesOfData = dataFromSock.split(b'\n')
+                            if loggingOption == "-hex":
+                                linesOfData = hexDump(dataFromSock)
+                            else:
+                                linesOfData = dataFromSock.split(b'\n')
                             if loggingOption == "-strip":
                                 linesOfData = removeNonPrintable(linesOfData)
                             if sock in dictionaryOfWriters:
-                                if loggingOption == "-raw" or loggingOption == "-strip":
+                                if loggingOption == "-raw" or loggingOption == "-strip" or loggingOption == "-hex":
                                     for line in linesOfData:
-                                        sys.stdout.buffer.write(b' <--- ' + line + b'\n')
+                                        sys.stdout.buffer.write(b' <--- ' + line + b'\n\r')
                                 (dictionaryOfWriters[sock]).send(dataFromSock)              # send the data to socks pair in the dictionary
                             else:
-                                if loggingOption == "-raw" or loggingOption == "-strip":
+                                if loggingOption == "-raw" or loggingOption == "-strip" or loggingOption == "-hex":
                                     for line in linesOfData:
-                                        sys.stdout.buffer.write(b' ---> ' + line + b'\n')
+                                        sys.stdout.buffer.write(b' ---> ' + line + b'\n\r')
                                 (dictionaryOfClientWriters[sock]).send(dataFromSock)              # send the data to socks pair in the dictionary
                         else:                                                   # That is, data is empty
-                            sock.close()
-                            print("Conncetion closed.\n")
+                            #sock.close()
+                            #print("Conncetion closed.\n")
+                            pass
                     except Exception as e:
                         pass
-    except KeyboardInturrupt:
-        print("Control-C detected. Closing proxy server...")
-    finally:
-        proxyListeningSocket.close()
-        print("Listening socket closed.")
-        sys.exit()
+    except KeyboardInterrupt:
+        print("\nControl-C detected. Closing proxy server...")
