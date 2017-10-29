@@ -159,7 +159,12 @@ if __name__ == "__main__":
                 hexOpt = True
             elif option == "-autoN":
                 autoN = True
-                autoNum = int(loggingOptions[loggingOptions.index(option)+1])     # The next item in the list loggingOptions is the paramater for -autoN
+                try:
+                    autoNum = int(loggingOptions[loggingOptions.index(option)+1])     # The next item in the list loggingOptions is the paramater for -autoN
+                except:
+                    print("Usage: -autoN <int>")
+                    sys.exit(0)
+
             elif option == "-replace":
                 replace = True
                 replaceOpt1 = loggingOptions[loggingOptions.index(option)+1]      # The next two items in the list loggingOptions are parameters for -replace
@@ -176,11 +181,9 @@ if __name__ == "__main__":
         proxyListeningSocket.bind((HOST, srcPort))
         proxyListeningSocket.listen(5)                                              # Listen for connections and queue up to 5 of them
         print("\nPort logger running: srcPort=" + str(srcPort) + " host=" + destServer + " dstPort=" + str(destPort) + '\n')
-
         potential_readers = [proxyListeningSocket]
         potential_writers = []
         potential_errors = []
-
         dictionaryOfWriters = {}                                                    # will hold pairs of (A, B) where A writes only to B
         dictionaryOfClientWriters ={}
         while potential_readers:
@@ -191,20 +194,20 @@ if __name__ == "__main__":
                         remoteServerConn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)                              # set up remote server connection for incoming client
                         remoteServerConn.connect((destServer,destPort))
                         localClientConn, clientAddress = sock.accept()                  # accept incoming local client
+                        localClientConn.setblocking(0)                                  # double check that connection in non binding so more clients can connect
+                        currentDateTime = datetime.datetime.now()
+                        print("New connection: " + str(currentDateTime) + ", from " + str(clientAddress) + "\n" )
+                        potential_readers.append(localClientConn)                       # add connection to those that may have something to read
+                        potential_readers.append(remoteServerConn)
+                        potential_writers.append(localClientConn)                       # add connection to those that may have something to read
+                        potential_writers.append(remoteServerConn)
+                        dictionaryOfClientWriters[localClientConn] = remoteServerConn         #now if localClientConn is ready_to_read, it will only do so from remoteServerConn
+                        dictionaryOfWriters[remoteServerConn] = localClientConn         #and if remoteServerConn is ready_to_read, it will only do so from localClientConn
                     except Exception as e:
 
-                        print("======================Error1: " + str(e))
-
-                    localClientConn.setblocking(0)                                  # double check that connection in non binding so more clients can connect
-                    currentDateTime = datetime.datetime.now()
-                    print("New connection: " + str(currentDateTime) + ", from " + str(clientAddress) + "\n" )
-                    potential_readers.append(localClientConn)                       # add connection to those that may have something to read
-                    potential_readers.append(remoteServerConn)
-                    potential_writers.append(localClientConn)                       # add connection to those that may have something to read
-                    potential_writers.append(remoteServerConn)
-                    dictionaryOfClientWriters[localClientConn] = remoteServerConn         #now if localClientConn is ready_to_read, it will only do so from remoteServerConn
-                    dictionaryOfWriters[remoteServerConn] = localClientConn         #and if remoteServerConn is ready_to_read, it will only do so from localClientConn
+                        print("Error: " + str(e))
                 else:
+                    potential_writers.append(sock)
                     try:
                         dataFromSock = sock.recv(1024)                                  # get data in 1024 byte chunks
                         if len(dataFromSock) != 0: #i.e. not empty
@@ -222,19 +225,21 @@ if __name__ == "__main__":
                                 if loggingOn:
                                     for line in linesOfData:
                                         sys.stdout.buffer.write(b' <--- ' + line + b'\n\r')
+                                        sys.stdout.flush()
                                 (dictionaryOfWriters[sock]).send(dataFromSock)              # send the data to socks pair in the dictionary
-                                # potential_writers.remove(sock)
+                                potential_writers.remove(sock)
 
                             else:
                                 if loggingOn:
                                     for line in linesOfData:
                                         sys.stdout.buffer.write(b' ---> ' + line + b'\n\r')
+                                        sys.stdout.flush()
                                 (dictionaryOfClientWriters[sock]).send(dataFromSock)              # send the data to socks pair in the dictionary
-                                # potential_writers.remove(sock)
+                                potential_writers.remove(sock)
                         else:                                                   # That is, data is empty
                             potential_readers.remove(sock)
                     except Exception as e:
-                        print("======================Error2: " + str(e))
+                        print("Error: " + str(e))
     except KeyboardInterrupt:
         print("\nControl-C detected. Closing proxy server...")
         proxyListeningSocket.close()
