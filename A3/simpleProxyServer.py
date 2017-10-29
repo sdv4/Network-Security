@@ -125,9 +125,6 @@ if __name__ == "__main__":
     global destPort
     global HOST
     global loggingOptions
-    # global loggingOption
-    # global replaceOptions
-    # global replaceOpt1, replaceOpt2
     global loggingOn
     global raw
     global strip
@@ -138,8 +135,6 @@ if __name__ == "__main__":
     global replaceOpt1, replaceOpt2
 
     cmdLineArgs = len(sys.argv)
-    # loggingOption  = ""
-    # replaceOptions = ""
     loggingOptions = []
     raw = False
     strip = False
@@ -169,20 +164,7 @@ if __name__ == "__main__":
                 replace = True
                 replaceOpt1 = loggingOptions[loggingOptions.index(option)+1]      # The next two items in the list loggingOptions are parameters for -replace
                 replaceOpt2 = loggingOptions[loggingOptions.index(option)+2]
-
-    # if cmdLineArgs == 4:
-    #     HOST, srcPort = "localhost", int(sys.argv[1])                           # Get port number to listen on as command line input
-    #     destServer, destPort = str(sys.argv[2]), int(sys.argv[3])               # Get destination server name or IP and port number to connect to
-    #     loggingOn = False
-    # elif cmdLineArgs == 5:
-    #     loggingOption = str(sys.argv[1])
-    #     HOST, srcPort = "localhost", int(sys.argv[2])                           # Get port number to listen on as command line input
-    #     destServer, destPort = str(sys.argv[3]), int(sys.argv[4])               # Get destination server name or IP and port number to connect to
-    # elif cmdLineArgs == 8:
-    #     loggingOption, replaceOptions, replaceOpt1, replaceOpt2 = str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3]), str(sys.argv[4])
-    #     HOST, srcPort = "localhost", int(sys.argv[5])                           # Get port number to listen on as command line input
-    #     destServer, destPort = str(sys.argv[6]), int(sys.argv[7])               # Get destination server name or IP and port number to connect to
-    else:                                                                       # args must be less than 4 or greater than 6
+    else:                                                                       # args must be less than 4
         print(errorString)
         sys.exit(0)
     try:
@@ -224,18 +206,14 @@ if __name__ == "__main__":
                     try:
                         dataFromSock = sock.recv(1024)                                  # get data in 1024 byte chunks
                         if len(dataFromSock) != 0: #i.e. not empty
-                            # if loggingOption == "-hex":
                             if hexOpt:
                                 linesOfData = hexDump(dataFromSock)
-                            # elif loggingOption == "-autoN":
                             elif autoN:
                                 linesOfData = autoNOutput(dataFromSock, autoNum)     #TODO: be able to take additional argument for N
                             else:
                                 linesOfData = dataFromSock.split(b'\n')
-                            # if loggingOption == "-strip":
                             if strip:
                                 linesOfData = removeNonPrintable(linesOfData)
-                            # if replaceOptions == "-replace":
                             if replace:
                                 linesOfData = replacePattern(linesOfData, replaceOpt1, replaceOpt2)
                             if sock in dictionaryOfWriters:
