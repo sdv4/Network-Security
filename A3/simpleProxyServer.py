@@ -13,7 +13,7 @@ import datetime
 import select
 
 global errorString
-errorString = ("Usage: python3 proxyServer.py [logOptions] [replaceOptions]" +
+errorString = ("Usage: python3 proxyServer.py [logOptions] [replaceOptions] " +
         "<source port> <server> <destination port>")
 
 def removeNonPrintable(lines):
@@ -26,9 +26,16 @@ def removeNonPrintable(lines):
         newLines.append(byteLine)
     return newLines
 
+def replacePattern(lines, opt1, opt2):
+    oldLines = lines
+    newLines = []
+    bOpt1 = str(opt1).encode()
+    bOpt2 = str(opt2).encode()
+    for line in oldLines:
+        line = line.replace(bOpt1, bOpt2)
+        newLines.append(line)
+    return newLines
 
-
-    return lines #TODO this does nothing yet
 
 
 if __name__ == "__main__":
@@ -37,6 +44,7 @@ if __name__ == "__main__":
     global HOST
     global loggingOption
     global replaceOptions
+    global replaceOpt1, replaceOpt2
 
     cmdLineArgs = len(sys.argv)
     loggingOption  = ""
@@ -48,10 +56,10 @@ if __name__ == "__main__":
         loggingOption = str(sys.argv[1])
         HOST, srcPort = "localhost", int(sys.argv[2])                           # Get port number to listen on as command line input
         destServer, destPort = str(sys.argv[3]), int(sys.argv[4])               # Get destination server name or IP and port number to connect to
-    elif cmdLineArgs == 6:
-        loggingOption, replaceOptions = str(sys.argv[1]), str(sys.argv[2])
-        HOST, srcPort = "localhost", int(sys.argv[3])                           # Get port number to listen on as command line input
-        destServer, destPort = str(sys.argv[4]), int(sys.argv[5])               # Get destination server name or IP and port number to connect to
+    elif cmdLineArgs == 8:
+        loggingOption, replaceOptions, replaceOpt1, replaceOpt2 = str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3]), str(sys.argv[4])
+        HOST, srcPort = "localhost", int(sys.argv[5])                           # Get port number to listen on as command line input
+        destServer, destPort = str(sys.argv[6]), int(sys.argv[7])               # Get destination server name or IP and port number to connect to
     else:                                                                       # args must be less than 4 or greater than 6
         print(errorString)
         sys.exit()
@@ -96,6 +104,8 @@ if __name__ == "__main__":
                             linesOfData = dataFromSock.split(b'\n')
                             if loggingOption == "-strip":
                                 linesOfData = removeNonPrintable(linesOfData)
+                            if replaceOptions == "-replace":
+                                linesOfData = replacePattern(linesOfData, replaceOpt1, replaceOpt2)
                             if sock in dictionaryOfWriters:
                                 if loggingOption == "-raw" or loggingOption == "-strip":
                                     for line in linesOfData:
