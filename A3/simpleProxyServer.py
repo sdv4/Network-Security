@@ -191,15 +191,17 @@ if __name__ == "__main__":
                         remoteServerConn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)                              # set up remote server connection for incoming client
                         remoteServerConn.connect((destServer,destPort))
                         localClientConn, clientAddress = sock.accept()                  # accept incoming local client
-                    except:
+                    except Exception as e:
 
-                        pass
+                        print("======================Error1: " + str(e))
 
                     localClientConn.setblocking(0)                                  # double check that connection in non binding so more clients can connect
                     currentDateTime = datetime.datetime.now()
                     print("New connection: " + str(currentDateTime) + ", from " + str(clientAddress) + "\n" )
                     potential_readers.append(localClientConn)                       # add connection to those that may have something to read
                     potential_readers.append(remoteServerConn)
+                    potential_writers.append(localClientConn)                       # add connection to those that may have something to read
+                    potential_writers.append(remoteServerConn)
                     dictionaryOfClientWriters[localClientConn] = remoteServerConn         #now if localClientConn is ready_to_read, it will only do so from remoteServerConn
                     dictionaryOfWriters[remoteServerConn] = localClientConn         #and if remoteServerConn is ready_to_read, it will only do so from localClientConn
                 else:
@@ -209,29 +211,30 @@ if __name__ == "__main__":
                             if hexOpt:
                                 linesOfData = hexDump(dataFromSock)
                             elif autoN:
-                                linesOfData = autoNOutput(dataFromSock, autoNum)     #TODO: be able to take additional argument for N
+                                linesOfData = autoNOutput(dataFromSock, autoNum)
                             else:
                                 linesOfData = dataFromSock.split(b'\n')
                             if strip:
                                 linesOfData = removeNonPrintable(linesOfData)
                             if replace:
                                 linesOfData = replacePattern(linesOfData, replaceOpt1, replaceOpt2)
-                            if sock in dictionaryOfWriters:
+                            if (sock in dictionaryOfWriters) and (sock in potential_writers):
                                 if loggingOn:
                                     for line in linesOfData:
                                         sys.stdout.buffer.write(b' <--- ' + line + b'\n\r')
                                 (dictionaryOfWriters[sock]).send(dataFromSock)              # send the data to socks pair in the dictionary
+                                # potential_writers.remove(sock)
+
                             else:
                                 if loggingOn:
                                     for line in linesOfData:
                                         sys.stdout.buffer.write(b' ---> ' + line + b'\n\r')
                                 (dictionaryOfClientWriters[sock]).send(dataFromSock)              # send the data to socks pair in the dictionary
+                                # potential_writers.remove(sock)
                         else:                                                   # That is, data is empty
-                            #sock.close()
-                            #print("Conncetion closed.\n")
-                            pass
+                            potential_readers.remove(sock)
                     except Exception as e:
-                        pass
+                        print("======================Error2: " + str(e))
     except KeyboardInterrupt:
         print("\nControl-C detected. Closing proxy server...")
         proxyListeningSocket.close()
