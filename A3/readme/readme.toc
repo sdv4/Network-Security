@@ -1,11 +1,13 @@
 \contentsline {section}{\numberline {1}How to monitor HTTP}{1}
-\contentsline {section}{\numberline {2}How to monitor SSH}{1}
+\contentsline {section}{\numberline {2}How to monitor SSH}{2}
 \contentsline {section}{\numberline {3}How to monitor NetCat-to-NetCat}{2}
-\contentsline {section}{\numberline {4}Supported logging formats}{2}
-\contentsline {section}{\numberline {5}Sample output}{3}
-\contentsline {subsection}{\numberline {5.1}Output - no logging}{3}
-\contentsline {subsection}{\numberline {5.2}Output - raw}{4}
-\contentsline {subsection}{\numberline {5.3}Output - strip}{6}
-\contentsline {subsection}{\numberline {5.4}Output - hex}{8}
-\contentsline {subsection}{\numberline {5.5}Output - autoN}{9}
-\contentsline {subsection}{\numberline {5.6}Output - replace}{10}
+\contentsline {section}{\numberline {4}How to monitor backdoor server from Assignment 2}{2}
+\contentsline {section}{\numberline {5}Supported logging formats}{2}
+\contentsline {section}{\numberline {6}Sample output}{3}
+\contentsline {subsection}{\numberline {6.1}Output - no logging}{3}
+\contentsline {subsection}{\numberline {6.2}Output - raw}{4}
+\contentsline {subsection}{\numberline {6.3}Output - strip}{6}
+\contentsline {subsection}{\numberline {6.4}Output - hex}{8}
+\contentsline {subsection}{\numberline {6.5}Output - autoN}{9}
+\contentsline {subsection}{\numberline {6.6}Output - replace}{10}
+\contentsline {subsection}{\numberline {6.7}Output - netcat-to-netcat communication}{11}

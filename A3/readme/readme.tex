@@ -60,6 +60,17 @@ python3 simpleProxyServer.py [log options] <source port> localhost <destination 
 nc localhost <source port>
 \end{lstlisting}
 
+\section{How to monitor backdoor server from Assignment 2}
+\begin{lstlisting}[style=terminal, title={Terminal 1: Run backdoor server}]
+python3 backdoor_server.py <destination port>
+\end{lstlisting}
+\begin{lstlisting}[style=terminal, title={Terminal 2: Run the proxy server}]
+python3 simpleProxyServer.py [log options] <source port> localhost <destination port>
+\end{lstlisting}
+\begin{lstlisting}[style=terminal, title={Terminal 3: Run NetCat}]
+nc localhost <source port>
+\end{lstlisting}
+
 \section{Supported logging formats}
 This program supports the following logging formats
 \begin{enumerate}
@@ -116,5 +127,15 @@ This program supports the following logging formats
 	\caption{Initialization of proxy server with replace formatting. All instances of `localhost' replaced with `REDACTED'}
 	\end{figure}
 
+	\subsection{Output - netcat-to-netcat communication}
+	\begin{figure}[H]
+	\includegraphics[scale=0.5, trim={0cm 0cm 0cm 0cm}, clip]{ncncinit}
+	\caption{Initialization of proxy (bottom), netcat server (top-right), and netcat client (top-left)}
+	\end{figure}
+	\begin{figure}[H]
+	\includegraphics[scale=0.5, trim={0cm 0cm 0cm 0cm}, clip]{ncncmid}
+	\caption{Sample output in the middle of execution}
+	\end{figure}
+	
 \end{document}
 
