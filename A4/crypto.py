@@ -54,10 +54,7 @@ if __name__ == "__main__":
     #Get desired key length of AES-CBC from user, 128 or 256 bit encryption
     key_length = 0
     while key_length != "128" and key_length != "256":
-        try:
-            key_length = raw_input("Enter what key length AES-CBC-<key_length> to use. 128 or 256: ")
-        except NameError:
-            print("\nError: Please enter 128 or 256")
+        key_length = raw_input("Enter what key length AES-CBC-<key_length> to use. 128 or 256: ")
 
     #Generate nonce, session_key, and iv
     seed = raw_input("Enter your secret key: ")
@@ -105,7 +102,7 @@ if __name__ == "__main__":
         else:
             break
 
-    #Read file in 1024 byte blocks, encrypt blocks
+    #Read file in 1024 byte blocks, and encrypt blocks
     #Output file: encrypted
     block = host_file.read(1024)                                                            #Read from file 1024 bytes at a time
     encrypted_bytes =b''                                                                    #Initialize byte string
@@ -122,13 +119,13 @@ if __name__ == "__main__":
     #Write encrypted bytes to file
     encrypted_file.write(encrypted_bytes)
     encrypted_file.close()
-    print("Encryption done. Output: encrypted")
+    print("Encryption successful. Output: encrypted")
 
 
     #========================DECRYPTION OF FILE============================
     #Open file to decrypt and writes to "decrypted"
     while True:
-        tmp = raw_input("Press enter to start decryption of file: encrypted")
+        tmp = raw_input("Press enter to start decryption of encrypted file")
         try:
             received_file = open("encrypted", 'r')                                          #The received encrypted file that needs decrypting
             decrypted_file = open("decrypted", 'w')                                         #The received decrypted file
@@ -137,7 +134,7 @@ if __name__ == "__main__":
         else:
             break
 
-    #Read file in 1024 bit (128 byte) blocks, decrypt blocks
+    #Read file in 1024 byte blocks, and decrypt blocks
     #Very similar to encryption except the unpadding follows after decryption
     #Output file: decrypted
     block = received_file.read(1024)
@@ -152,4 +149,4 @@ if __name__ == "__main__":
     #Write decrypted bytes to file
     decrypted_file.write(decrypted_bytes)
     decrypted_file.close()
-    print("Decryption done. Output: decrypted")
+    print("Decryption successful. Output: decrypted")
