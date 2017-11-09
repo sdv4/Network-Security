@@ -28,11 +28,11 @@ def getIV(seed, nonce):
 #Input: String <session_key>, String <initialization_vector>
 #Output: Cipher <encryptor>, Cipher <decryptor>, padding <padder>, padding <unpadder>
 def initializeCipher(session_key, iv):
-        backend = default_backend()                                                             #Note: cryptography.io was originally designed to support multiple backends, but this design has been deprecated. So we will use default_backend()
-        cipher = Cipher(algorithms.AES(session_key), modes.CBC(iv), backend=backend)            #Creates Cipher object using AES-CBC encryption
+        backend = default_backend()                                                         #Note: cryptography.io was originally designed to support multiple backends, but this design has been deprecated. So we will use default_backend()
+        cipher = Cipher(algorithms.AES(session_key), modes.CBC(iv), backend=backend)        #Creates Cipher object using AES-CBC encryption
         encryptor = cipher.encryptor()
         decryptor = cipher.decryptor()
-        padder = padding.PKCS7(128).padder()                                                    #Creates padding objects to pad using PKCS7, the argument determines what multiple the data needs to be in (eg. 128 bit blocks for AES-CBC)
+        padder = padding.PKCS7(128).padder()                                                #Creates padding objects to pad using PKCS7, the argument determines what multiple the data needs to be in (eg. 128 bit blocks for AES-CBC)
         unpadder = padding.PKCS7(128).unpadder()
         return encryptor, decryptor, padder, unpadder
 
@@ -48,19 +48,19 @@ def checkResponse(client_response, nonce, session_key):
 
 if __name__ == "__main__":
 
-    print("===================================================================")                #Used to separate each execution of the program
+    print("===================================================================")            #Used to separate each execution of the program
 
     #==========================INITIALIZATION==============================
     #Get desired key length of AES-CBC from user, 128 or 256 bit encryption
     key_length = 0
     while key_length != "128" and key_length != "256":
         try:
-            key_length = raw_input("Enter what key length AES-CBC-<key_length> to use. 128 or 256: ")   #Gets key length from user
+            key_length = raw_input("Enter what key length AES-CBC-<key_length> to use. 128 or 256: ")
         except NameError:
             print("\nError: Please enter 128 or 256")
 
     #Generate nonce, session_key, and iv
-    seed = raw_input("Enter your secret key: ")                                             #Gets input seed from user
+    seed = raw_input("Enter your secret key: ")
     nonce = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16)) #Concatenates 16 randomly chosen alphanumeric characters
     session_key = getSessionKey(seed, nonce, key_length)
     iv = getIV(seed, nonce)
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     while True:
         tmp = raw_input("Press enter to start decryption of file: encrypted")
         try:
-            received_file = open("encrypted", 'r')                                            #The received encrypted file that needs decrypting
+            received_file = open("encrypted", 'r')                                          #The received encrypted file that needs decrypting
             decrypted_file = open("decrypted", 'w')                                         #The received decrypted file
         except:
             print("Error: Could not open file.")
