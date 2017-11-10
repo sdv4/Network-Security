@@ -13,8 +13,7 @@ from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 
 def download(conn):
-    encrypted_bytes = doEncrypt(READ)
-    conn.sendall(encrypted_bytes)                                                           # Indicate to server that client wants to download files
+    sendData(READ, conn)                                                           # Indicate to server that client wants to download files
     data = conn.recv(1024)
     if str(data) == "1":                                                        # Server ready to receive fileName
         conn.sendall(fileName)
@@ -52,6 +51,23 @@ def upload(conn):
         print("Error: file could not be written by server", file = sys.stderr)
     conn.close()
     sys.exit()
+
+def sendData(data, conn):
+    if cipher != "null":
+        encrypted_bytes = doEncrypt(data)
+        conn.sendall(encrypted_bytes)
+    else:
+        conn.sendall(data)
+    return
+
+def rcvData(conn):
+    if cipher != "null":
+        encrypted_bytes = conn.recv(1024)
+        decrypted_bytes = doDecrypt(encrypted_bytes)
+        return decrypted_bytes
+    else:
+        data = conn.recv(1024)
+        return data
 
 # Create session key using sha3-256(seed|nonce|"SK")
 def getSessionKey(nonce):
@@ -96,14 +112,6 @@ def doDecrypt(ciphertext):
     unpadded_bytes = unpadder.update(decrypted_bytes) + unpadder.finalize()
     return unpadded_bytes
 
-# Verify the client's response to the challenge with the server's own digest
-def checkResponse(client_response, nonce, session_key):
-    server_response = hashlib.sha256(challenge + session_key).digest()
-    if server_response == client_response:
-        return True
-    else:
-        return False
-
 def main():
     global PORT
     global KEY
@@ -126,10 +134,10 @@ def main():
         PORT = int(hostPort[1])
         cipher = str(sys.argv[4])
         KEY  = str(sys.argv[5])
-        ACK = "1"
-        READ = "read"
-        WRITE = "write"
-        ERROR = "-1"
+        ACK = "1".encode()
+        READ = "read".encode()
+        WRITE = "write".encode()
+        ERROR = "-1".encode()
 
         client_nonce = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16)) # Concatenates 16 randomly chosen alphanumeric characters
         # Initialize AES arguments

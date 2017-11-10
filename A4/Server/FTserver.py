@@ -44,8 +44,7 @@ def authenticate_client(connection, key):
 def serve(connection):
     global fileName
 
-    data = connection.recv(1024)
-    data = doDecrypt(data)
+    data = rcvData(connection)
 
     if str(data) == "write":                                                        # Client wants to upload file
         connection.sendall("0")
@@ -93,6 +92,23 @@ def serve(connection):
         connection.sendall("-1")                                                # Invalid argument from client, respond with error code
     connection.close()
 
+def sendData(data, conn):
+    if cipher != "null":
+        encrypted_bytes = doEncrypt(data)
+        conn.sendall(encrypted_bytes)
+    else:
+        conn.sendall(data)
+    return
+
+def rcvData(conn):
+    if cipher != "null":
+        encrypted_bytes = conn.recv(1024)
+        decrypted_bytes = doDecrypt(encrypted_bytes)
+        return decrypted_bytes
+    else:
+        data = conn.recv(1024)
+        return data
+
 # Create session key using sha3-256(seed|nonce|"SK")
 def getSessionKey(nonce):
     session_key = hashlib.sha256(KEY + nonce + "SK").digest()
@@ -135,15 +151,6 @@ def doDecrypt(ciphertext):
     decrypted_bytes = decryptor.update(ciphertext) + decryptor.finalize()
     unpadded_bytes = unpadder.update(decrypted_bytes) + unpadder.finalize()
     return unpadded_bytes
-
-# Verify the client's response to the challenge with the server's own digest
-def checkResponse(client_response, nonce, session_key):
-    server_response = hashlib.sha256(challenge + session_key).digest()
-    if server_response == client_response:
-        return True
-    else:
-        return False
-
 
 def main():
     global PORT
