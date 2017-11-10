@@ -133,19 +133,24 @@ def main():
         WRITE = "write"
         ERROR = "-1"
 
+        client_nonce = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16)) # Concatenates 16 randomly chosen alphanumeric characters
         if cipher != "null":
             # Initialize AES arguments
-            nonce = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16)) # Concatenates 16 randomly chosen alphanumeric characters
-            session_key = getSessionKey(nonce)
-            iv = getIV(nonce)
+            session_key = getSessionKey(client_nonce)
+            iv = getIV(client_nonce)
 
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.connect((HOST, PORT))
 
-        #send the first message to server containing cipher and nonce
-        first_message = cipher + "," + nonce
-        server_socket.sendall(first_message)
+        # Authenticate client to server
+        first_msg = cipher + "," + client_nonce
+        server_socket.sendall(first_msg)                                        # Sebd cipher,nounce to server
+        server_challenge = server_socket.recv(1024)
+        challenge_response = hashlib.sha256(session_key + server_challenge).digest()
+        server_socket.sendall(challenge_response)
 
+
+        # Successful Authentication
         if command == "write":
             upload(server_socket)
 

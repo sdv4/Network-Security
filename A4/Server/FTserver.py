@@ -15,19 +15,34 @@ from cryptography.hazmat.backends import default_backend
 
 #TODO: implement client authentication using shared key
 def authenticate_client(connection, key):
-    return True
+    global cipher
+    global session_key
+    global iv
+
+    cipher_nonce = connection.recv(1024)
+    cipher_nonce= str(cipher_nonce).split(",")
+    cipher = cipher_nonce[0]
+    client_nonce = cipher_nonce[1]
+
+    session_key = getSessionKey(client_nonce)
+    iv = getIV(client_nonce)
+
+    #if cipher == "null"
+    challenge_nonce = os.urandom(16)
+    connection.sendall(challenge_nonce)
+    client_response = connection.recv(1024)
+    test_string = hashlib.sha256(session_key + challenge_nonce).digest()
+    if client_response == test_string:
+        print("Authentication successful")
+        return True
+    else:
+        connection.close()
+        return False
+
+
 
 def serve(connection):
     global fileName
-
-    #Gets cipher information and nonce from client
-    data = connection.recv(1024)
-    data = doDecrypt(data)
-    first_message = str(data).split(",")
-    cipher = first_message[0]
-    nonce = first_message[1]
-    session_key = getSessionKey(nonce)
-    iv = getIV(nonce)
 
     data = connection.recv(1024)
     data = doDecrypt(data)
@@ -133,9 +148,6 @@ def checkResponse(client_response, nonce, session_key):
 def main():
     global PORT
     global KEY
-    global cipher
-    global session_key
-    global iv
 
     if(len(sys.argv) == 3):
         PORT = int(sys.argv[1])
