@@ -13,19 +13,22 @@ from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 
 def download(conn):
-    sendData(READ, conn)                                                           # Indicate to server that client wants to download files
-    data = conn.recv(1024)
+    sendData(conn, READ)                                                           # Indicate to server that client wants to download files
+    data = rcvData(conn, 1024)
     if str(data) == "1":                                                        # Server ready to receive fileName
-        conn.sendall(fileName)
-        fileSize = conn.recv(1024)                                              # receive file size from server
+        sendData(conn, fileName.encode())
+        fileSize = rcvData(conn, 1024)                                              # receive file size from
+        print("DEBUG: File size is " + str(fileSize))
         if str(fileSize) != "-1":
             try:
-                conn.sendall("1")                                               # Indicate ready to read file from server
-                theFile = conn.recv(int(fileSize))                                      # get entire file
+                sendData(conn, ACK)                                              # Indicate ready to read file from server
+                theFile = rcvData(conn, int(fileSize))                                      # get entire file
+                print("DEBUG: file received")
                 print(theFile)
-                conn.sendall("1")
-            except:
-                conn.sendall("-1")
+                sendData(conn, ACK)
+            except Exception as e:
+                sendData(conn, ERROR)
+                print("Error: " + str(e))
         else:
             print("Error: file could not be read by server", file = sys.stderr)
     else:
@@ -34,17 +37,17 @@ def download(conn):
     sys.exit()
 
 def upload(conn):
-    conn.sendall("write")                                                           # Indicate to server that client wants to upload files
-    data = conn.recv(1024)
-    if str(data) == "0":
-        conn.sendall(fileName)
-        fileNameEcho = conn.recv(1024)
+    sendData(conn, WRITE)                                                           # Indicate to server that client wants to upload files
+    data = rcvData(conn, 1024)
+    if str(data) == "1":
+        sendData(conn, fileName.encode())
+        fileNameEcho = rcvData(conn, 1024)
         if str(fileNameEcho) == fileName :
             print(fileName)
             for block in fileinput.input(files='-',):
-                conn.sendall(block)
+                sendData(conn, block)
             conn.shutdown(socket.SHUT_WR)
-            statusResponse = conn.recv(1024)
+            statusResponse = rcvData(conn, 1024)
             if str(statusResponse) == "1":
                 print("Upload successful - closing client...")
         else:
@@ -54,7 +57,7 @@ def upload(conn):
     conn.close()
     sys.exit()
 
-def sendData(data, conn):
+def sendData(conn, data):
     if cipher != "null":
         encrypted_bytes = doEncrypt(data)
         conn.sendall(encrypted_bytes)
@@ -62,13 +65,16 @@ def sendData(data, conn):
         conn.sendall(data)
     return
 
-def rcvData(conn):
+def rcvData(conn, size):
+    print("DEBUG: Receiving file of size: " + str(size))
     if cipher != "null":
-        encrypted_bytes = conn.recv(1024)
+        encrypted_bytes = conn.recv(size)
+        print("DEBUG: Starting to decrypt received bytes of size: " + str(len(encrypted_bytes)))
         decrypted_bytes = doDecrypt(encrypted_bytes)
+        print("DEBUG: Decryption successful. Bytes size is: " + str(len(decrypted_bytes)))
         return decrypted_bytes
     else:
-        data = conn.recv(1024)
+        data = conn.recv(size)
         return data
 
 # Create session key using sha3-256(seed|nonce|"SK")
@@ -110,8 +116,11 @@ def doEncrypt(plaintext):
 def doDecrypt(ciphertext):
     # Initialize cipher objects
     decryptor, unpadder = initDecryptor()
+    print("DEBUG: size of received bytes " + str(len(ciphertext)))
     decrypted_bytes = decryptor.update(ciphertext) + decryptor.finalize()
+    print("DEBUG: Decrypted bytes size is " + str(len(decrypted_bytes)))
     unpadded_bytes = unpadder.update(decrypted_bytes) + unpadder.finalize()
+    print("DEBUG: unpadded_bytes is size " + str(len(unpadded_bytes)))
     return unpadded_bytes
 
 def main():
@@ -152,9 +161,9 @@ def main():
         # Authenticate client to server
         first_msg = cipher + "," + client_nonce
         server_socket.sendall(first_msg)                                        # Sebd cipher,nounce to server
-        server_challenge = server_socket.recv(1024)
+        server_challenge = rcvData(server_socket, 1024)
         challenge_response = hashlib.sha256(KEY + server_challenge).digest()
-        server_socket.sendall(challenge_response)
+        sendData(server_socket, challenge_response)
 
 
         # Successful Authentication

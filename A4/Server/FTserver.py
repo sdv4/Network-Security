@@ -29,8 +29,8 @@ def authenticate_client(connection, key):
 
     #if cipher == "null"
     challenge_nonce = os.urandom(16)
-    connection.sendall(challenge_nonce)
-    client_response = connection.recv(1024)
+    sendData(connection, challenge_nonce)
+    client_response = rcvData(connection, 1024)
     test_string = hashlib.sha256(KEY + challenge_nonce).digest()
     if client_response == test_string:
         print("Authentication successful")
@@ -44,55 +44,59 @@ def authenticate_client(connection, key):
 def serve(connection):
     global fileName
 
-    data = rcvData(connection)
+    data = rcvData(connection, 1024)
 
     if str(data) == "write":                                                        # Client wants to upload file
-        connection.sendall("0")
-        fileName = connection.recv(1024)                                        # Get name of file to be uploaded
+        sendData(connection, ACK)
+        fileName = rcvData(connection, 1024)                                        # Get name of file to be uploaded
         fileName = (str(fileName)).replace('\n','')                             # for connecting with netcat
         print("Command: write   File name: " + fileName)
         theFile = open(fileName, "w+")                                          # Create file obj with specified name or write over file if already exists in dir
-        connection.sendall(fileName)                                            # Echo file name back to client to indicate ready to receive
+        sendData(connection, fileName.encode())                                            # Echo file name back to client to indicate ready to receive
         while 1:                                                                # Receive file data from client until no more sent
-            data = connection.recv(1024)
+            data = rcvData(connection, 1024)
             if len(data) == 0:
                 break
             theFile.write(data)                                                 # Write data to file
 
         theFile.close()                                                         # Close/finish writting to file and
-        connection.sendall("1")                                                 # Send success indicator
+        sendData(connection, ACK)                                                 # Send success indicator
         print("Status: success")
 
     elif str(data) == "read":                                                      # Client wants to download file
-        connection.sendall("1")                                                 # Ready to get fileNmame
-        fileName = connection.recv(1024)                                        # Get name of file to be sent to client
+        sendData(connection, ACK)                                                 # Ready to get fileNmame
+        fileName = rcvData(connection, 1024)                                        # Get name of file to be sent to client
         fileName = (str(fileName)).replace('\n','')                             # for connecting with netcat
         print("Command: read   File name: " + fileName)
         if os.path.exists(fileName):
             theFile = open(fileName, "r")
             data = theFile.read()
+            if cipher != "null":
+                data = doEncrypt(data)
             fileSize = len(data)
-            connection.sendall(str(fileSize))                                   # Send file size so client knows file exists and will come next
-            readyResponse = connection.recv(1024)                               # Will receive 1 when client ready to receive
+            sendData(connection, str(fileSize).encode())                                   # Send file size so client knows file exists and will come next
+            readyResponse = rcvData(connection, 1024)                               # Will receive 1 when client ready to receive
+            print("DEBUG: Received: " + readyResponse)
             if str(readyResponse) == "1":
                 connection.sendall(data)                                        # Send file
                 theFile.close()
-                status = connection.recv(1024)
+                status = rcvData(connection, 1024)
+                print("DEBUG: Status: " + status)
                 if str(status) == "1":
                     print("Status: success")
                 else:
-                    print("Status: fail")
+                    print("Status: fail. Client did not receive file.")
             else:
-                print("Status: fail")
+                print("Status: fail. Client not ready")
 
         else:
-            connection.sendall("-1")                                            # File DNE, send protocol error code
+            sendData(connection, ERROR)                                            # File DNE, send protocol error code
             print("Status: fail - " + fileName + " does not exist on server")
     else:
-        connection.sendall("-1")                                                # Invalid argument from client, respond with error code
+        sendData(connection, ERROR)                                                # Invalid argument from client, respond with error code
     connection.close()
 
-def sendData(data, conn):
+def sendData(conn, data):
     if cipher != "null":
         encrypted_bytes = doEncrypt(data)
         conn.sendall(encrypted_bytes)
@@ -100,13 +104,13 @@ def sendData(data, conn):
         conn.sendall(data)
     return
 
-def rcvData(conn):
+def rcvData(conn, size):
     if cipher != "null":
-        encrypted_bytes = conn.recv(1024)
+        encrypted_bytes = conn.recv(size)
         decrypted_bytes = doDecrypt(encrypted_bytes)
         return decrypted_bytes
     else:
-        data = conn.recv(1024)
+        data = conn.recv(size)
         return data
 
 # Create session key using sha3-256(seed|nonce|"SK")
@@ -142,7 +146,9 @@ def doEncrypt(plaintext):
     # Initialize cipher objects
     encryptor, padder = initEncryptor()
     padded_bytes = padder.update(plaintext) + padder.finalize()
+    print("DEBUG: Padded bytes size: " + str(len(padded_bytes)))
     encrypted_bytes = encryptor.update(padded_bytes) + encryptor.finalize()
+    print("DEBUG: Encrypted bytes size: " + str(len(encrypted_bytes)))
     return encrypted_bytes
 
 def doDecrypt(ciphertext):
@@ -155,10 +161,18 @@ def doDecrypt(ciphertext):
 def main():
     global PORT
     global KEY
+    global ACK
+    global READ
+    global WRITE
+    global ERROR
 
     if(len(sys.argv) == 3):
         PORT = int(sys.argv[1])
         KEY  = str(sys.argv[2])
+        ACK = "1".encode()
+        READ = "read".encode()
+        WRITE = "write".encode()
+        ERROR = "-1".encode()
 
         # Start listening on PORT
         listening_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)            # create TCP socket to communicate with IPv4 addresses
