@@ -98,14 +98,6 @@ def doDecrypt(ciphertext):
     unpadded_bytes = unpadder.update(decrypted_bytes) + unpadder.finalize()
     return unpadded_bytes
 
-# Verify the client's response to the challenge with the server's own digest
-def checkResponse(client_response, nonce, session_key):
-    server_response = hashlib.sha256(challenge + session_key).digest()
-    if server_response == client_response:
-        return True
-    else:
-        return False
-
 def main():
     global PORT
     global KEY
@@ -146,7 +138,7 @@ def main():
         first_msg = cipher + "," + client_nonce
         server_socket.sendall(first_msg)                                        # Sebd cipher,nounce to server
         server_challenge = server_socket.recv(1024)
-        challenge_response = hashlib.sha256(session_key + server_challenge).digest()
+        challenge_response = hashlib.sha256(KEY + server_challenge).digest()
         server_socket.sendall(challenge_response)
 
 

@@ -31,7 +31,7 @@ def authenticate_client(connection, key):
     challenge_nonce = os.urandom(16)
     connection.sendall(challenge_nonce)
     client_response = connection.recv(1024)
-    test_string = hashlib.sha256(session_key + challenge_nonce).digest()
+    test_string = hashlib.sha256(KEY + challenge_nonce).digest()
     if client_response == test_string:
         print("Authentication successful")
         return True
@@ -135,15 +135,6 @@ def doDecrypt(ciphertext):
     decrypted_bytes = decryptor.update(ciphertext) + decryptor.finalize()
     unpadded_bytes = unpadder.update(decrypted_bytes) + unpadder.finalize()
     return unpadded_bytes
-
-# Verify the client's response to the challenge with the server's own digest
-def checkResponse(client_response, nonce, session_key):
-    server_response = hashlib.sha256(challenge + session_key).digest()
-    if server_response == client_response:
-        return True
-    else:
-        return False
-
 
 def main():
     global PORT
