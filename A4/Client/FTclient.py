@@ -32,8 +32,6 @@ def download(conn):
             print("Error: file could not be read by server", file = sys.stderr)
     else:
         print("Error: file could not be read by server", file = sys.stderr)
-    conn.close()
-    sys.exit()
 
 def upload(conn):
     conn.sendall("0")                                                           # Indicate to server that client wants to upload files
@@ -53,9 +51,6 @@ def upload(conn):
             print("Error: file could not be written by server", file = sys.stderr)
     else:
         print("Error: file could not be written by server", file = sys.stderr)
-    conn.close()
-    sys.exit()
-
 
 def main():
     global PORT
@@ -78,6 +73,7 @@ def main():
         server_socket.connect((HOST, PORT))
 
         # Authenticate client to server
+
         client_nounce = os.urandom(16)
         first_msg = cipher + "," + client_nounce
         server_socket.sendall(first_msg)                                        # Sebd cipher,nounce to server
@@ -98,6 +94,9 @@ def main():
 
     else:
         print("Error: wrong command line arguments", file = sys.stderr)
+        
+    conn.close()
+    sys.exit()
 
 
 if __name__ == "__main__":

@@ -17,7 +17,7 @@ import random
 #TODO: implement client authentication using shared key
 def authenticate_client(connection, key):
     global cipher
-
+     
     cipher_nounce = connection.recv(1024)
     cipher_nounce= str(cipher_nounce).split(",")
     cipher = cipher_nounce[0]
