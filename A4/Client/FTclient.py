@@ -10,6 +10,9 @@ from __future__ import print_function                                           
 import socket
 import sys
 import fileinput
+import os
+import hashlib
+import random
 
 def download(conn):
     conn.sendall("1")                                                           # Indicate to server that client wants to download files
@@ -73,6 +76,17 @@ def main():
 
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.connect((HOST, PORT))
+
+        # Authenticate client to server
+        client_nounce = os.urandom(16)
+        first_msg = cipher + "," + client_nounce
+        server_socket.sendall(first_msg)                                        # Sebd cipher,nounce to server
+        server_challenge = server_socket.recv(1024)
+        challenge_response = hashlib.sha256(KEY + server_challenge).digest()
+        server_socket.sendall(challenge_response)
+
+
+        # Successful Authentication
         if command == "write":
             upload(server_socket)
 

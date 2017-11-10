@@ -10,11 +10,34 @@
 from __future__ import print_function                                           # Import python3 print function
 import socket
 import sys
-import os.path
+import os
+import hashlib
+import random
 
 #TODO: implement client authentication using shared key
 def authenticate_client(connection, key):
-    return True
+    global cipher
+
+    cipher_nounce = connection.recv(1024)
+    cipher_nounce= str(cipher_nounce).split(",")
+    cipher = cipher_nounce[0]
+    client_nounce = cipher_nounce[1]
+
+    IV = hashlib.sha256(KEY + client_nounce + "IV").digest()
+    session_key = hashlib.sha256(KEY + client_nounce + "SK")
+    #if cipher == "null"
+    challenge_nounce = os.urandom(16)
+    connection.sendall(challenge_nounce)
+    client_response = connection.recv(1024)
+    test_string = hashlib.sha256(KEY + challenge_nounce).digest()
+    if client_response == test_string:
+        print("Authentication successful")
+        return True
+    else:
+        connection.close()
+        return False
+
+
 
 def serve(connection):
     global fileName
