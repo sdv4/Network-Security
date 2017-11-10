@@ -16,9 +16,10 @@ def authenticate_client(connection, key):
     return True
 
 def serve(connection):
+    global fileName
     data = connection.recv(1024)
     print(data)
-    if int(data) is 0:                                                          # Client wants to upload file
+    if str(data) == "0":                                                          # Client wants to upload file
         connection.sendall("0")
         fileName = connection.recv(1024)                                        # Get name of file to be uploaded
         fileName = (str(fileName)).replace('\n','')                             # for connecting with netcat
@@ -34,7 +35,7 @@ def serve(connection):
         connection.sendall("1")                                                 # Send success indicator
         print("Status: success")
 
-    elif int(data) is 1:                                                             # Client wants to download file
+    elif str(data) == "1":                                                             # Client wants to download file
         connection.sendall("1")
         fileName = connection.recv(1024)                                        # Get name of file to be uploaded
         fileName = (str(fileName)).replace('\n','')                             # for connecting with netcat
@@ -43,10 +44,14 @@ def serve(connection):
             theFile = open(fileName, "r")
             data = theFile.read()
             fileSize = len(data)
-            connection.sendall(str(fileSize))                                        # send file size so client knows file exists and will come next
-            connection.sendall(data)                                            # Send file
-            theFile.close()
-            print("Status: success")
+            connection.sendall(str(fileSize))                                   # send file size so client knows file exists and will come next
+            readyResponse = connection.recv(1024)
+            if str(readyResponse) == "1":
+                connection.sendall(data)                                            # Send file
+                theFile.close()
+                print("Status: success")
+            else:
+                print("Status: fail")
 
         else:
             connection.sendall("-1")                                            # File DNE, send protocol error code
