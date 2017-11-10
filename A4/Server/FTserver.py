@@ -3,6 +3,7 @@
 # uploading a file from the client or downloading a file to the client
 # CPSC 526 Assignment 4 - Fall 2017
 # Authors: Shane Sims and Mason Lieu
+# Version: 10 November 2017
 # Sources viewed or consulted:
 # http://www.binarytides.com/python-socket-server-code-example/ - for help structuring server
 # https://www.digitalocean.com/community/tutorials/how-to-handle-plain-text-files-in-python-3 - for information on file creation
@@ -18,8 +19,8 @@ def authenticate_client(connection, key):
 def serve(connection):
     global fileName
     data = connection.recv(1024)
-    print(data)
-    if str(data) == "0":                                                          # Client wants to upload file
+
+    if str(data) == "0":                                                        # Client wants to upload file
         connection.sendall("0")
         fileName = connection.recv(1024)                                        # Get name of file to be uploaded
         fileName = (str(fileName)).replace('\n','')                             # for connecting with netcat
@@ -28,28 +29,33 @@ def serve(connection):
         connection.sendall(fileName)                                            # Echo file name back to client to indicate ready to receive
         while 1:                                                                # Receive file data from client until no more sent
             data = connection.recv(1024)
-            theFile.write(data)                                                 # Write data to file
-            if not data:
+            if len(data) == 0:
                 break
+            theFile.write(data)                                                 # Write data to file
+
         theFile.close()                                                         # Close/finish writting to file and
         connection.sendall("1")                                                 # Send success indicator
         print("Status: success")
 
-    elif str(data) == "1":                                                             # Client wants to download file
-        connection.sendall("1")
-        fileName = connection.recv(1024)                                        # Get name of file to be uploaded
+    elif str(data) == "1":                                                      # Client wants to download file
+        connection.sendall("1")                                                 # Ready to get fileNmame
+        fileName = connection.recv(1024)                                        # Get name of file to be sent to client
         fileName = (str(fileName)).replace('\n','')                             # for connecting with netcat
         print("Command: read   File name: " + fileName)
         if os.path.exists(fileName):
             theFile = open(fileName, "r")
             data = theFile.read()
             fileSize = len(data)
-            connection.sendall(str(fileSize))                                   # send file size so client knows file exists and will come next
-            readyResponse = connection.recv(1024)
+            connection.sendall(str(fileSize))                                   # Send file size so client knows file exists and will come next
+            readyResponse = connection.recv(1024)                               # Will receive 1 when client ready to receive
             if str(readyResponse) == "1":
-                connection.sendall(data)                                            # Send file
+                connection.sendall(data)                                        # Send file
                 theFile.close()
-                print("Status: success")
+                status = connection.recv(1024)
+                if str(status) == "1":
+                    print("Status: success")
+                else:
+                    print("Status: fail")
             else:
                 print("Status: fail")
 

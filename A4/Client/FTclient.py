@@ -1,7 +1,15 @@
 # FTclient.py
+# Implements custom protocol - to be used with FTserver.py
+# File Transfer client for uploading a file to a server or downloading a file from a server
+# CPSC 526 Assignment 4 - Fall 2017
+# Authors: Shane Sims and Mason Lieu
+# Version: 10 November 2017
+# Sources viewed or consulted:
+# https://docs.python.org/3/library/fileinput.html#fileinput.FileInput - for info on reading from stdin
 from __future__ import print_function                                           # Import python3 print function
 import socket
 import sys
+import fileinput
 
 def download(conn):
     conn.sendall("1")                                                           # Indicate to server that client wants to download files
@@ -10,9 +18,13 @@ def download(conn):
         conn.sendall(fileName)
         fileSize = conn.recv(1024)                                              # receive file size from server
         if str(fileSize) != "-1":
-            conn.sendall("1")
-            theFile = conn.recv(int(fileSize))                                      # get entire file
-            print(theFile)
+            try:
+                conn.sendall("1")                                               # Indicate ready to read file from server
+                theFile = conn.recv(int(fileSize))                                      # get entire file
+                print(theFile)
+                conn.sendall("1")
+            except:
+                conn.sendall("-1")
         else:
             print("Error: file could not be read by server", file = sys.stderr)
     else:
@@ -21,7 +33,25 @@ def download(conn):
     sys.exit()
 
 def upload(conn):
-    conn.sendall("1")                                                           # Indicate to server that client wants to download files
+    conn.sendall("0")                                                           # Indicate to server that client wants to upload files
+    data = conn.recv(1024)
+    if str(data) == "0":
+        conn.sendall(fileName)
+        fileNameEcho = conn.recv(1024)
+        if str(fileNameEcho) == fileName :
+            print(fileName)
+            for block in fileinput.input(files='-',):
+                conn.sendall(block)
+            conn.shutdown(socket.SHUT_WR)
+            statusResponse = conn.recv(1024)
+            if str(statusResponse) == "1":
+                print("Upload successful - closing client...")
+        else:
+            print("Error: file could not be written by server", file = sys.stderr)
+    else:
+        print("Error: file could not be written by server", file = sys.stderr)
+    conn.close()
+    sys.exit()
 
 
 def main():
