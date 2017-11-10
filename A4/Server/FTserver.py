@@ -8,28 +8,30 @@
 # http://www.binarytides.com/python-socket-server-code-example/ - for help structuring server
 # https://www.digitalocean.com/community/tutorials/how-to-handle-plain-text-files-in-python-3 - for information on file creation
 from __future__ import print_function                                           # Import python3 print function
-import socket
-import sys
-import os
-import hashlib
-import random
+import os, random, string, hashlib, sys, socket
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.backends import default_backend
 
 #TODO: implement client authentication using shared key
 def authenticate_client(connection, key):
     global cipher
-     
-    cipher_nounce = connection.recv(1024)
-    cipher_nounce= str(cipher_nounce).split(",")
-    cipher = cipher_nounce[0]
-    client_nounce = cipher_nounce[1]
+    global session_key
+    global iv
 
-    IV = hashlib.sha256(KEY + client_nounce + "IV").digest()
-    session_key = hashlib.sha256(KEY + client_nounce + "SK")
+    cipher_nonce = connection.recv(1024)
+    cipher_nonce= str(cipher_nonce).split(",")
+    cipher = cipher_nonce[0]
+    client_nonce = cipher_nonce[1]
+
+    session_key = getSessionKey(client_nonce)
+    iv = getIV(client_nonce)
+
     #if cipher == "null"
-    challenge_nounce = os.urandom(16)
-    connection.sendall(challenge_nounce)
+    challenge_nonce = os.urandom(16)
+    connection.sendall(challenge_nonce)
     client_response = connection.recv(1024)
-    test_string = hashlib.sha256(KEY + challenge_nounce).digest()
+    test_string = hashlib.sha256(KEY + challenge_nonce).digest()
     if client_response == test_string:
         print("Authentication successful")
         return True
@@ -41,9 +43,11 @@ def authenticate_client(connection, key):
 
 def serve(connection):
     global fileName
-    data = connection.recv(1024)
 
-    if str(data) == "0":                                                        # Client wants to upload file
+    data = connection.recv(1024)
+    data = doDecrypt(data)
+
+    if str(data) == "write":                                                        # Client wants to upload file
         connection.sendall("0")
         fileName = connection.recv(1024)                                        # Get name of file to be uploaded
         fileName = (str(fileName)).replace('\n','')                             # for connecting with netcat
@@ -60,7 +64,7 @@ def serve(connection):
         connection.sendall("1")                                                 # Send success indicator
         print("Status: success")
 
-    elif str(data) == "1":                                                      # Client wants to download file
+    elif str(data) == "read":                                                      # Client wants to download file
         connection.sendall("1")                                                 # Ready to get fileNmame
         fileName = connection.recv(1024)                                        # Get name of file to be sent to client
         fileName = (str(fileName)).replace('\n','')                             # for connecting with netcat
@@ -89,13 +93,66 @@ def serve(connection):
         connection.sendall("-1")                                                # Invalid argument from client, respond with error code
     connection.close()
 
+# Create session key using sha3-256(seed|nonce|"SK")
+def getSessionKey(nonce):
+    session_key = hashlib.sha256(KEY + nonce + "SK").digest()
+    if cipher == "aes128":
+        return session_key[:16]                     # Returns the first 16 bytes for AES-CBC-128
+    elif  cipher == "aes256":
+        return session_key                         # Returns all 32 bytes for AES-CBC-256
+
+# Create IV using sha3-256(seed|nonce|"IV")
+def getIV(nonce):
+    iv = hashlib.sha256(KEY + nonce + "IV").digest()
+    return iv[:16]              # Returns the first 16 bytes (ie. the correct size for an IV in AES-CBC)
+
+# Create encryptor and padder objects needed for AES-CBC
+def initEncryptor():
+        backend = default_backend()
+        cipher = Cipher(algorithms.AES(session_key), modes.CBC(iv), backend=backend)        # Creates Cipher object using AES-CBC encryption
+        encryptor = cipher.encryptor()
+        padder = padding.PKCS7(128).padder()                                                # Creates padding objects to pad using PKCS7, the argument determines what multiple the data needs to be in (eg. 128 bit blocks for AES-CBC)
+        return encryptor, padder
+
+# Create decryptor and unpadder objects needed for AES-CBC
+def initDecryptor():
+        backend = default_backend()
+        cipher = Cipher(algorithms.AES(session_key), modes.CBC(iv), backend=backend)        # Creates Cipher object using AES-CBC encryption
+        decryptor = cipher.decryptor()
+        unpadder = padding.PKCS7(128).unpadder()
+        return decryptor, unpadder
+
+def doEncrypt(plaintext):
+    # Initialize cipher objects
+    encryptor, padder = initEncryptor()
+    padded_bytes = padder.update(plaintext) + padder.finalize()
+    encrypted_bytes = encryptor.update(padded_bytes) + encryptor.finalize()
+    return encrypted_bytes
+
+def doDecrypt(ciphertext):
+    # Initialize cipher objects
+    decryptor, unpadder = initDecryptor()
+    decrypted_bytes = decryptor.update(ciphertext) + decryptor.finalize()
+    unpadded_bytes = unpadder.update(decrypted_bytes) + unpadder.finalize()
+    return unpadded_bytes
+
+# Verify the client's response to the challenge with the server's own digest
+def checkResponse(client_response, nonce, session_key):
+    server_response = hashlib.sha256(challenge + session_key).digest()
+    if server_response == client_response:
+        return True
+    else:
+        return False
+
 
 def main():
     global PORT
     global KEY
+
     if(len(sys.argv) == 3):
         PORT = int(sys.argv[1])
         KEY  = str(sys.argv[2])
+
         # Start listening on PORT
         listening_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)            # create TCP socket to communicate with IPv4 addresses
         #TODO: should we wrap the bind in try/except? why/why not?
