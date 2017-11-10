@@ -44,8 +44,7 @@ def authenticate_client(connection, key):
 def serve(connection):
     global fileName
 
-    data = connection.recv(1024)
-    data = doDecrypt(data)
+    data = rcvData(connection)
 
     if str(data) == "write":                                                        # Client wants to upload file
         connection.sendall("0")
@@ -92,6 +91,23 @@ def serve(connection):
     else:
         connection.sendall("-1")                                                # Invalid argument from client, respond with error code
     connection.close()
+
+def sendData(data, conn):
+    if cipher != "null":
+        encrypted_bytes = doEncrypt(data)
+        conn.sendall(encrypted_bytes)
+    else:
+        conn.sendall(data)
+    return
+
+def rcvData(conn):
+    if cipher != "null":
+        encrypted_bytes = conn.recv(1024)
+        decrypted_bytes = doDecrypt(encrypted_bytes)
+        return decrypted_bytes
+    else:
+        data = conn.recv(1024)
+        return data
 
 # Create session key using sha3-256(seed|nonce|"SK")
 def getSessionKey(nonce):
