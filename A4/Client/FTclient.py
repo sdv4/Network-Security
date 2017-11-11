@@ -7,23 +7,26 @@
 # Sources viewed or consulted:
 # https://docs.python.org/3/library/fileinput.html#fileinput.FileInput - for info on reading from stdin
 from __future__ import print_function                                           # Import python3 print function
-import os, random, string, hashlib, socket, sys, fileinput
+import os, random, string, hashlib, socket, sys, fileinput, io
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 
 def download(conn):
-    sendData(conn, READ)                                                           # Indicate to server that client wants to download files
+    sendData(conn, READ)                                                        # Indicate to server that client wants to download files
     data = rcvData(conn, 1024)
     if str(data) == "1":                                                        # Server ready to receive fileName
         sendData(conn, fileName.encode())
-        fileSize = rcvData(conn, 1024)                                              # receive file size from
-        print("DEBUG: File size is " + str(fileSize))
+        fileSize = rcvData(conn, 1024)                                          # receive file size from
         if str(fileSize) != "-1":
             try:
-                sendData(conn, ACK)                                              # Indicate ready to read file from server
-                theFile = rcvData(conn, int(fileSize))                                      # get entire file
-                print("DEBUG: file received")
+                sendData(conn, ACK)                                             # Indicate ready to read file from server
+                theFile = b''
+                while 1:
+                    if len(theFile) == int(fileSize):                           # Read up to file size
+                        break
+                    data = rcvData(conn, 1040)                                  # Receive up to 1040 bytes = 1024 byte message + 16 byte padding
+                    theFile += data
                 print(theFile)
                 sendData(conn, ACK)
             except Exception as e:
@@ -37,15 +40,21 @@ def download(conn):
     sys.exit()
 
 def upload(conn):
-    sendData(conn, WRITE)                                                           # Indicate to server that client wants to upload files
+    sendData(conn, WRITE)                                                       # Indicate to server that client wants to upload files
     data = rcvData(conn, 1024)
     if str(data) == "1":
-        sendData(conn, fileName.encode())
+        sendData(conn, fileName.encode())                                       # Send file name to server to start transfer
         fileNameEcho = rcvData(conn, 1024)
         if str(fileNameEcho) == fileName :
             print(fileName)
-            for block in fileinput.input(files='-',):
-                sendData(conn, block)
+            block = b''
+            for line in fileinput.input(files='-',):
+                block += line                                                   # 'Block' is treated as a queue of bytes from 'line' and 1024 bytes exit at a time
+                if len(block) >= 1024:
+                    full_block = block[:1024]                                   # Cut the first 1024 bytes from block to encrypt and send
+                    block = block[1024:len(block)]                              # Keep the remainder of the block
+                    sendData(conn, full_block)
+            sendData(conn, block)                                               # Encrypt then send the remainder of block
             conn.shutdown(socket.SHUT_WR)
             statusResponse = rcvData(conn, 1024)
             if str(statusResponse) == "1":
@@ -57,6 +66,7 @@ def upload(conn):
     conn.close()
     sys.exit()
 
+# Encrypt (if enabled) and send data bytes
 def sendData(conn, data):
     if cipher != "null":
         encrypted_bytes = doEncrypt(data)
@@ -65,30 +75,29 @@ def sendData(conn, data):
         conn.sendall(data)
     return
 
+# Receive data bytes and decrypt (if enabled)
 def rcvData(conn, size):
-    print("DEBUG: Receiving file of size: " + str(size))
-    if cipher != "null":
-        encrypted_bytes = conn.recv(size)
-        print("DEBUG: Starting to decrypt received bytes of size: " + str(len(encrypted_bytes)))
+    data = conn.recv(size)
+    if (len(data) > 0) and (cipher != "null"):
+        encrypted_bytes = data
         decrypted_bytes = doDecrypt(encrypted_bytes)
-        print("DEBUG: Decryption successful. Bytes size is: " + str(len(decrypted_bytes)))
         return decrypted_bytes
-    else:
-        data = conn.recv(size)
-        return data
+    return data
 
-# Create session key using sha3-256(seed|nonce|"SK")
-def getSessionKey(nonce):
-    session_key = hashlib.sha256(KEY + nonce + "SK").digest()
-    if cipher == "aes128":
-        return session_key[:16]                     # Returns the first 16 bytes for AES-CBC-128
-    elif  cipher == "aes256":
-        return session_key                         # Returns all 32 bytes for AES-CBC-256
+# Pads using PKCS7 padding then encrypts
+def doEncrypt(plaintext):
+    encryptor, padder = initEncryptor()
+    padded_bytes = padder.update(plaintext) + padder.finalize()
+    encrypted_bytes = encryptor.update(padded_bytes) + encryptor.finalize()
+    return encrypted_bytes
 
-# Create IV using sha3-256(seed|nonce|"IV")
-def getIV(nonce):
-    iv = hashlib.sha256(KEY + nonce + "IV").digest()
-    return iv[:16]              # Returns the first 16 bytes (ie. the correct size for an IV in AES-CBC)
+# Decrypts then unpads using PKCS7 padding
+def doDecrypt(ciphertext):
+    # Initialize cipher objects
+    decryptor, unpadder = initDecryptor()
+    decrypted_bytes = decryptor.update(ciphertext) + decryptor.finalize()
+    unpadded_bytes = unpadder.update(decrypted_bytes) + unpadder.finalize()
+    return unpadded_bytes
 
 # Create encryptor and padder objects needed for AES-CBC
 def initEncryptor():
@@ -106,22 +115,18 @@ def initDecryptor():
         unpadder = padding.PKCS7(128).unpadder()
         return decryptor, unpadder
 
-def doEncrypt(plaintext):
-    # Initialize cipher objects
-    encryptor, padder = initEncryptor()
-    padded_bytes = padder.update(plaintext) + padder.finalize()
-    encrypted_bytes = encryptor.update(padded_bytes) + encryptor.finalize()
-    return encrypted_bytes
+# Create session key using sha3-256(seed|nonce|"SK")
+def getSessionKey(nonce):
+    session_key = hashlib.sha256(KEY + nonce + "SK").digest()
+    if cipher == "aes128":
+        return session_key[:16]                                                 # Returns the first 16 bytes for AES-CBC-128
+    elif  cipher == "aes256":
+        return session_key                                                      # Returns all 32 bytes for AES-CBC-256
 
-def doDecrypt(ciphertext):
-    # Initialize cipher objects
-    decryptor, unpadder = initDecryptor()
-    print("DEBUG: size of received bytes " + str(len(ciphertext)))
-    decrypted_bytes = decryptor.update(ciphertext) + decryptor.finalize()
-    print("DEBUG: Decrypted bytes size is " + str(len(decrypted_bytes)))
-    unpadded_bytes = unpadder.update(decrypted_bytes) + unpadder.finalize()
-    print("DEBUG: unpadded_bytes is size " + str(len(unpadded_bytes)))
-    return unpadded_bytes
+# Create IV using sha3-256(seed|nonce|"IV")
+def getIV(nonce):
+    iv = hashlib.sha256(KEY + nonce + "IV").digest()
+    return iv[:16]                                                              # Returns the first 16 bytes (ie. the correct size for an IV in AES-CBC)
 
 def main():
     global PORT

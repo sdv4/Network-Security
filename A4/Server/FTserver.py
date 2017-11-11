@@ -8,26 +8,28 @@
 # http://www.binarytides.com/python-socket-server-code-example/ - for help structuring server
 # https://www.digitalocean.com/community/tutorials/how-to-handle-plain-text-files-in-python-3 - for information on file creation
 from __future__ import print_function                                           # Import python3 print function
-import os, random, string, hashlib, sys, socket
+import os, random, string, hashlib, sys, socket, io
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 
-#TODO: implement client authentication using shared key
+#Authenticates a client by using response=sha256(secret_key|challenge)
 def authenticate_client(connection, key):
     global cipher
     global session_key
     global iv
 
+    #Receive first msg=(cipher, client_nonce) from the client "in the clear"
     cipher_nonce = connection.recv(1024)
     cipher_nonce= str(cipher_nonce).split(",")
     cipher = cipher_nonce[0]
     client_nonce = cipher_nonce[1]
 
+    #Create unique session key and iv
     session_key = getSessionKey(client_nonce)
     iv = getIV(client_nonce)
 
-    #if cipher == "null"
+    #Send challenge to client and authenticate using their response
     challenge_nonce = os.urandom(16)
     sendData(connection, challenge_nonce)
     client_response = rcvData(connection, 1024)
@@ -39,63 +41,61 @@ def authenticate_client(connection, key):
         connection.close()
         return False
 
-
-
 def serve(connection):
     global fileName
 
-    data = rcvData(connection, 1024)
+    data = rcvData(connection, 1024)                                            # Receive command from client
 
-    if str(data) == "write":                                                        # Client wants to upload file
+    if str(data) == "write":                                                    # Client wants to upload file
         sendData(connection, ACK)
-        fileName = rcvData(connection, 1024)                                        # Get name of file to be uploaded
+        fileName = rcvData(connection, 1024)                                    # Get name of file to be uploaded
         fileName = (str(fileName)).replace('\n','')                             # for connecting with netcat
         print("Command: write   File name: " + fileName)
         theFile = open(fileName, "w+")                                          # Create file obj with specified name or write over file if already exists in dir
-        sendData(connection, fileName.encode())                                            # Echo file name back to client to indicate ready to receive
+        sendData(connection, fileName.encode())                                 # Echo file name back to client to indicate ready to receive
         while 1:                                                                # Receive file data from client until no more sent
-            data = rcvData(connection, 1024)
+            data = rcvData(connection, 1040)                                    # Receive up to 1040 bytes = 1024 byte message + 16 byte padding
             if len(data) == 0:
                 break
             theFile.write(data)                                                 # Write data to file
-
         theFile.close()                                                         # Close/finish writting to file and
-        sendData(connection, ACK)                                                 # Send success indicator
-        print("Status: success")
+        sendData(connection, ACK)                                               # Send success indicator
+        print("Status: Client successfully wrote file")
 
-    elif str(data) == "read":                                                      # Client wants to download file
-        sendData(connection, ACK)                                                 # Ready to get fileNmame
-        fileName = rcvData(connection, 1024)                                        # Get name of file to be sent to client
+    elif str(data) == "read":                                                   # Client wants to download file
+        sendData(connection, ACK)                                               # Ready to get fileNmame
+        fileName = rcvData(connection, 1024)                                    # Get name of file to be sent to client
         fileName = (str(fileName)).replace('\n','')                             # for connecting with netcat
         print("Command: read   File name: " + fileName)
         if os.path.exists(fileName):
             theFile = open(fileName, "r")
             data = theFile.read()
-            if cipher != "null":
-                data = doEncrypt(data)
             fileSize = len(data)
-            sendData(connection, str(fileSize).encode())                                   # Send file size so client knows file exists and will come next
-            readyResponse = rcvData(connection, 1024)                               # Will receive 1 when client ready to receive
-            print("DEBUG: Received: " + readyResponse)
+            sendData(connection, str(fileSize).encode())                        # Send file size so client knows file exists and will come next
+            readyResponse = rcvData(connection, 1024)                           # Will receive 1 when client ready to receive
             if str(readyResponse) == "1":
-                connection.sendall(data)                                        # Send file
+                theFile.seek(0)                                                 # Reset file pointer to beginning of file
+                block = theFile.read(1024)                                      # Read and encrypt 1024 bytes at a time from the file
+                while len(block) > 0:
+                    sendData(connection, block)
+                    block = theFile.read(1024)
                 theFile.close()
                 status = rcvData(connection, 1024)
-                print("DEBUG: Status: " + status)
                 if str(status) == "1":
-                    print("Status: success")
+                    print("Status: Client successfully read file")
                 else:
                     print("Status: fail. Client did not receive file.")
             else:
                 print("Status: fail. Client not ready")
 
         else:
-            sendData(connection, ERROR)                                            # File DNE, send protocol error code
+            sendData(connection, ERROR)                                         # File DNE, send protocol error code
             print("Status: fail - " + fileName + " does not exist on server")
     else:
-        sendData(connection, ERROR)                                                # Invalid argument from client, respond with error code
+        sendData(connection, ERROR)                                             # Invalid argument from client, respond with error code
     connection.close()
 
+# Encrypt (if enabled) and send data bytes
 def sendData(conn, data):
     if cipher != "null":
         encrypted_bytes = doEncrypt(data)
@@ -104,27 +104,29 @@ def sendData(conn, data):
         conn.sendall(data)
     return
 
+# Receive data bytes and decrypt (if enabled)
 def rcvData(conn, size):
-    if cipher != "null":
-        encrypted_bytes = conn.recv(size)
+    data = conn.recv(size)
+    if (len(data) > 0) and (cipher != "null"):
+        encrypted_bytes = data
         decrypted_bytes = doDecrypt(encrypted_bytes)
         return decrypted_bytes
-    else:
-        data = conn.recv(size)
-        return data
+    return data
 
-# Create session key using sha3-256(seed|nonce|"SK")
-def getSessionKey(nonce):
-    session_key = hashlib.sha256(KEY + nonce + "SK").digest()
-    if cipher == "aes128":
-        return session_key[:16]                     # Returns the first 16 bytes for AES-CBC-128
-    elif  cipher == "aes256":
-        return session_key                         # Returns all 32 bytes for AES-CBC-256
+# Pads using PKCS7 padding then encrypts
+def doEncrypt(plaintext):
+    encryptor, padder = initEncryptor()
+    padded_bytes = padder.update(plaintext) + padder.finalize()
+    encrypted_bytes = encryptor.update(padded_bytes) + encryptor.finalize()
+    return encrypted_bytes
 
-# Create IV using sha3-256(seed|nonce|"IV")
-def getIV(nonce):
-    iv = hashlib.sha256(KEY + nonce + "IV").digest()
-    return iv[:16]              # Returns the first 16 bytes (ie. the correct size for an IV in AES-CBC)
+# Decrypts then unpads using PKCS7 padding
+def doDecrypt(ciphertext):
+    # Initialize cipher objects
+    decryptor, unpadder = initDecryptor()
+    decrypted_bytes = decryptor.update(ciphertext) + decryptor.finalize()
+    unpadded_bytes = unpadder.update(decrypted_bytes) + unpadder.finalize()
+    return unpadded_bytes
 
 # Create encryptor and padder objects needed for AES-CBC
 def initEncryptor():
@@ -142,21 +144,19 @@ def initDecryptor():
         unpadder = padding.PKCS7(128).unpadder()
         return decryptor, unpadder
 
-def doEncrypt(plaintext):
-    # Initialize cipher objects
-    encryptor, padder = initEncryptor()
-    padded_bytes = padder.update(plaintext) + padder.finalize()
-    print("DEBUG: Padded bytes size: " + str(len(padded_bytes)))
-    encrypted_bytes = encryptor.update(padded_bytes) + encryptor.finalize()
-    print("DEBUG: Encrypted bytes size: " + str(len(encrypted_bytes)))
-    return encrypted_bytes
+# Create session key using sha3-256(seed|nonce|"SK")
+def getSessionKey(nonce):
+    session_key = hashlib.sha256(KEY + nonce + "SK").digest()
+    if cipher == "aes128":
+        return session_key[:16]                                                 # Returns the first 16 bytes for AES-CBC-128
+    elif  cipher == "aes256":
+        return session_key                                                      # Returns all 32 bytes for AES-CBC-256
 
-def doDecrypt(ciphertext):
-    # Initialize cipher objects
-    decryptor, unpadder = initDecryptor()
-    decrypted_bytes = decryptor.update(ciphertext) + decryptor.finalize()
-    unpadded_bytes = unpadder.update(decrypted_bytes) + unpadder.finalize()
-    return unpadded_bytes
+# Create IV using sha3-256(seed|nonce|"IV")
+def getIV(nonce):
+    iv = hashlib.sha256(KEY + nonce + "IV").digest()
+    return iv[:16]                                                              # Returns the first 16 bytes (ie. the correct size for an IV in AES-CBC)
+
 
 def main():
     global PORT
@@ -189,6 +189,7 @@ def main():
                     serve(client_connection)
                 else:
                     print("Error: wrong key", file = sys.stderr)
+                    print("Current key is: " + KEY)
         except KeyboardInterrupt:
             print("\nControl-C detected. Closing server...")
             listening_socket.close()
