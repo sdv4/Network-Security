@@ -36,6 +36,8 @@ def download(conn):
             print("Error: file could not be read by server", file = sys.stderr)
     else:
         print("Error: file could not be read by server", file = sys.stderr)
+    conn.close()
+    sys.exit()
 
 def upload(conn):
     sendData(conn, WRITE)                                                       # Indicate to server that client wants to upload files
@@ -181,9 +183,6 @@ def main():
 
     else:
         print("Error: wrong command line arguments", file = sys.stderr)
-
-    conn.close()
-    sys.exit()
 
 
 if __name__ == "__main__":
