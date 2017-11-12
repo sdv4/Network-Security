@@ -55,23 +55,31 @@ python FTclient.py <command> <file name> <host>:<port> <cipher> <key>
  \hline
  ~& Client & Server\\
  \hline\hline
- 1. & send \texttt{write} & ~ \\ 
+ 1. & send cipher,nonce1 & ~\\
  \hline
- 2. & ~ & send {ACK} \\ 
+ 2. & ~& send challenge nonce2 \\
  \hline
- 3. & send \texttt{fileName} & ~ \\ 
+ 3. & send sha256(key|nonce2) & ~ \\
  \hline
- 4. & ~ & echo \texttt{fileName}\\
+ 4. & ~& send ACK\\
  \hline
- 5. & encrypt 1024 byte blocks and \texttt{send} & ~\\
+ 5. & send \texttt{write} & ~ \\ 
  \hline
- 6. & ~& \texttt{receive} and decrypt blocks\\
+ 6. & ~ & send ACK\\ 
  \hline
- 7. &\texttt{send} EOF &~\\
+ 7. & send \texttt{fileName} & ~ \\ 
  \hline
- 8. & ~& \texttt{send} status/result flag\\
+ 8. & ~ & echo \texttt{fileName}\\
  \hline
- 9. & \texttt{print} status & ~\\
+ 9. & encrypt 1024 byte blocks and \texttt{send} & ~\\
+ \hline
+ 10. & ~& \texttt{receive} and decrypt blocks\\
+ \hline
+ 11. &\texttt{send} EOF &~\\
+ \hline
+ 12. & ~& \texttt{send} status/result flag\\
+ \hline
+ 13. & \texttt{print} status & ~\\
  \hline
 \end{tabular}
 \end{center}
@@ -82,21 +90,29 @@ python FTclient.py <command> <file name> <host>:<port> <cipher> <key>
  \hline
  ~& Client & Server\\
  \hline\hline
- 1. & \texttt{send} \texttt{read} & ~ \\ 
+ 1. & send cipher,nonce1 & ~\\
  \hline
- 2. & ~ & \texttt{send} {ACK} \\ 
+ 2. & ~& send challenge nonce2 \\
  \hline
- 3. & \texttt{send} file name & ~ \\ 
+ 3. & send sha256(key|nonce2) & ~ \\
  \hline
- 4. & ~ & \texttt{send} file size\\
+ 4. & ~& send ACK\\
  \hline
- 5. & ~& encrypt 1024 byte blocks and \texttt{send}\\
+ 5. & \texttt{send} \texttt{read} & ~ \\ 
  \hline
- 6. & \texttt{receive} and decrypt blocks &~\\
+ 6. & ~ & \texttt{send} {ACK} \\ 
  \hline
- 8. & \texttt{send} status/result flag &~\\
+ 7. & \texttt{send} file name & ~ \\ 
  \hline
- 9. & \texttt{print} status & ~\\
+ 8. & ~ & \texttt{send} file size\\
+ \hline
+ 9. & ~& encrypt 1024 byte blocks and \texttt{send}\\
+ \hline
+ 10. & \texttt{receive} and decrypt blocks &~\\
+ \hline
+ 11. & \texttt{send} status/result flag &~\\
+ \hline
+ 12. & \texttt{print} status & ~\\
  \hline
 \end{tabular}
 \end{center}
