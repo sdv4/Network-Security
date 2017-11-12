@@ -1,0 +1,630 @@
+ 
+aes256 1KB download test 1 :
+OK
+
+real	0m0.299s
+user	0m0.129s
+sys	0m0.070s
+ 
+aes256 1KB download test 2 :
+OK
+
+real	0m0.147s
+user	0m0.102s
+sys	0m0.029s
+ 
+aes256 1KB download test 3 :
+OK
+
+real	0m0.130s
+user	0m0.098s
+sys	0m0.023s
+ 
+aes256 1KB download test 4 :
+OK
+
+real	0m0.139s
+user	0m0.097s
+sys	0m0.025s
+ 
+aes256 1KB download test 5 :
+OK
+
+real	0m0.135s
+user	0m0.101s
+sys	0m0.024s
+ 
+aes256 1KB download test 6 :
+OK
+
+real	0m0.137s
+user	0m0.101s
+sys	0m0.024s
+ 
+aes256 1KB download test 7 :
+OK
+
+real	0m0.135s
+user	0m0.099s
+sys	0m0.026s
+ 
+aes256 1KB download test 8 :
+OK
+
+real	0m0.132s
+user	0m0.101s
+sys	0m0.023s
+ 
+aes256 1KB download test 9 :
+OK
+
+real	0m0.137s
+user	0m0.105s
+sys	0m0.025s
+ 
+aes256 1KB download test 10 :
+OK
+
+real	0m0.137s
+user	0m0.104s
+sys	0m0.025s
+ 
+aes256 1MB download test 1 :
+OK
+
+real	0m7.975s
+user	0m6.957s
+sys	0m0.621s
+ 
+aes256 1MB download test 2 :
+OK
+
+real	0m7.414s
+user	0m6.600s
+sys	0m0.532s
+ 
+aes256 1MB download test 3 :
+OK
+
+real	0m7.398s
+user	0m6.641s
+sys	0m0.548s
+ 
+aes256 1MB download test 4 :
+OK
+
+real	0m7.466s
+user	0m6.647s
+sys	0m0.560s
+ 
+aes256 1MB download test 5 :
+OK
+
+real	0m7.563s
+user	0m6.696s
+sys	0m0.590s
+ 
+aes256 1MB download test 6 :
+OK
+
+real	0m7.486s
+user	0m6.628s
+sys	0m0.584s
+ 
+aes256 1MB download test 7 :
+OK
+
+real	0m7.490s
+user	0m6.634s
+sys	0m0.566s
+ 
+aes256 1MB download test 8 :
+OK
+
+real	0m7.392s
+user	0m6.531s
+sys	0m0.586s
+ 
+aes256 1MB download test 9 :
+OK
+
+real	0m7.453s
+user	0m6.632s
+sys	0m0.552s
+ 
+aes256 1MB download test 10 :
+OK
+
+real	0m7.423s
+user	0m6.629s
+sys	0m0.545s
+ 
+aes256 1GB download test 1 :
+OK
+
+real	1m14.738s
+user	1m6.620s
+sys	0m5.296s
+ 
+aes256 1GB download test 2 :
+OK
+
+real	1m14.287s
+user	1m6.090s
+sys	0m5.322s
+ 
+aes256 1GB download test 3 :
+OK
+
+real	1m14.077s
+user	1m5.922s
+sys	0m5.262s
+ 
+aes256 1GB download test 4 :
+OK
+
+real	1m14.108s
+user	1m6.012s
+sys	0m5.250s
+ 
+aes256 1GB download test 5 :
+OK
+
+real	1m14.096s
+user	1m6.200s
+sys	0m5.300s
+ 
+aes256 1GB download test 6 :
+OK
+
+real	1m13.967s
+user	1m5.743s
+sys	0m5.303s
+ 
+aes256 1GB download test 7 :
+OK
+
+real	1m13.922s
+user	1m5.903s
+sys	0m5.180s
+ 
+aes256 1GB download test 8 :
+OK
+
+real	1m14.084s
+user	1m6.159s
+sys	0m5.212s
+ 
+aes256 1GB download test 9 :
+OK
+
+real	1m13.474s
+user	1m5.600s
+sys	0m5.287s
+ 
+aes256 1GB download test 10 :
+OK
+
+real	1m12.913s
+user	1m5.413s
+sys	0m4.989s
+ 
+aes128 1KB download test 1 :
+OK
+
+real	0m0.138s
+user	0m0.106s
+sys	0m0.024s
+ 
+aes128 1KB download test 2 :
+OK
+
+real	0m0.132s
+user	0m0.096s
+sys	0m0.024s
+ 
+aes128 1KB download test 3 :
+OK
+
+real	0m0.132s
+user	0m0.096s
+sys	0m0.023s
+ 
+aes128 1KB download test 4 :
+OK
+
+real	0m0.131s
+user	0m0.096s
+sys	0m0.023s
+ 
+aes128 1KB download test 5 :
+OK
+
+real	0m0.131s
+user	0m0.096s
+sys	0m0.023s
+ 
+aes128 1KB download test 6 :
+OK
+
+real	0m0.134s
+user	0m0.099s
+sys	0m0.023s
+ 
+aes128 1KB download test 7 :
+OK
+
+real	0m0.137s
+user	0m0.100s
+sys	0m0.023s
+ 
+aes128 1KB download test 8 :
+OK
+
+real	0m0.139s
+user	0m0.103s
+sys	0m0.025s
+ 
+aes128 1KB download test 9 :
+OK
+
+real	0m0.133s
+user	0m0.096s
+sys	0m0.023s
+ 
+aes128 1KB download test 10 :
+OK
+
+real	0m0.140s
+user	0m0.103s
+sys	0m0.026s
+ 
+aes128 1MB download test 1 :
+OK
+
+real	0m7.183s
+user	0m6.391s
+sys	0m0.535s
+ 
+aes128 1MB download test 2 :
+OK
+
+real	0m7.174s
+user	0m6.405s
+sys	0m0.525s
+ 
+aes128 1MB download test 3 :
+OK
+
+real	0m7.256s
+user	0m6.548s
+sys	0m0.521s
+ 
+aes128 1MB download test 4 :
+OK
+
+real	0m7.161s
+user	0m6.394s
+sys	0m0.540s
+ 
+aes128 1MB download test 5 :
+OK
+
+real	0m7.221s
+user	0m6.452s
+sys	0m0.540s
+ 
+aes128 1MB download test 6 :
+OK
+
+real	0m7.300s
+user	0m6.597s
+sys	0m0.523s
+ 
+aes128 1MB download test 7 :
+OK
+
+real	0m7.191s
+user	0m6.446s
+sys	0m0.512s
+ 
+aes128 1MB download test 8 :
+OK
+
+real	0m7.216s
+user	0m6.454s
+sys	0m0.515s
+ 
+aes128 1MB download test 9 :
+OK
+
+real	0m7.163s
+user	0m6.419s
+sys	0m0.515s
+ 
+aes128 1MB download test 10 :
+OK
+
+real	0m7.185s
+user	0m6.438s
+sys	0m0.515s
+ 
+aes128 1GB download test 1 :
+OK
+
+real	1m12.528s
+user	1m5.044s
+sys	0m5.100s
+ 
+aes128 1GB download test 2 :
+OK
+
+real	1m12.420s
+user	1m4.851s
+sys	0m5.030s
+ 
+aes128 1GB download test 3 :
+OK
+
+real	1m12.499s
+user	1m4.990s
+sys	0m5.065s
+ 
+aes128 1GB download test 4 :
+OK
+
+real	1m12.488s
+user	1m4.552s
+sys	0m5.235s
+ 
+aes128 1GB download test 5 :
+OK
+
+real	1m12.659s
+user	1m4.956s
+sys	0m5.119s
+ 
+aes128 1GB download test 6 :
+OK
+
+real	1m14.738s
+user	1m6.566s
+sys	0m5.340s
+ 
+aes128 1GB download test 7 :
+OK
+
+real	1m13.828s
+user	1m6.019s
+sys	0m5.253s
+ 
+aes128 1GB download test 8 :
+OK
+
+real	1m13.473s
+user	1m5.624s
+sys	0m5.195s
+ 
+aes128 1GB download test 9 :
+OK
+
+real	1m13.463s
+user	1m5.542s
+sys	0m5.154s
+ 
+aes128 1GB download test 10 :
+OK
+
+real	1m13.660s
+user	1m6.246s
+sys	0m5.064s
+ 
+null 1KB download test 1 :
+OK
+
+real	0m0.066s
+user	0m0.046s
+sys	0m0.014s
+ 
+null 1KB download test 2 :
+OK
+
+real	0m0.065s
+user	0m0.042s
+sys	0m0.017s
+ 
+null 1KB download test 3 :
+OK
+
+real	0m0.061s
+user	0m0.042s
+sys	0m0.012s
+ 
+null 1KB download test 4 :
+OK
+
+real	0m0.059s
+user	0m0.040s
+sys	0m0.012s
+ 
+null 1KB download test 5 :
+OK
+
+real	0m0.060s
+user	0m0.041s
+sys	0m0.012s
+ 
+null 1KB download test 6 :
+OK
+
+real	0m0.061s
+user	0m0.040s
+sys	0m0.015s
+ 
+null 1KB download test 7 :
+OK
+
+real	0m0.059s
+user	0m0.040s
+sys	0m0.013s
+ 
+null 1KB download test 8 :
+OK
+
+real	0m0.066s
+user	0m0.041s
+sys	0m0.020s
+ 
+null 1KB download test 9 :
+OK
+
+real	0m0.062s
+user	0m0.042s
+sys	0m0.013s
+ 
+null 1KB download test 10 :
+OK
+
+real	0m0.059s
+user	0m0.040s
+sys	0m0.012s
+ 
+null 1MB download test 1 :
+OK
+
+real	0m0.739s
+user	0m0.276s
+sys	0m0.368s
+ 
+null 1MB download test 2 :
+Error: file could not be read by server
+
+real	0m0.072s
+user	0m0.047s
+sys	0m0.013s
+ 
+null 1MB download test 3 :
+OK
+
+real	0m0.738s
+user	0m0.278s
+sys	0m0.367s
+ 
+null 1MB download test 4 :
+OK
+
+real	0m0.754s
+user	0m0.282s
+sys	0m0.366s
+ 
+null 1MB download test 5 :
+OK
+
+real	0m0.744s
+user	0m0.281s
+sys	0m0.369s
+ 
+null 1MB download test 6 :
+OK
+
+real	0m0.763s
+user	0m0.282s
+sys	0m0.382s
+ 
+null 1MB download test 7 :
+OK
+
+real	0m0.755s
+user	0m0.279s
+sys	0m0.368s
+ 
+null 1MB download test 8 :
+OK
+
+real	0m0.807s
+user	0m0.288s
+sys	0m0.423s
+ 
+null 1MB download test 9 :
+OK
+
+real	0m0.779s
+user	0m0.287s
+sys	0m0.402s
+ 
+null 1MB download test 10 :
+OK
+
+real	0m0.749s
+user	0m0.284s
+sys	0m0.365s
+ 
+null 1GB download test 1 :
+OK
+
+real	0m7.441s
+user	0m2.465s
+sys	0m3.753s
+ 
+null 1GB download test 2 :
+OK
+
+real	0m7.275s
+user	0m2.473s
+sys	0m3.619s
+ 
+null 1GB download test 3 :
+OK
+
+real	0m7.355s
+user	0m2.412s
+sys	0m3.729s
+ 
+null 1GB download test 4 :
+Error: file could not be read by server
+
+real	0m0.135s
+user	0m0.044s
+sys	0m0.013s
+ 
+null 1GB download test 5 :
+OK
+
+real	0m7.286s
+user	0m2.417s
+sys	0m3.635s
+ 
+null 1GB download test 6 :
+OK
+
+real	0m7.399s
+user	0m2.470s
+sys	0m3.731s
+ 
+null 1GB download test 7 :
+OK
+
+real	0m7.425s
+user	0m2.446s
+sys	0m3.751s
+ 
+null 1GB download test 8 :
+OK
+
+real	0m7.429s
+user	0m2.464s
+sys	0m3.700s
+ 
+null 1GB download test 9 :
+OK
+
+real	0m7.379s
+user	0m2.405s
+sys	0m3.677s
+ 
+null 1GB download test 10 :
+OK
+
+real	0m7.418s
+user	0m2.486s
+sys	0m3.711s
