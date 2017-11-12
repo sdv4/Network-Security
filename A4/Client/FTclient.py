@@ -50,7 +50,7 @@ def upload(conn):
             block = b''
             for line in fileinput.input(files='-',):
                 block += line                                                   # 'Block' is treated as a queue of bytes from 'line' and 1024 bytes exit at a time
-                if len(block) >= 1024:
+                while len(block) > 1024:
                     full_block = block[:1024]                                   # Cut the first 1024 bytes from block to encrypt and send
                     block = block[1024:len(block)]                              # Keep the remainder of the block
                     sendData(conn, full_block)
