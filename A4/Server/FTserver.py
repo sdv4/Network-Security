@@ -13,7 +13,6 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 
-#Authenticates a client by using response=sha256(secret_key|challenge)
 def authenticate_client(connection, key):
     global cipher
     global session_key
@@ -24,11 +23,16 @@ def authenticate_client(connection, key):
     cipher_nonce= str(cipher_nonce).split(",")
     cipher = cipher_nonce[0]
     client_nonce = cipher_nonce[1]
+    print(" cipher=" + cipher)
+    print("nonce=" + client_nonce)
 
     #Create unique session key and iv
     session_key = getSessionKey(client_nonce)
     iv = getIV(client_nonce)
+    print("IV=" + ''.join(x.encode('hex') for x in iv))
 
+    if cipher != "null":
+        print("SK=" + ''.join(x.encode('hex') for x in session_key))
     #Send challenge to client and authenticate using their response
     challenge_nonce = os.urandom(16)
     sendData(connection, challenge_nonce)
@@ -36,8 +40,11 @@ def authenticate_client(connection, key):
     test_string = hashlib.sha256(KEY + challenge_nonce).digest()
     if client_response == test_string:
         print("Authentication successful")
+        #sendData(connection, ACK)                                               # send authentication succesful ACK
         return True
     else:
+        print("Authentication failed.")
+        #sendData(connection, ERROR)
         connection.close()
         return False
 
@@ -184,7 +191,7 @@ def main():
             while 1: #listen for client connections - serve - repeat
                 print("Waiting for client connection...")
                 client_connection, client_address = listening_socket.accept()
-                print("New connection from client on address " + str(client_address))
+                sys.stdout.write("New connection from client on address " + str(client_address))
                 if authenticate_client(client_connection, KEY) :
                     serve(client_connection)
                 else:

@@ -1,0 +1,202 @@
+1KB Test 1 : 
+OK
+
+real	0m0.265s
+user	0m0.113s
+sys	0m0.030s
+ 
+1KB Test 2 : 
+OK
+
+real	0m0.160s
+user	0m0.119s
+sys	0m0.029s
+ 
+1KB Test 3 : 
+OK
+
+real	0m0.161s
+user	0m0.120s
+sys	0m0.029s
+ 
+1KB Test 4 : 
+OK
+
+real	0m0.162s
+user	0m0.122s
+sys	0m0.029s
+ 
+1KB Test 5 : 
+OK
+
+real	0m0.161s
+user	0m0.120s
+sys	0m0.029s
+ 
+1KB Test 6 : 
+OK
+
+real	0m0.159s
+user	0m0.118s
+sys	0m0.029s
+ 
+1KB Test 7 : 
+OK
+
+real	0m0.163s
+user	0m0.122s
+sys	0m0.029s
+ 
+1KB Test 8 : 
+OK
+
+real	0m0.164s
+user	0m0.121s
+sys	0m0.031s
+ 
+1KB Test 9 : 
+OK
+
+real	0m0.168s
+user	0m0.125s
+sys	0m0.031s
+ 
+1KB Test 10 : 
+OK
+
+real	0m0.162s
+user	0m0.121s
+sys	0m0.030s
+
+
+1MB Test 1 :
+
+real	0m0.345s
+user	0m0.177s
+sys	0m0.046s
+
+1MB Test 2 :
+
+real	0m0.255s
+user	0m0.180s
+sys	0m0.047s
+
+1MB Test 3 :
+
+real	0m0.256s
+user	0m0.179s
+sys	0m0.049s
+
+1MB Test 4 :
+
+real	0m0.259s
+user	0m0.183s
+sys	0m0.048s
+
+1MB Test 5 :
+
+real	0m0.255s
+user	0m0.182s
+sys	0m0.048s
+
+1MB Test 6 :
+
+real	0m0.266s
+user	0m0.190s
+sys	0m0.050s
+
+1MB Test 7 :
+
+real	0m0.263s
+user	0m0.186s
+sys	0m0.050s
+
+1MB Test 8 :
+
+real	0m0.255s
+user	0m0.182s
+sys	0m0.045s
+
+1MB Test 9 :
+
+real	0m0.255s
+user	0m0.179s
+sys	0m0.049s
+
+1MB Test 10 :
+
+real	0m0.254s
+user	0m0.179s
+sys	0m0.049s
+
+
+
+
+
+1GB:
+
+real	0m0.082s
+user	0m0.053s
+sys	0m0.021s
+Shanes-MacBook-Pro:Client shanesims$ for i in {1..10} do echo "" ; echo "Test $i : "; time cat 1GB.bin | python FTclient.py write 1GB.bin localhost:8001 aes256 passpass; done
+-bash: syntax error near unexpected token `echo'
+Shanes-MacBook-Pro:Client shanesims$ time cat 1GB.bin | python FTclient.py write 1GB.bin localhost:8001 null passpass
+OK
+
+real	0m6.675s
+user	0m2.076s
+sys	0m1.378s
+Shanes-MacBook-Pro:Client shanesims$ time cat 1GB.bin | python FTclient.py write 1GB.bin localhost:8001 null passpass
+OK
+
+real	0m6.671s
+user	0m2.009s
+sys	0m1.336s
+Shanes-MacBook-Pro:Client shanesims$ time cat 1GB.bin | python FTclient.py write 1GB.bin localhost:8001 null passpass
+OK
+
+real	0m6.709s
+user	0m2.045s
+sys	0m1.367s
+Shanes-MacBook-Pro:Client shanesims$ time cat 1GB.bin | python FTclient.py write 1GB.bin localhost:8001 null passpass
+OK
+
+real	0m6.692s
+user	0m2.055s
+sys	0m1.364s
+Shanes-MacBook-Pro:Client shanesims$ time cat 1GB.bin | python FTclient.py write 1GB.bin localhost:8001 null passpass
+OK
+
+real	0m6.770s
+user	0m2.080s
+sys	0m1.400s
+Shanes-MacBook-Pro:Client shanesims$ time cat 1GB.bin | python FTclient.py write 1GB.bin localhost:8001 null passpass
+OK
+
+real	0m6.807s
+user	0m2.086s
+sys	0m1.387s
+Shanes-MacBook-Pro:Client shanesims$ time cat 1GB.bin | python FTclient.py write 1GB.bin localhost:8001 null passpass
+OK
+
+real	0m6.706s
+user	0m2.041s
+sys	0m1.365s
+Shanes-MacBook-Pro:Client shanesims$ time cat 1GB.bin | python FTclient.py write 1GB.bin localhost:8001 null passpass
+OK
+
+real	0m6.773s
+user	0m2.081s
+sys	0m1.416s
+Shanes-MacBook-Pro:Client shanesims$ time cat 1GB.bin | python FTclient.py write 1GB.bin localhost:8001 null passpass
+OK
+
+real	0m6.756s
+user	0m2.057s
+sys	0m1.379s
+Shanes-MacBook-Pro:Client shanesims$ time cat 1GB.bin | python FTclient.py write 1GB.bin localhost:8001 null passpass
+OK
+
+real	0m6.793s
+user	0m2.060s
+sys	0m1.391s

@@ -1,0 +1,209 @@
+null 1KB download test 1 :
+OK
+
+real	0m0.119s
+user	0m0.046s
+sys	0m0.025s
+ 
+null 1KB download test 2 :
+Error: file could not be read by server
+
+real	0m0.063s
+user	0m0.040s
+sys	0m0.013s
+ 
+null 1KB download test 3 :
+OK
+
+real	0m0.068s
+user	0m0.044s
+sys	0m0.014s
+ 
+null 1KB download test 4 :
+OK
+
+real	0m0.077s
+user	0m0.049s
+sys	0m0.015s
+ 
+null 1KB download test 5 :
+OK
+
+real	0m0.076s
+user	0m0.049s
+sys	0m0.015s
+ 
+null 1KB download test 6 :
+OK
+
+real	0m0.073s
+user	0m0.047s
+sys	0m0.014s
+ 
+null 1KB download test 7 :
+OK
+
+real	0m0.071s
+user	0m0.046s
+sys	0m0.014s
+ 
+null 1KB download test 8 :
+OK
+
+real	0m0.072s
+user	0m0.047s
+sys	0m0.015s
+ 
+null 1KB download test 9 :
+OK
+
+real	0m0.066s
+user	0m0.046s
+sys	0m0.015s
+ 
+null 1KB download test 10 :
+OK
+
+real	0m0.075s
+user	0m0.045s
+sys	0m0.013s
+ 
+null 1MB download test 1 :
+OK
+
+real	0m0.073s
+user	0m0.048s
+sys	0m0.014s
+ 
+null 1MB download test 2 :
+OK
+
+real	0m0.072s
+user	0m0.047s
+sys	0m0.014s
+ 
+null 1MB download test 3 :
+OK
+
+real	0m0.075s
+user	0m0.049s
+sys	0m0.015s
+ 
+null 1MB download test 4 :
+OK
+
+real	0m0.074s
+user	0m0.048s
+sys	0m0.014s
+ 
+null 1MB download test 5 :
+OK
+
+real	0m0.076s
+user	0m0.050s
+sys	0m0.015s
+ 
+null 1MB download test 6 :
+OK
+
+real	0m0.098s
+user	0m0.064s
+sys	0m0.019s
+ 
+null 1MB download test 7 :
+Error: file could not be read by server
+
+real	0m0.109s
+user	0m0.064s
+sys	0m0.023s
+ 
+null 1MB download test 8 :
+OK
+
+real	0m0.098s
+user	0m0.059s
+sys	0m0.022s
+ 
+null 1MB download test 9 :
+OK
+
+real	0m0.094s
+user	0m0.057s
+sys	0m0.020s
+ 
+null 1MB download test 10 :
+OK
+
+real	0m0.115s
+user	0m0.060s
+sys	0m0.020s
+ 
+null 1GB download test 1 :
+OK
+
+real	0m8.306s
+user	0m2.641s
+sys	0m4.141s
+ 
+null 1GB download test 2 :
+OK
+
+real	0m7.527s
+user	0m2.503s
+sys	0m3.784s
+ 
+null 1GB download test 3 :
+OK
+
+real	0m7.568s
+user	0m2.461s
+sys	0m3.780s
+ 
+null 1GB download test 4 :
+Error: file could not be read by server
+
+real	0m0.199s
+user	0m0.063s
+sys	0m0.024s
+ 
+null 1GB download test 5 :
+OK
+
+real	0m7.416s
+user	0m2.550s
+sys	0m3.700s
+ 
+null 1GB download test 6 :
+OK
+
+real	0m7.421s
+user	0m2.504s
+sys	0m3.671s
+ 
+null 1GB download test 7 :
+OK
+
+real	0m8.227s
+user	0m2.705s
+sys	0m4.058s
+ 
+null 1GB download test 8 :
+OK
+
+real	0m7.478s
+user	0m2.527s
+sys	0m3.706s
+ 
+null 1GB download test 9 :
+OK
+
+real	0m7.438s
+user	0m2.482s
+sys	0m3.662s
+ 
+null 1GB download test 10 :
+OK
+
+real	0m7.449s
+user	0m2.550s
+sys	0m3.640s

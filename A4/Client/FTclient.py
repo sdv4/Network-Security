@@ -27,8 +27,9 @@ def download(conn):
                         break
                     data = rcvData(conn, 1040)                                  # Receive up to 1040 bytes = 1024 byte message + 16 byte padding
                     theFile += data
-                print(theFile)
+                sys.stdout.write(theFile)
                 sendData(conn, ACK)
+                print("OK", file = sys.stderr)
             except Exception as e:
                 sendData(conn, ERROR)
                 print("Error: " + str(e))
@@ -46,7 +47,6 @@ def upload(conn):
         sendData(conn, fileName.encode())                                       # Send file name to server to start transfer
         fileNameEcho = rcvData(conn, 1024)
         if str(fileNameEcho) == fileName :
-            print(fileName)
             block = b''
             for line in fileinput.input(files='-',):
                 block += line                                                   # 'Block' is treated as a queue of bytes from 'line' and 1024 bytes exit at a time
@@ -58,7 +58,7 @@ def upload(conn):
             conn.shutdown(socket.SHUT_WR)
             statusResponse = rcvData(conn, 1024)
             if str(statusResponse) == "1":
-                print("Upload successful - closing client...")
+                print("OK", file = sys.stderr)
         else:
             print("Error: file could not be written by server", file = sys.stderr)
     else:

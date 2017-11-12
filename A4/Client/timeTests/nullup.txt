@@ -1,0 +1,215 @@
+Null cipher
+
+1KB Test 1 : 
+OK
+
+real	0m0.095s
+user	0m0.049s
+sys	0m0.025s
+ 
+1KB Test 2 : 
+OK
+
+real	0m0.087s
+user	0m0.052s
+sys	0m0.019s
+ 
+1KB Test 3 : 
+OK
+
+real	0m0.088s
+user	0m0.056s
+sys	0m0.022s
+ 
+1KB Test 4 : 
+OK
+
+real	0m0.084s
+user	0m0.053s
+sys	0m0.021s
+ 
+1KB Test 5 : 
+OK
+
+real	0m0.066s
+user	0m0.041s
+sys	0m0.015s
+ 
+1KB Test 6 : 
+OK
+
+real	0m0.087s
+user	0m0.053s
+sys	0m0.023s
+ 
+1KB Test 7 : 
+OK
+
+real	0m0.067s
+user	0m0.042s
+sys	0m0.015s
+ 
+1KB Test 8 : 
+OK
+
+real	0m0.090s
+user	0m0.055s
+sys	0m0.024s
+ 
+1KB Test 9 : 
+OK
+
+real	0m0.062s
+user	0m0.042s
+sys	0m0.014s
+ 
+1KB Test 10 : 
+OK
+
+real	0m0.083s
+user	0m0.049s
+sys	0m0.018s
+
+
+
+
+1MB Test 1 : 
+OK
+
+real	0m0.131s
+user	0m0.052s
+sys	0m0.033s
+ 
+1MB Test 2 : 
+OK
+
+real	0m0.099s
+user	0m0.055s
+sys	0m0.027s
+ 
+1MB Test 3 : 
+OK
+
+real	0m0.093s
+user	0m0.055s
+sys	0m0.021s
+ 
+1MB Test 4 : 
+OK
+
+real	0m0.094s
+user	0m0.056s
+sys	0m0.023s
+ 
+1MB Test 5 : 
+OK
+
+real	0m0.096s
+user	0m0.061s
+sys	0m0.022s
+ 
+1MB Test 6 : 
+OK
+
+real	0m0.093s
+user	0m0.058s
+sys	0m0.020s
+ 
+1MB Test 7 : 
+OK
+
+real	0m0.097s
+user	0m0.057s
+sys	0m0.022s
+ 
+1MB Test 8 : 
+OK
+
+real	0m0.096s
+user	0m0.060s
+sys	0m0.023s
+ 
+1MB Test 9 : 
+OK
+
+real	0m0.095s
+user	0m0.057s
+sys	0m0.021s
+ 
+1MB Test 10 : 
+OK
+
+real	0m0.094s
+user	0m0.057s
+sys	0m0.020s
+
+
+1GB Test 1 : 
+OK
+
+real	0m7.852s
+user	0m2.218s
+sys	0m1.808s
+ 
+1GB Test 2 : 
+OK
+
+real	0m7.486s
+user	0m2.021s
+sys	0m1.403s
+ 
+1GB Test 3 : 
+OK
+
+real	0m6.874s
+user	0m2.063s
+sys	0m1.373s
+ 
+1GB Test 4 : 
+OK
+
+real	0m7.411s
+user	0m2.059s
+sys	0m1.388s
+ 
+1GB Test 5 : 
+OK
+
+real	0m6.901s
+user	0m2.078s
+sys	0m1.393s
+ 
+1GB Test 6 : 
+OK
+
+real	0m6.850s
+user	0m2.066s
+sys	0m1.364s
+ 
+1GB Test 7 : 
+OK
+
+real	0m7.414s
+user	0m2.063s
+sys	0m1.365s
+ 
+1GB Test 8 : 
+OK
+
+real	0m8.403s
+user	0m2.114s
+sys	0m1.447s
+ 
+1GB Test 9 : 
+OK
+
+real	0m7.859s
+user	0m2.175s
+sys	0m1.585s
+ 
+1GB Test 10 : 
+OK
+
+real	0m6.886s
+user	0m2.059s
+sys	0m1.404s

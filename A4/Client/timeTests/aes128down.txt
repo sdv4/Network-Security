@@ -1,0 +1,184 @@
+1KB down Test 1 : 
+
+real	0m0.258s
+user	0m0.118s
+sys	0m0.030s
+ 
+1KB down Test 2 : 
+
+real	0m0.172s
+user	0m0.125s
+sys	0m0.030s
+ 
+1KB down Test 3 : 
+
+real	0m0.169s
+user	0m0.120s
+sys	0m0.030s
+ 
+1KB down Test 4 : 
+
+real	0m0.162s
+user	0m0.115s
+sys	0m0.029s
+ 
+1KB down Test 5 : 
+
+real	0m0.171s
+user	0m0.120s
+sys	0m0.033s
+ 
+1KB down Test 6 : 
+
+real	0m0.172s
+user	0m0.122s
+sys	0m0.031s
+ 
+1KB down Test 7 : 
+
+real	0m0.167s
+user	0m0.122s
+sys	0m0.029s
+ 
+1KB down Test 8 : 
+
+real	0m0.168s
+user	0m0.119s
+sys	0m0.032s
+ 
+1KB down Test 9 : 
+
+real	0m0.167s
+user	0m0.120s
+sys	0m0.030s
+ 
+1KB down Test 10 : 
+
+real	0m0.165s
+user	0m0.117s
+sys	0m0.030s
+
+
+
+ 
+1MB down Test 1 : 
+
+real	0m0.204s
+user	0m0.135s
+sys	0m0.040s
+ 
+1MB down Test 2 : 
+
+real	0m0.173s
+user	0m0.124s
+sys	0m0.031s
+ 
+1MB down Test 3 : 
+
+real	0m0.171s
+user	0m0.122s
+sys	0m0.031s
+ 
+1MB down Test 4 : 
+
+real	0m0.166s
+user	0m0.119s
+sys	0m0.031s
+ 
+1MB down Test 5 : 
+
+real	0m0.167s
+user	0m0.120s
+sys	0m0.030s
+ 
+1MB down Test 6 : 
+
+real	0m0.168s
+user	0m0.121s
+sys	0m0.030s
+ 
+1MB down Test 7 : 
+
+real	0m0.171s
+user	0m0.124s
+sys	0m0.030s
+ 
+1MB down Test 8 : 
+
+real	0m0.163s
+user	0m0.117s
+sys	0m0.030s
+ 
+1MB down Test 9 : 
+
+real	0m0.163s
+user	0m0.117s
+sys	0m0.030s
+ 
+1MB down Test 10 : 
+
+real	0m0.163s
+user	0m0.116s
+sys	0m0.029s
+
+
+
+1GB down Test 1 : 
+
+real	1m17.281s
+user	1m8.032s
+sys	0m5.758s
+ 
+1GB down Test 2 : 
+
+real	1m14.298s
+user	1m5.952s
+sys	0m5.409s
+ 
+1GB down Test 3 : 
+
+real	1m14.375s
+user	1m5.526s
+sys	0m5.490s
+ 
+1GB down Test 4 : 
+
+real	9m1.232s
+user	1m23.076s
+sys	0m6.904s
+ 
+1GB down Test 5 : 
+
+real	1m19.823s
+user	1m9.913s
+sys	0m5.954s
+ 
+1GB down Test 6 : 
+
+real	1m17.989s
+user	1m9.904s
+sys	0m5.500s
+ 
+1GB down Test 7 : 
+
+real	1m18.945s
+user	1m9.310s
+sys	0m5.932s
+ 
+1GB down Test 8 : 
+
+real	1m19.005s
+user	1m9.177s
+sys	0m5.892s
+ 
+1GB down Test 9 : 
+
+real	1m19.619s
+user	1m10.119s
+sys	0m5.848s
+ 
+1GB down Test 10 : 
+
+real	1m17.531s
+user	1m8.145s
+sys	0m5.773s

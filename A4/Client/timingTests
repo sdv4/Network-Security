@@ -1,0 +1,35 @@
+#!/bin/bash
+for i in {1..10}
+do
+  echo " "
+  echo "aes256 1KB download test $i :"
+  time python FTclient.py read 1KB.bin localhost:8000 aes256 passpass > 1KB.bin
+done
+
+for i in {1..10}
+do
+  echo " "
+  echo "aes256 1MB download test $i :"
+  time python FTclient.py read 1MB.bin localhost:8000 aes256 passpass > 1MB.bin
+done
+
+for i in {1..10}
+do
+  echo " "
+  echo "null 1KB download test $i :"
+  time python FTclient.py read 1KB.bin localhost:8000 null passpass > 1KB.bin
+done
+
+for i in {1..10}
+do
+  echo " "
+  echo "null 1MB download test $i :"
+  time python FTclient.py read 1MB.bin localhost:8000 null passpass > 1MB.bin
+done
+
+for i in {1..10}
+do
+  echo " "
+  echo "null 1GB download test $i :"
+  time python FTclient.py read 1GB.bin localhost:8000 null passpass > 1GB.bin
+done
