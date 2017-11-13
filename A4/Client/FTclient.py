@@ -53,7 +53,10 @@ def upload(conn):
                 while len(block) > 1024:
                     full_block = block[:1024]                                   # Cut the first 1024 bytes from block to encrypt and send
                     block = block[1024:len(block)]                              # Keep the remainder of the block
+                #    print("DEBUG: remainder of block being uploaded: " + str(len(block)))
+                #    print("DEBUG: sending full_block of size: " + str(len(full_block)))
                     sendData(conn, full_block)
+    #        print("DEBUG: sending final block of size: " + str(len(block)))
             sendData(conn, block)                                               # Encrypt then send the remainder of block
             conn.shutdown(socket.SHUT_WR)
             statusResponse = rcvData(conn, 1024)

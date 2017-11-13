@@ -2,1123 +2,629 @@
 aes256 1KB upload test 1 :
 OK
 
-real	0m0.273s
-user	0m0.122s
-sys	0m0.064s
+real	0m0.280s
+user	0m0.121s
+sys	0m0.063s
  
 aes256 1KB upload test 2 :
 OK
 
-real	0m0.124s
-user	0m0.094s
-sys	0m0.023s
+real	0m0.138s
+user	0m0.106s
+sys	0m0.026s
  
 aes256 1KB upload test 3 :
+OK
+
+real	0m0.137s
+user	0m0.105s
+sys	0m0.026s
+ 
+aes256 1KB upload test 4 :
+OK
+
+real	0m0.140s
+user	0m0.107s
+sys	0m0.028s
+ 
+aes256 1KB upload test 5 :
+OK
+
+real	0m0.137s
+user	0m0.105s
+sys	0m0.026s
+ 
+aes256 1KB upload test 6 :
+OK
+
+real	0m0.139s
+user	0m0.106s
+sys	0m0.027s
+ 
+aes256 1KB upload test 7 :
+OK
+
+real	0m0.138s
+user	0m0.105s
+sys	0m0.027s
+ 
+aes256 1KB upload test 8 :
+OK
+
+real	0m0.136s
+user	0m0.104s
+sys	0m0.025s
+ 
+aes256 1KB upload test 9 :
+OK
+
+real	0m0.130s
+user	0m0.100s
+sys	0m0.024s
+ 
+aes256 1KB upload test 10 :
+OK
+
+real	0m0.151s
+user	0m0.116s
+sys	0m0.028s
+ 
+aes256 1MB upload test 1 :
+OK
+
+real	0m0.225s
+user	0m0.177s
+sys	0m0.034s
+ 
+aes256 1MB upload test 2 :
+OK
+
+real	0m0.225s
+user	0m0.178s
+sys	0m0.034s
+ 
+aes256 1MB upload test 3 :
+OK
+
+real	0m0.224s
+user	0m0.180s
+sys	0m0.034s
+ 
+aes256 1MB upload test 4 :
+OK
+
+real	0m0.222s
+user	0m0.179s
+sys	0m0.031s
+ 
+aes256 1MB upload test 5 :
+OK
+
+real	0m0.228s
+user	0m0.183s
+sys	0m0.035s
+ 
+aes256 1MB upload test 6 :
+OK
+
+real	0m0.223s
+user	0m0.183s
+sys	0m0.032s
+ 
+aes256 1MB upload test 7 :
+OK
+
+real	0m0.222s
+user	0m0.183s
+sys	0m0.033s
+ 
+aes256 1MB upload test 8 :
+OK
+
+real	0m0.221s
+user	0m0.181s
+sys	0m0.033s
+ 
+aes256 1MB upload test 9 :
+OK
+
+real	0m0.216s
+user	0m0.178s
+sys	0m0.032s
+ 
+aes256 1MB upload test 10 :
+OK
+
+real	0m0.224s
+user	0m0.184s
+sys	0m0.033s
+ 
+aes256 1GB upload test 1 :
+OK
+
+real	1m27.248s
+user	1m19.711s
+sys	0m7.720s
+ 
+aes256 1GB upload test 2 :
+OK
+
+real	1m27.640s
+user	1m20.105s
+sys	0m7.295s
+ 
+aes256 1GB upload test 3 :
+OK
+
+real	1m26.041s
+user	1m18.802s
+sys	0m7.182s
+ 
+aes256 1GB upload test 4 :
+OK
+
+real	1m24.635s
+user	1m17.807s
+sys	0m6.884s
+ 
+aes256 1GB upload test 5 :
+OK
+
+real	1m25.513s
+user	1m18.437s
+sys	0m7.188s
+ 
+aes256 1GB upload test 6 :
+OK
+
+real	1m26.546s
+user	1m19.178s
+sys	0m7.284s
+ 
+aes256 1GB upload test 7 :
+OK
+
+real	1m24.842s
+user	1m18.127s
+sys	0m6.867s
+ 
+aes256 1GB upload test 8 :
+OK
+
+real	1m24.737s
+user	1m17.819s
+sys	0m7.037s
+ 
+aes256 1GB upload test 9 :
+OK
+
+real	1m26.843s
+user	1m19.516s
+sys	0m7.299s
+ 
+aes256 1GB upload test 10 :
+OK
+
+real	1m24.126s
+user	1m17.148s
+sys	0m7.100s
+ 
+aes128 1KB upload test 1 :
+OK
+
+real	0m0.139s
+user	0m0.101s
+sys	0m0.025s
+ 
+aes128 1KB upload test 2 :
+OK
+
+real	0m0.143s
+user	0m0.110s
+sys	0m0.027s
+ 
+aes128 1KB upload test 3 :
+OK
+
+real	0m0.134s
+user	0m0.103s
+sys	0m0.025s
+ 
+aes128 1KB upload test 4 :
+OK
+
+real	0m0.151s
+user	0m0.112s
+sys	0m0.028s
+ 
+aes128 1KB upload test 5 :
+OK
+
+real	0m0.139s
+user	0m0.106s
+sys	0m0.028s
+ 
+aes128 1KB upload test 6 :
+OK
+
+real	0m0.144s
+user	0m0.110s
+sys	0m0.029s
+ 
+aes128 1KB upload test 7 :
+OK
+
+real	0m0.134s
+user	0m0.103s
+sys	0m0.026s
+ 
+aes128 1KB upload test 8 :
+OK
+
+real	0m0.142s
+user	0m0.110s
+sys	0m0.026s
+ 
+aes128 1KB upload test 9 :
+OK
+
+real	0m0.142s
+user	0m0.109s
+sys	0m0.028s
+ 
+aes128 1KB upload test 10 :
 OK
 
 real	0m0.139s
 user	0m0.106s
 sys	0m0.026s
  
-aes256 1KB upload test 4 :
-OK
-
-real	0m0.133s
-user	0m0.103s
-sys	0m0.025s
- 
-aes256 1KB upload test 5 :
-OK
-
-real	0m0.125s
-user	0m0.096s
-sys	0m0.023s
- 
-aes256 1KB upload test 6 :
-OK
-
-real	0m0.129s
-user	0m0.099s
-sys	0m0.024s
- 
-aes256 1KB upload test 7 :
-OK
-
-real	0m0.139s
-user	0m0.107s
-sys	0m0.026s
- 
-aes256 1KB upload test 8 :
-OK
-
-real	0m0.128s
-user	0m0.098s
-sys	0m0.023s
- 
-aes256 1KB upload test 9 :
-OK
-
-real	0m0.126s
-user	0m0.097s
-sys	0m0.023s
- 
-aes256 1KB upload test 10 :
-OK
-
-real	0m0.125s
-user	0m0.095s
-sys	0m0.023s
- 
-aes256 1MB upload test 1 :
-OK
-
-real	0m8.783s
-user	0m7.990s
-sys	0m0.759s
- 
-aes256 1MB upload test 2 :
-OK
-
-real	0m8.108s
-user	0m7.466s
-sys	0m0.664s
- 
-aes256 1MB upload test 3 :
-OK
-
-real	0m8.356s
-user	0m7.641s
-sys	0m0.725s
- 
-aes256 1MB upload test 4 :
-OK
-
-real	0m8.113s
-user	0m7.475s
-sys	0m0.662s
- 
-aes256 1MB upload test 5 :
-OK
-
-real	0m8.124s
-user	0m7.471s
-sys	0m0.674s
- 
-aes256 1MB upload test 6 :
-OK
-
-real	0m8.267s
-user	0m7.637s
-sys	0m0.652s
- 
-aes256 1MB upload test 7 :
-OK
-
-real	0m8.129s
-user	0m7.494s
-sys	0m0.658s
- 
-aes256 1MB upload test 8 :
-OK
-
-real	0m8.220s
-user	0m7.592s
-sys	0m0.651s
- 
-aes256 1MB upload test 9 :
-OK
-
-real	0m8.142s
-user	0m7.506s
-sys	0m0.658s
- 
-aes256 1MB upload test 10 :
-OK
-
-real	0m8.118s
-user	0m7.484s
-sys	0m0.657s
- 
-aes256 1GB upload test 1 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 176, in main
-    upload(server_socket)
-  File "FTclient.py", line 57, in upload
-    sendData(conn, block)                                               # Encrypt then send the remainder of block
-  File "FTclient.py", line 73, in sendData
-    conn.sendall(encrypted_bytes)
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 41] Protocol wrong type for socket
-
-real	0m9.283s
-user	0m4.607s
-sys	0m3.570s
- 
-aes256 1GB upload test 2 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.080s
-user	0m0.043s
-sys	0m0.019s
- 
-aes256 1GB upload test 3 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.051s
-user	0m0.036s
-sys	0m0.013s
- 
-aes256 1GB upload test 4 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
- 
-aes256 1GB upload test 5 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
- 
-aes256 1GB upload test 6 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.055s
-user	0m0.039s
-sys	0m0.014s
- 
-aes256 1GB upload test 7 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.052s
-user	0m0.036s
-sys	0m0.014s
- 
-aes256 1GB upload test 8 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.053s
-user	0m0.037s
-sys	0m0.013s
- 
-aes256 1GB upload test 9 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.052s
-user	0m0.036s
-sys	0m0.013s
- 
-aes256 1GB upload test 10 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.058s
-user	0m0.041s
-sys	0m0.015s
- 
-aes128 1KB upload test 1 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.055s
-user	0m0.039s
-sys	0m0.013s
- 
-aes128 1KB upload test 2 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.052s
-user	0m0.037s
-sys	0m0.012s
- 
-aes128 1KB upload test 3 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.052s
-user	0m0.037s
-sys	0m0.012s
- 
-aes128 1KB upload test 4 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.052s
-user	0m0.037s
-sys	0m0.012s
- 
-aes128 1KB upload test 5 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.054s
-user	0m0.038s
-sys	0m0.013s
- 
-aes128 1KB upload test 6 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.052s
-user	0m0.037s
-sys	0m0.012s
- 
-aes128 1KB upload test 7 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.052s
-user	0m0.037s
-sys	0m0.012s
- 
-aes128 1KB upload test 8 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.053s
-user	0m0.037s
-sys	0m0.013s
- 
-aes128 1KB upload test 9 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.051s
-user	0m0.037s
-sys	0m0.012s
- 
-aes128 1KB upload test 10 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.052s
-user	0m0.037s
-sys	0m0.012s
- 
 aes128 1MB upload test 1 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
+real	0m0.232s
+user	0m0.186s
+sys	0m0.035s
  
 aes128 1MB upload test 2 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
+real	0m0.251s
+user	0m0.200s
+sys	0m0.039s
  
 aes128 1MB upload test 3 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.053s
-user	0m0.037s
-sys	0m0.013s
+real	0m0.229s
+user	0m0.183s
+sys	0m0.034s
  
 aes128 1MB upload test 4 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.056s
-user	0m0.040s
-sys	0m0.015s
+real	0m0.250s
+user	0m0.199s
+sys	0m0.038s
  
 aes128 1MB upload test 5 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.053s
-user	0m0.037s
-sys	0m0.013s
+real	0m0.236s
+user	0m0.188s
+sys	0m0.036s
  
 aes128 1MB upload test 6 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.056s
-user	0m0.040s
-sys	0m0.015s
+real	0m0.229s
+user	0m0.182s
+sys	0m0.035s
  
 aes128 1MB upload test 7 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
+real	0m0.228s
+user	0m0.183s
+sys	0m0.033s
  
 aes128 1MB upload test 8 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
+real	0m0.226s
+user	0m0.181s
+sys	0m0.035s
  
 aes128 1MB upload test 9 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.053s
-user	0m0.038s
-sys	0m0.014s
+real	0m0.220s
+user	0m0.177s
+sys	0m0.031s
  
 aes128 1MB upload test 10 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.053s
-user	0m0.038s
-sys	0m0.014s
+real	0m0.231s
+user	0m0.182s
+sys	0m0.036s
  
 aes128 1GB upload test 1 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.051s
-user	0m0.037s
-sys	0m0.013s
+real	1m22.841s
+user	1m16.298s
+sys	0m6.660s
  
 aes128 1GB upload test 2 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
+real	1m21.751s
+user	1m15.689s
+sys	0m6.341s
  
 aes128 1GB upload test 3 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
+real	1m21.662s
+user	1m15.541s
+sys	0m6.382s
  
 aes128 1GB upload test 4 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.038s
-sys	0m0.013s
+real	1m22.772s
+user	1m16.529s
+sys	0m6.514s
  
 aes128 1GB upload test 5 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.053s
-user	0m0.037s
-sys	0m0.013s
+real	1m21.838s
+user	1m15.609s
+sys	0m6.516s
  
 aes128 1GB upload test 6 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.053s
-user	0m0.037s
-sys	0m0.013s
+real	1m22.678s
+user	1m16.430s
+sys	0m6.501s
  
 aes128 1GB upload test 7 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
+real	1m22.247s
+user	1m15.988s
+sys	0m6.528s
  
 aes128 1GB upload test 8 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.056s
-user	0m0.041s
-sys	0m0.014s
+real	1m22.115s
+user	1m15.713s
+sys	0m6.644s
  
 aes128 1GB upload test 9 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.053s
-user	0m0.038s
-sys	0m0.014s
+real	1m20.146s
+user	1m14.143s
+sys	0m6.299s
  
 aes128 1GB upload test 10 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.051s
-user	0m0.037s
-sys	0m0.013s
+real	1m22.049s
+user	1m15.803s
+sys	0m6.496s
  
 null 1KB upload test 1 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
+real	0m0.058s
+user	0m0.039s
 sys	0m0.012s
  
 null 1KB upload test 2 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.053s
-user	0m0.037s
+real	0m0.063s
+user	0m0.041s
 sys	0m0.012s
  
 null 1KB upload test 3 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.054s
-user	0m0.038s
-sys	0m0.013s
+real	0m0.055s
+user	0m0.039s
+sys	0m0.012s
  
 null 1KB upload test 4 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
+real	0m0.064s
+user	0m0.040s
 sys	0m0.012s
  
 null 1KB upload test 5 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
+real	0m0.062s
+user	0m0.039s
 sys	0m0.013s
  
 null 1KB upload test 6 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
+real	0m0.054s
+user	0m0.038s
 sys	0m0.012s
  
 null 1KB upload test 7 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
+real	0m0.054s
+user	0m0.038s
 sys	0m0.012s
  
 null 1KB upload test 8 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.012s
+real	0m0.058s
+user	0m0.041s
+sys	0m0.013s
  
 null 1KB upload test 9 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.054s
+real	0m0.055s
 user	0m0.040s
 sys	0m0.012s
  
 null 1KB upload test 10 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
+real	0m0.063s
+user	0m0.040s
 sys	0m0.012s
  
 null 1MB upload test 1 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.058s
-user	0m0.042s
-sys	0m0.014s
+real	0m0.075s
+user	0m0.050s
+sys	0m0.018s
  
 null 1MB upload test 2 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.062s
-user	0m0.045s
-sys	0m0.015s
+real	0m0.076s
+user	0m0.052s
+sys	0m0.018s
  
 null 1MB upload test 3 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.053s
-user	0m0.037s
-sys	0m0.014s
+real	0m0.071s
+user	0m0.050s
+sys	0m0.018s
  
 null 1MB upload test 4 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
+real	0m0.071s
+user	0m0.049s
+sys	0m0.018s
  
 null 1MB upload test 5 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+Error: file could not be written by server
 
 real	0m0.054s
 user	0m0.038s
-sys	0m0.014s
- 
-null 1MB upload test 6 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.051s
-user	0m0.037s
 sys	0m0.013s
  
-null 1MB upload test 7 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+null 1MB upload test 6 :
+OK
 
-real	0m0.057s
+real	0m0.074s
+user	0m0.051s
+sys	0m0.019s
+ 
+null 1MB upload test 7 :
+OK
+
+real	0m0.074s
+user	0m0.050s
+sys	0m0.018s
+ 
+null 1MB upload test 8 :
+OK
+
+real	0m0.074s
+user	0m0.052s
+sys	0m0.018s
+ 
+null 1MB upload test 9 :
+OK
+
+real	0m0.080s
+user	0m0.055s
+sys	0m0.019s
+ 
+null 1MB upload test 10 :
+OK
+
+real	0m0.076s
+user	0m0.052s
+sys	0m0.018s
+ 
+null 1GB upload test 1 :
+OK
+
+real	0m15.311s
+user	0m10.797s
+sys	0m4.796s
+ 
+null 1GB upload test 2 :
+Error: file could not be written by server
+
+real	0m0.059s
 user	0m0.041s
 sys	0m0.015s
  
-null 1MB upload test 8 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.053s
-user	0m0.038s
-sys	0m0.014s
- 
-null 1MB upload test 9 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.053s
-user	0m0.038s
-sys	0m0.013s
- 
-null 1MB upload test 10 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.053s
-user	0m0.037s
-sys	0m0.014s
- 
-null 1GB upload test 1 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.051s
-user	0m0.037s
-sys	0m0.013s
- 
-null 1GB upload test 2 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
-
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
- 
 null 1GB upload test 3 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
+real	0m15.096s
+user	0m10.594s
+sys	0m4.776s
  
 null 1GB upload test 4 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.053s
-user	0m0.038s
-sys	0m0.014s
+real	0m15.433s
+user	0m10.850s
+sys	0m4.854s
  
 null 1GB upload test 5 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
+real	0m15.357s
+user	0m10.762s
+sys	0m4.868s
  
 null 1GB upload test 6 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.055s
-user	0m0.040s
-sys	0m0.014s
+real	0m15.751s
+user	0m11.014s
+sys	0m5.008s
  
 null 1GB upload test 7 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.053s
-user	0m0.037s
-sys	0m0.014s
+real	0m15.421s
+user	0m10.737s
+sys	0m4.958s
  
 null 1GB upload test 8 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
+real	0m15.206s
+user	0m10.748s
+sys	0m4.742s
  
 null 1GB upload test 9 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.052s
-user	0m0.037s
-sys	0m0.013s
+real	0m15.249s
+user	0m10.659s
+sys	0m4.871s
  
 null 1GB upload test 10 :
-Traceback (most recent call last):
-  File "FTclient.py", line 189, in <module>
-    main()
-  File "FTclient.py", line 164, in main
-    server_socket.connect((HOST, PORT))
-  File "/usr/local/Cellar/python/2.7.13/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
-    return getattr(self._sock,name)(*args)
-socket.error: [Errno 61] Connection refused
+OK
 
-real	0m0.057s
-user	0m0.040s
-sys	0m0.015s
+real	0m15.306s
+user	0m10.731s
+sys	0m4.854s

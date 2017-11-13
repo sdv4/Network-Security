@@ -120,6 +120,17 @@ python FTclient.py <command> <file name> <host>:<port> <cipher> <key>
 
 \section*{Timing Tests}
 
+	\begin{figure}[H]
+	\includegraphics[scale=0.5, trim={0cm 0cm 0cm 0cm}, clip]{time_tab}
+	\caption{}
+	\end{figure}
+
+Summary of Results:\newline
+
+\begin{itemize}
+	\item Download times: From the figure above, it appears that there is a negligible difference in the download times the two AES ciphers used. It might have been expected that the time to download the 1GB file would have resulted in a pronounced difference between the two AES ciphers, but this was not the case. Somewhat surprisingly, within a given AES cipher there the download times for the 1MB file was about twice that of the 1KB file, despite being nearly ten times the size.  As was to be expected, the download speed of when using the null cipher was much faster than using the either of the AES ciphers, in all cases of file size. 
+	\item Upload times: From the figure above, it can be seen that the results of the time tests for uploading are very similar to those for downloading, for all ciphers and file sizes. The only noteworthy comment that can be made is that on average the upload times were slightly slower than those for downloads.
+\end{itemize}
 
 
 \end{document}

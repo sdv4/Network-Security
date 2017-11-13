@@ -1,0 +1,210 @@
+ 
+aes256 1MB download test 1 :
+OK
+
+real	0m0.337s
+user	0m0.180s
+sys	0m0.062s
+ 
+aes256 1MB download test 2 :
+OK
+
+real	0m0.218s
+user	0m0.173s
+sys	0m0.033s
+ 
+aes256 1MB download test 3 :
+OK
+
+real	0m0.214s
+user	0m0.167s
+sys	0m0.032s
+ 
+aes256 1MB download test 4 :
+OK
+
+real	0m0.218s
+user	0m0.171s
+sys	0m0.032s
+ 
+aes256 1MB download test 5 :
+OK
+
+real	0m0.213s
+user	0m0.168s
+sys	0m0.030s
+ 
+aes256 1MB download test 6 :
+OK
+
+real	0m0.217s
+user	0m0.170s
+sys	0m0.031s
+ 
+aes256 1MB download test 7 :
+OK
+
+real	0m0.219s
+user	0m0.170s
+sys	0m0.033s
+ 
+aes256 1MB download test 8 :
+OK
+
+real	0m0.220s
+user	0m0.172s
+sys	0m0.032s
+ 
+aes256 1MB download test 9 :
+OK
+
+real	0m0.221s
+user	0m0.173s
+sys	0m0.032s
+ 
+aes256 1MB download test 10 :
+OK
+
+real	0m0.216s
+user	0m0.168s
+sys	0m0.031s
+ 
+aes128 1MB download test 1 :
+OK
+
+real	0m0.222s
+user	0m0.173s
+sys	0m0.033s
+ 
+aes128 1MB download test 2 :
+OK
+
+real	0m0.207s
+user	0m0.163s
+sys	0m0.030s
+ 
+aes128 1MB download test 3 :
+OK
+
+real	0m0.224s
+user	0m0.172s
+sys	0m0.032s
+ 
+aes128 1MB download test 4 :
+OK
+
+real	0m0.216s
+user	0m0.174s
+sys	0m0.033s
+ 
+aes128 1MB download test 5 :
+OK
+
+real	0m0.219s
+user	0m0.172s
+sys	0m0.031s
+ 
+aes128 1MB download test 6 :
+OK
+
+real	0m0.221s
+user	0m0.174s
+sys	0m0.032s
+ 
+aes128 1MB download test 7 :
+OK
+
+real	0m0.216s
+user	0m0.170s
+sys	0m0.031s
+ 
+aes128 1MB download test 8 :
+OK
+
+real	0m0.221s
+user	0m0.172s
+sys	0m0.032s
+ 
+aes128 1MB download test 9 :
+OK
+
+real	0m0.213s
+user	0m0.167s
+sys	0m0.031s
+ 
+aes128 1MB download test 10 :
+OK
+
+real	0m0.218s
+user	0m0.172s
+sys	0m0.032s
+ 
+null 1MB download test 1 :
+OK
+
+real	0m0.079s
+user	0m0.048s
+sys	0m0.019s
+ 
+null 1MB download test 2 :
+OK
+
+real	0m0.068s
+user	0m0.043s
+sys	0m0.017s
+ 
+null 1MB download test 3 :
+OK
+
+real	0m0.065s
+user	0m0.043s
+sys	0m0.017s
+ 
+null 1MB download test 4 :
+OK
+
+real	0m0.068s
+user	0m0.045s
+sys	0m0.016s
+ 
+null 1MB download test 5 :
+OK
+
+real	0m0.069s
+user	0m0.044s
+sys	0m0.017s
+ 
+null 1MB download test 6 :
+OK
+
+real	0m0.069s
+user	0m0.045s
+sys	0m0.017s
+ 
+null 1MB download test 7 :
+OK
+
+real	0m0.071s
+user	0m0.046s
+sys	0m0.018s
+ 
+null 1MB download test 8 :
+OK
+
+real	0m0.077s
+user	0m0.050s
+sys	0m0.019s
+ 
+null 1MB download test 9 :
+OK
+
+real	0m0.067s
+user	0m0.043s
+sys	0m0.016s
+ 
+null 1MB download test 10 :
+OK
+
+real	0m0.069s
+user	0m0.043s
+sys	0m0.017s
