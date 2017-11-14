@@ -1,0 +1,12 @@
+  in accept 136.159.15.22/32    22,80             established
+ 	  #
+  in accept 136.159.5.5/16    80,8080        
+
+							#frogs are awesome, don't you agree
+  in accept *                 443        
+  in accept 10.0.0.0/31       *        
+  in deny   *                 21        
+
+in accept * * established
+
+out accept 137.159.0.0/8 *
