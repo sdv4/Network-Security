@@ -52,7 +52,7 @@ def readConfig(configFile):
         for num, line in enumerate(config):
             line = line.split()                                     # Remove uneven whitespace
             if len(line) > 0 and line[0][0] != "#":                 # Reject lines that are empty or begin with a comment
-                configDict[num+1] = line
+                configRules[num+1] = line
     except:
         print("Error: Could not open file " + configFile + "\nClosing firewall.", file = sys.stderr)
         sys.exit(0)
@@ -62,7 +62,7 @@ def readConfig(configFile):
 # OUTPUT: String <output> - what is done with each packet
 def filterPacket(packet):
     fields = packet.split()
-    rules = configDict.copy()                                       # Create copy of rules
+    rules = configRules.copy()                                       # Create copy of rules
 
     for key in list(rules.keys()):                                  # Iterate through each rule from the config file dropping rules that do not apply to the packet
         if fields[0] != rules[key][0]:                              # Remove rule with a different direction than the packet's
@@ -89,11 +89,11 @@ def filterPacket(packet):
     #     sys.exit(0)
 
 def main():
-    global configDict, ACCEPT, DROP, REJECT, DEFAULT
+    global configRules, ACCEPT, DROP, REJECT, DEFAULT
 
     if(len(sys.argv) == 2):
         configFile = str(sys.argv[1])
-        configDict = {}
+        configRules = {}
         DEFAULT = "drop() "
         readConfig(configFile)
         packet = sys.stdin.readline()
