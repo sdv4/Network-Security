@@ -43,15 +43,89 @@ def IPtoInt(IPString):
         sys.exit(0)
     return ipInt
 
+
+def isValidRule(rule):
+    # nested helper function for determining valid port arguments
+    def validPorts(portString):
+        ports = portString.split(',')
+        for port in ports:
+                try:
+                    if (port == '*'):
+                        return True                                             # if port = '*' it is ok to break as it should be only arg
+                    if ((int(port) > 65535) or (int(port) < 0)):
+                        return False
+                except:
+                    return False                                                # exception caught if port[0] cannot be type casted to int
+        return True
+
+#TODO: confirm with Mason that malformed IP addresses will be checked spotted with IPtoInt call so that this
+# functionality shouldn't be replicated here
+
+    params = len(rule)
+    warningString = "Warning: malformed line in configuration file. Line dropped."
+    directions = ["in", "out"]                                                  # List of allowed arguments
+    actions = ["accept", "drop", "reject"]
+    #ipValues = ['*']                                                                # Must be in CIDR notation or '*'
+    flagValue = ["established"]
+    if params == 0:                                                             # Line is empty - ignore without warning
+        return False
+    elif rule[0][0] == '#':                                                     # Comment line - ignore without warning
+        return False
+    elif (params == 4):                                                         # Check if the 4 arguments are valid
+        if (rule[0] in directions) & (rule[1] in actions) & (validPorts(rule[3])):
+             return True
+        else:
+            print(warningString, file = sys.stderr)
+            return False
+    elif (params == 5):                                                         # Check if the 5 arguments are valid
+        if (rule[0] in directions) & (rule[1] in actions) & (validPorts(rule[3])) & (rule[4] in flagValue):
+                return True
+        else:
+           print(warningString, file = sys.stderr)
+           return False
+    else:
+        print(warningString, file = sys.stderr)
+        return False
+
+# Function to check if a packet is valid or malformed
+# Input packet - a list of the elements between the whitespaces of a given packet
+# Output boolean - True if packet is valid; else False
+def validPacket(packetString):
+    packet = packetString.split()
+    directions = ["in", "out"]
+    flags = ["0", "1"]
+    fields = len(packet)
+    warningString = "Warning: malformed packet in packet file. Packet ignored."
+    def validPort(portString):
+        try:
+            if ((int(portString) > 65535) or (int(portString) < 0)):
+                return False
+        except:
+            return False                                                # exception caught if port[0] cannot be type casted to int
+        return True
+
+    if fields != 4:
+        return False                                                            # Every packet must have exactly 4 fields
+    else:
+        if (packet[0] in directions) & (validPort(packet[2])) & (str(packet[3]) in flags):
+            return True
+        else:
+            print(warningString, file = sys.stderr)
+            return False
+
+
+
 # Create dictionary of rules from a config file
 # - rules are numbered by their line number in the config file
 # - rules are also stored as a list of strings
+# - Invalid rules or malformed lines will result in a warning being printed to stderr and
+# rule being dropped, but firewall will continue to run
 def readConfig(configFile):
     try:
         config = open(configFile, 'r')
         for num, line in enumerate(config):
-            line = line.split()                                     # Remove uneven whitespace
-            if len(line) > 0 and line[0][0] != "#":                 # Reject lines that are empty or begin with a comment
+            line = line.split()                                                 # Remove uneven whitespace
+            if isValidRule(line):                                               # Reject lines that are empty or begin with a comment
                 configRules[num+1] = line
     except:
         print("Error: Could not open file " + configFile + "\nClosing firewall.", file = sys.stderr)
@@ -98,8 +172,9 @@ def main():
         readConfig(configFile)
         packet = sys.stdin.readline()
         while (packet):
-            output = filterPacket(packet)
-            print(output)
+            if validPacket(packet):                                             # Check ensure packet not malformed
+                output = filterPacket(packet)
+                print(output)
             packet = sys.stdin.readline()
     else:
         print("Error: wrong command line arguments.\nClosing firewall.", file = sys.stderr)
