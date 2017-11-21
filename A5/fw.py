@@ -1,3 +1,10 @@
+# fw.py
+# Programm to simulate a firewall based on a passed in config file of rules to
+# filter packet
+# example use: Shanes-MacBook-Pro:A5 shanesims$ python3 fw.py rules2.txt < packets2.txt | diff -y results2.txt -
+# CPSC 526 Assignment 5 - Fall 2017
+# Authors: Shane Sims and Mason Lieu
+# Version: 21 November 2017
 import sys, fileinput
 
 # Returns true if ip1 is in the CIDR block of ip2.
