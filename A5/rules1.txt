@@ -2,9 +2,9 @@ in  accept 136.159.5.5/32     22
 in  accept 136.159.5.5/16     80,8080
 in  accept *                  443
 in  accept 10.0.0.0/31        *
-in  drop   *                  21
+in  reject   *                  21
 in  accept *                  *        established
 out accept 137.159.0.0/8      *
-out drop   10.0.0.0/8         *
-out drop   *                  22
+out reject   10.0.0.0/8         *
+out reject   *                  22
 out accept *                  *

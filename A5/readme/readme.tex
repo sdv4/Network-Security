@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+\usepackage{array, url, kantlipsum, listings, xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx, float, courier}
+\usepackage[section]{placeins}
+\usepackage[utf8]{inputenc}
+\graphicspath{ {output/} }
+
+\lstdefinestyle{terminal}
+{
+    backgroundcolor=\color{white},
+    basicstyle=\footnotesize\color{black}\ttfamily,
+    frame=tb,
+    numbers=left
+}
+\makeatletter
+\long\def\@makecaption#1#2{%
+	\vskip\abovecaptionskip
+		\bfseries #1: #2\par
+	\vskip\belowcaptionskip}%
+\makeatother
+
+\title{Assignment 5 \\CPSC 526 Fall 2017 \\ November 21, 2017}
+\author{
+\begin{tabular}{c c}
+Mason Lieu & Shane Sims\tabularnewline
+ID: 10110089 & ID: 00300601\tabularnewline
+Tutorial 04 & Tutorial 04 \tabularnewline
+\url{mlieu@ucalgary.ca} & \url{shane.sims@ucalgary.ca}
+\end{tabular}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{How to run fw.py}
+\begin{lstlisting}[style=terminal, title={Running the fw.py}]
+python3 fw.py <rules_file.txt> < <packets_file.txt>
+\end{lstlisting}
+
+
+\end{document}
+

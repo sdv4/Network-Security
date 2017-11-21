@@ -164,7 +164,7 @@ def filterPacket(packet):
     #     sys.exit(0)
 
 def main():
-    global configRules, ACCEPT, DROP, REJECT, DEFAULT
+    global configRules, ACCEPT, DROP, REJECT, DEFAULT                   #TODO: do we need the constants? dont seem to be used
 
     if(len(sys.argv) == 2):
         configFile = str(sys.argv[1])
