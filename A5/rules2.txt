@@ -5,7 +5,7 @@
 							#frogs are awesome, don't you agree
   in accept *                 443        
   in accept 10.0.0.0/31       *        
-  in drop   *                 21        
+  in reject   *                 21        
 
 in accept * * established
 
