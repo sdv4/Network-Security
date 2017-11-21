@@ -149,16 +149,11 @@ def filterPacket(packet):
             del rules[key]
 
     if len(rules) >= 1:                                             # Take the first rule left in the set of rules. TODO: Ask about multiple rules applying to one packet. Case: packets1.txt (packet 5), rules1.txt (rule 2 and 6)
-        sys.stdout.write("DEBUG: Rules left " + str(list(rules.keys())))
-        key, value = rules.popitem()
-        sys.stdout.write(" DEBUG: popped key " + str(key) + " ")
-        if value[1] == "drop":
-            output = "deny(" + str(key) + ")" + " " + ' '.join(fields)
-            return output
-        else:
-            output = value[1] + "(" + str(key) + ")" + " " + ' '.join(fields)   #TODO: ' '.join(fields) makes it so that a '|' doesn't appear in the diff
-            #output = value[1] + "(" + str(key) + ")" + " " + packet            #TODO: packet makes it so that a '|' appears in the diff
-            return output
+        key = min(list(rules.keys()))                               # Find the lowest key (first occuring rule) in the remaining set of rules
+        rule = rules[key]                                           # Finds the rule with the lowest key
+        output = rule[1] + "(" + str(key) + ")" + " " + ' '.join(fields)   #TODO: ' '.join(fields) makes it so that a '|' doesn't appear in the diff
+        #output = value[1] + "(" + str(key) + ")" + " " + packet            #TODO: packet makes it so that a '|' appears in the diff
+        return output
     elif len(rules) == 0:                                           # Drop the package as the default option when no rules apply
         output = DEFAULT + ' '.join(fields)
         #output = DEFAULT + packet                                  #TODO: See a few lines above
