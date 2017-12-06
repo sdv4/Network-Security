@@ -78,6 +78,9 @@ def listen():
                             IRCconnection.sendall(b'PONG\r\n')
                         elif "JOIN" in splitmessage:
                             pvtmsgToChannel(SECRET_PHRASE[1:])
+                        elif "QUIT" in splitmessage:
+                            bot = splitmessage.split("!")[0][1:]
+                            print(bot + " has exited")
 
                 elif reader is sys.stdin:
                     getCommand()
