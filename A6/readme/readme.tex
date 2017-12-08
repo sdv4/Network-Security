@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+\usepackage{array, url, kantlipsum, listings, xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx, float, courier}
+\usepackage[section]{placeins}
+\usepackage[utf8]{inputenc}
+\graphicspath{ {output/} }
+
+\lstdefinestyle{terminal}
+{
+    backgroundcolor=\color{white},
+    basicstyle=\footnotesize\color{black}\ttfamily,
+    frame=tb,
+    numbers=left
+}
+\makeatletter
+\long\def\@makecaption#1#2{%
+	\vskip\abovecaptionskip
+		\bfseries #1: #2\par
+	\vskip\belowcaptionskip}%
+\makeatother
+
+\title{Assignment 6 \\CPSC 526 Fall 2017 \\ 8 December 2017}
+\author{
+\begin{tabular}{c c}
+Mason Lieu & Shane Sims\tabularnewline
+ID: 10110089 & ID: 00300601\tabularnewline
+Tutorial 04 & Tutorial 04 \tabularnewline
+\url{mlieu@ucalgary.ca} & \url{shane.sims@ucalgary.ca}
+\end{tabular}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{How to run the bot program}
+\begin{lstlisting}[style=terminal, title={Running bot.py}]
+python3 bot.py <hostname> <port> <channel> <secret-phrase>
+\end{lstlisting}
+\begin{lstlisting}[style=terminal, title={Running conbot.py}]
+python3 conbot.py <hostname> <port> <channel> <secret-phrase>
+\end{lstlisting}
+
+
+\end{document}
+
